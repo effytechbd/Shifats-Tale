@@ -3,13 +3,23 @@
 import React, { useState } from "react";
 import { faqs } from "@/data/faq";
 import { Plus, Minus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function FAQSection() {
   const [openId, setOpenId] = useState<string | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const toggleFAQ = (id: string) => {
     setOpenId(openId === id ? null : id);
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
   };
 
   return (
@@ -20,28 +30,28 @@ export default function FAQSection() {
         {/* Section Header */}
         <div className="text-center mb-16 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
             FAQ
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
             Have Questions? We Have Answers.
           </motion.p>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
             Find responses to frequent inquiries about offline timings, performance checks, and lesson backup recording archives.
@@ -56,24 +66,30 @@ export default function FAQSection() {
             return (
               <motion.div
                 key={faq.id}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
-                className="brand-card rounded-2xl overflow-hidden bg-white border border-border transition-all"
+                transition={{ duration: 0.5, delay: shouldReduceMotion ? 0 : idx * 0.05 }}
+                className="brand-card rounded-2xl overflow-hidden bg-white border border-border transition-all hover:border-accent/25 hover:shadow-sm duration-300"
               >
                 {/* Header/Question tab trigger */}
                 <button
                   onClick={() => toggleFAQ(faq.id)}
                   type="button"
-                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer hover:bg-bg-soft/40 focus:outline-none transition-colors"
+                  className="w-full flex items-center justify-between p-5 sm:p-6 text-left cursor-pointer hover:bg-bg-soft/20 focus:outline-none transition-colors"
                 >
                   <span className="font-extrabold text-primary text-base sm:text-lg pr-4">
                     {faq.question}
                   </span>
-                  <div className="shrink-0 p-1.5 bg-bg border border-border rounded-lg text-primary hover:text-primary transition-colors">
+                  
+                  {/* Rotating toggle icon */}
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.25, ease: "easeInOut" }}
+                    className="shrink-0 p-1.5 bg-bg border border-border rounded-lg text-primary hover:text-primary transition-colors duration-200"
+                  >
                     {isOpen ? <Minus className="h-4 w-4 text-primary" /> : <Plus className="h-4 w-4 text-primary" />}
-                  </div>
+                  </motion.div>
                 </button>
 
                 {/* Collapsible Answer */}

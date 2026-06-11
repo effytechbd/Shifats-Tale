@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import { Award, Users, GraduationCap, CheckCircle } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface StatItem {
   number: string;
@@ -36,17 +39,50 @@ const stats: StatItem[] = [
 ];
 
 export default function TrustStats() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.08,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 15 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5, 
+        ease: "easeOut" as const
+      } 
+    },
+  };
+
   return (
     <section className="relative z-10 px-4 sm:px-6 lg:px-8 -mt-8">
       <div className="brand-container">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+        >
           {stats.map((stat, i) => (
-            <div
+            <motion.div
               key={i}
-              className="brand-card rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center space-y-2 relative overflow-hidden transition-all duration-300 hover:-translate-y-1 group bg-white border border-border"
+              variants={cardVariants}
+              className="brand-card rounded-2xl p-5 sm:p-6 flex flex-col items-center text-center space-y-2 relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-lg hover:border-accent/30 group bg-white border border-border"
             >
               {/* Top border highlight on hover */}
-              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* Icon wrapper */}
               <div className="bg-bg-soft p-3 rounded-xl border border-border group-hover:scale-105 transition-transform duration-300">
@@ -67,9 +103,9 @@ export default function TrustStats() {
               <span className="text-[11px] sm:text-xs text-muted font-medium">
                 {stat.description}
               </span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

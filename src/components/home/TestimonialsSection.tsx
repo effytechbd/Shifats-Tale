@@ -3,9 +3,44 @@
 import React from "react";
 import { testimonials } from "@/data/testimonials";
 import { Star, Quote } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function TestimonialsSection() {
+  const shouldReduceMotion = useReducedMotion();
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 20 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5, 
+        ease: "easeOut" as const
+      } 
+    },
+  };
+
   return (
     <section id="testimonials" className="brand-section-wrapper bg-bg-soft relative">
       <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
@@ -14,28 +49,28 @@ export default function TestimonialsSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
             Testimonials
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
             What Parents & Students Say
           </motion.p>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
             Honest feedback from students who achieved Board A+ and cracked engineering university admissions under Shifat Sir's guidance.
@@ -43,18 +78,21 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {testimonials.map((t, idx) => (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
+          {testimonials.map((t) => (
             <motion.div
               key={t.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="brand-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative bg-white border border-border group"
+              variants={cardVariants}
+              className="brand-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative bg-white border border-border group hover:-translate-y-1 hover:shadow-md hover:border-accent/30 transition-all duration-300"
             >
-              {/* Double quote background icon - very subtle */}
-              <Quote className="absolute right-6 top-6 h-12 w-12 text-bg transition-colors pointer-events-none" />
+              {/* Double quote background icon - scales and highlights on card hover */}
+              <Quote className="absolute right-6 top-6 h-12 w-12 text-bg/80 group-hover:text-accent/10 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
 
               <div className="space-y-4 relative z-10">
                 {/* Stars */}
@@ -65,7 +103,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Quote Content */}
-                <p className="text-text text-sm sm:text-base leading-relaxed italic">
+                <p className="text-text text-sm sm:text-base leading-relaxed italic group-hover:text-primary-dark transition-colors">
                   "{t.quote}"
                 </p>
               </div>
@@ -73,7 +111,7 @@ export default function TestimonialsSection() {
               {/* User Identity Info */}
               <div className="pt-6 border-t border-border mt-6 flex items-center justify-between">
                 <div>
-                  <h4 className="font-extrabold text-primary text-sm sm:text-base">
+                  <h4 className="font-extrabold text-primary text-sm sm:text-base group-hover:text-primary transition-colors">
                     {t.name}
                   </h4>
                   <span className="text-xs text-muted block">
@@ -82,14 +120,14 @@ export default function TestimonialsSection() {
                 </div>
                 
                 {t.achievement && (
-                  <span className="text-[10px] sm:text-xs font-bold text-primary bg-bg px-2.5 py-1 rounded-lg border border-border max-w-[200px] text-right truncate">
+                  <span className="text-[10px] sm:text-xs font-bold text-primary bg-bg px-2.5 py-1 rounded-lg border border-border max-w-[200px] text-right truncate group-hover:border-accent/20 transition-all">
                     {t.achievement}
                   </span>
                 )}
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

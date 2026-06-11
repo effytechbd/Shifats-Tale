@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { galleryItems } from "@/data/gallery";
 import { Camera, ZoomIn } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 type CategoryFilter = "All" | "classroom" | "notes" | "events" | "flyers";
 
 export default function GallerySection() {
   const [filter, setFilter] = useState<CategoryFilter>("All");
+  const shouldReduceMotion = useReducedMotion();
 
   const filteredItems = galleryItems.filter((item) => {
     if (filter === "All") return true;
@@ -24,6 +25,38 @@ export default function GallerySection() {
     { label: "Events & Awards", value: "events" },
   ];
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      scale: shouldReduceMotion ? 1 : 0.95, 
+      y: shouldReduceMotion ? 0 : 20 
+    },
+    visible: (idx: number) => ({
+      opacity: 1,
+      scale: 1,
+      y: 0,
+      transition: { 
+        duration: 0.4, 
+        delay: shouldReduceMotion ? 0 : idx * 0.05,
+        ease: "easeOut" as const
+      }
+    }),
+    exit: { 
+      opacity: 0, 
+      scale: shouldReduceMotion ? 1 : 0.95,
+      transition: { duration: 0.2 } 
+    }
+  };
+
   return (
     <section id="gallery" className="brand-section-wrapper bg-bg relative">
       <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none" />
@@ -32,28 +65,28 @@ export default function GallerySection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
             Gallery
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
             Explore Life at Shifat's Tales
           </motion.p>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
             A visual overview of our learning facilities, flyers, handwritten worksheets, and celebrations of student success.
@@ -66,7 +99,7 @@ export default function GallerySection() {
             <button
               key={tab.value}
               onClick={() => setFilter(tab.value)}
-              className={`px-4.5 py-2.5 text-xs sm:text-sm font-bold rounded-full border transition-all duration-300 cursor-pointer ${
+              className={`px-4.5 py-2.5 text-xs sm:text-sm font-bold rounded-full border transition-all duration-205 cursor-pointer hover:scale-[1.02] active:scale-95 ${
                 filter === tab.value
                   ? "bg-accent border-accent text-primary shadow-sm"
                   : "bg-white border-border text-muted hover:text-primary hover:border-muted"
@@ -79,16 +112,17 @@ export default function GallerySection() {
 
         {/* Gallery Grid */}
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <AnimatePresence mode="popLayout">
-            {filteredItems.map((item) => (
+          <AnimatePresence mode="popLayout" initial={false}>
+            {filteredItems.map((item, idx) => (
               <motion.div
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
+                variants={cardVariants}
+                custom={idx}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 key={item.id}
-                className="brand-card rounded-2xl overflow-hidden aspect-[3/4] sm:aspect-square relative group bg-white border border-border transition-all duration-300 cursor-pointer"
+                className="brand-card rounded-2xl overflow-hidden aspect-[3/4] sm:aspect-square relative group bg-white border border-border transition-all duration-300 cursor-pointer shadow-sm hover:border-accent/40 hover:shadow-md"
               >
                 {/* Photo Placeholder Background (Shown if image fails or loading) */}
                 <div className="absolute inset-0 bg-bg-soft flex flex-col items-center justify-center p-4">
@@ -98,14 +132,14 @@ export default function GallerySection() {
                   <span className="text-[9px] text-muted mt-1 uppercase font-bold">({item.category})</span>
                 </div>
 
-                {/* Real Image Render */}
+                {/* Real Image Render - smooth premium zoom */}
                 {item.imageUrl && (
                   <Image
                     src={item.imageUrl}
                     alt={item.title}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-500 group-hover:scale-105 z-0"
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-108 z-0"
                     priority={item.category === "flyers"}
                   />
                 )}
@@ -141,4 +175,3 @@ export default function GallerySection() {
     </section>
   );
 }
-

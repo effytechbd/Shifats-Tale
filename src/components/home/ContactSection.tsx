@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Clock } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -16,6 +16,7 @@ export default function ContactSection() {
 
   const [submitted, setSubmitted] = useState(false);
   const whatsappNumber = "8801879169446";
+  const shouldReduceMotion = useReducedMotion();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -58,6 +59,24 @@ export default function ContactSection() {
     }, 1500);
   };
 
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const columnVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 25 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" as const }
+    }
+  };
+
   return (
     <section id="contact" className="brand-section-wrapper bg-bg-soft relative">
       <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-[140px] pointer-events-none" />
@@ -66,28 +85,28 @@ export default function ContactSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
             Connect Now
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
             Inquire About Upcoming Batches
           </motion.p>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
             Fill out the short form below to compile an direct inquiry. Submitting will immediately open a chat with Shifat Sir on WhatsApp.
@@ -97,12 +116,18 @@ export default function ContactSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           
           {/* Quick info column */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6 lg:pr-8">
+          <motion.div 
+            variants={columnVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="lg:col-span-5 flex flex-col justify-between space-y-6 lg:pr-8"
+          >
             <div className="space-y-4">
               <h3 className="text-xl sm:text-2xl font-extrabold text-primary tracking-tight">
                 Direct Contact Channels
               </h3>
-              <p className="text-text text-sm leading-relaxed">
+              <p className="text-text text-sm leading-relaxed font-semibold">
                 If you prefer to call, write, or visit the center directly rather than fill out the form, feel free to use the credentials below.
               </p>
             </div>
@@ -112,9 +137,9 @@ export default function ContactSection() {
               {/* Phone */}
               <a
                 href="tel:+8801879169446"
-                className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:border-accent transition-all shadow-sm"
+                className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
               >
-                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0">
+                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
@@ -128,9 +153,9 @@ export default function ContactSection() {
                 href="https://wa.me/8801879169446"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:border-accent transition-all shadow-sm"
+                className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
               >
-                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0">
+                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
                   <MessageCircle className="h-5 w-5" />
                 </div>
                 <div>
@@ -145,25 +170,25 @@ export default function ContactSection() {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:border-accent transition-all shadow-sm"
+                  className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
                 >
-                  <FacebookIcon className="h-4.5 w-4.5 text-primary" />
+                  <FacebookIcon className="h-4.5 w-4.5 text-primary group-hover:scale-105 transition-transform" />
                   <span className="text-xs font-bold text-primary-dark">Facebook</span>
                 </a>
                 <a
                   href="https://youtube.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:border-accent transition-all shadow-sm"
+                  className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
                 >
-                  <YoutubeIcon className="h-4.5 w-4.5 text-primary" />
+                  <YoutubeIcon className="h-4.5 w-4.5 text-primary group-hover:scale-105 transition-transform" />
                   <span className="text-xs font-bold text-primary-dark">YouTube</span>
                 </a>
               </div>
 
               {/* Office hours */}
-              <div className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white shadow-sm">
-                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0">
+              <div className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white shadow-sm hover:-translate-y-0.5 hover:border-accent/20 transition-all duration-200 group">
+                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform">
                   <Clock className="h-5 w-5" />
                 </div>
                 <div>
@@ -173,8 +198,8 @@ export default function ContactSection() {
               </div>
 
               {/* Address info */}
-              <div className="flex items-start space-x-4 p-4 rounded-xl border border-border bg-white shadow-sm">
-                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 mt-0.5">
+              <div className="flex items-start space-x-4 p-4 rounded-xl border border-border bg-white shadow-sm hover:-translate-y-0.5 hover:border-accent/20 transition-all duration-200 group">
+                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 mt-0.5 group-hover:scale-105 transition-transform">
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
@@ -185,10 +210,16 @@ export default function ContactSection() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Form column */}
-          <div className="lg:col-span-7 brand-card rounded-2xl p-6 sm:p-8 bg-white border border-border">
+          <motion.div 
+            variants={columnVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="lg:col-span-7 brand-card rounded-2xl p-6 sm:p-8 bg-white border border-border hover:shadow-md hover:border-accent/10 transition-all duration-300"
+          >
             <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
               
               {/* Student Name */}
@@ -204,7 +235,7 @@ export default function ContactSection() {
                   placeholder="Enter student's full name"
                   value={formData.studentName}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none text-text text-sm font-medium transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/15 text-text text-sm font-medium transition-all"
                 />
               </div>
 
@@ -221,7 +252,7 @@ export default function ContactSection() {
                   placeholder="e.g. Class 10 / HSC 2026"
                   value={formData.studentClass}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none text-text text-sm font-medium transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/15 text-text text-sm font-medium transition-all"
                 />
               </div>
 
@@ -235,7 +266,7 @@ export default function ContactSection() {
                   name="interestedCourse"
                   value={formData.interestedCourse}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none text-text text-sm font-semibold transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/15 text-text text-sm font-semibold transition-all cursor-pointer"
                 >
                   <option value="ssc-academic">SSC Academic Batch</option>
                   <option value="hsc-academic">HSC Academic Batch</option>
@@ -259,7 +290,7 @@ export default function ContactSection() {
                   placeholder="e.g. 017XXXXXXXX"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none text-text text-sm font-medium transition-all"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/15 text-text text-sm font-medium transition-all"
                 />
               </div>
 
@@ -276,7 +307,7 @@ export default function ContactSection() {
                   placeholder="Let Sir know if you have specific timing queries or academic targets..."
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none text-text text-sm font-medium transition-all resize-none"
+                  className="w-full px-4 py-3 rounded-xl bg-bg-soft border border-border focus:border-accent focus:bg-white focus:outline-none focus:ring-2 focus:ring-accent/15 text-text text-sm font-medium transition-all resize-none"
                 />
               </div>
 
@@ -284,7 +315,7 @@ export default function ContactSection() {
               <button
                 type="submit"
                 disabled={submitted}
-                className="primary-btn w-full flex items-center justify-center space-x-2 text-center disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer"
+                className="primary-btn w-full flex items-center justify-center space-x-2 text-center disabled:opacity-75 disabled:cursor-not-allowed cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-transform duration-100"
               >
                 {submitted ? (
                   <>
@@ -299,7 +330,7 @@ export default function ContactSection() {
                 )}
               </button>
             </form>
-          </div>
+          </motion.div>
 
         </div>
       </div>

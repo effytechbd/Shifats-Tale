@@ -4,10 +4,44 @@ import React, { useState } from "react";
 import { youtubeClasses, YouTubeClass } from "@/data/youtubeClasses";
 import { Play, Clock, Eye, X } from "lucide-react";
 import { YoutubeIcon } from "@/components/ui/Icons";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 export default function YouTubeClassesSection() {
   const [activeVideo, setActiveVideo] = useState<YouTubeClass | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5, ease: "easeOut" as const }
+    }
+  };
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.1,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 25 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5, 
+        ease: "easeOut" as const
+      } 
+    },
+  };
 
   return (
     <section id="youtube-classes" className="brand-section-wrapper bg-bg relative">
@@ -17,28 +51,28 @@ export default function YouTubeClassesSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-4">
           <motion.h2
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
             Free Classes
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
             Concept Breakdown Lectures
           </motion.p>
           <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            variants={headerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
             Review Shifat Sir's pedagogy first-hand. Check out some of our most-watched math & physics conceptual explanations.
@@ -46,15 +80,18 @@ export default function YouTubeClassesSection() {
         </div>
 
         {/* Video Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {youtubeClasses.map((v, idx) => (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
+          {youtubeClasses.map((v) => (
             <motion.div
               key={v.id}
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="brand-card rounded-2xl overflow-hidden flex flex-col group bg-white border border-border"
+              variants={cardVariants}
+              className="brand-card rounded-2xl overflow-hidden flex flex-col group bg-white border border-border hover:-translate-y-1 hover:shadow-lg hover:border-accent/40 transition-all duration-300"
             >
               {/* YouTube Thumbnail Placeholder */}
               <div
@@ -64,16 +101,19 @@ export default function YouTubeClassesSection() {
                 <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:16px_16px]" />
                 
                 {/* Subject Name Tag */}
-                <span className="absolute top-4 left-4 z-10 px-2.5 py-1 rounded-md bg-white border border-border text-primary text-[10px] font-bold uppercase tracking-wider">
+                <span className="absolute top-4 left-4 z-20 px-2.5 py-1 rounded-md bg-white border border-border text-primary text-[10px] font-bold uppercase tracking-wider">
                   {v.topic}
                 </span>
 
-                {/* Big YouTube Play Button */}
-                <div className="relative z-10 w-16 h-16 rounded-full bg-white border border-border flex items-center justify-center transform group-hover:scale-105 group-hover:bg-accent group-hover:text-primary text-accent transition-all duration-300 shadow-md">
+                {/* Dark premium overlay that fades in on hover */}
+                <div className="absolute inset-0 bg-primary-dark/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center" />
+
+                {/* Big YouTube Play Button with hover scale */}
+                <div className="relative z-20 w-16 h-16 rounded-full bg-white border border-border flex items-center justify-center transform group-hover:scale-110 group-hover:bg-accent group-hover:text-primary group-hover:border-accent text-accent transition-all duration-300 shadow-md">
                   <Play className="h-6 w-6 fill-current ml-1" />
                 </div>
 
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-primary z-10">
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-primary z-20">
                   <span className="flex items-center space-x-1 font-bold bg-white/95 px-2 py-0.5 rounded border border-border shadow-sm">
                     <Clock className="h-3.5 w-3.5" />
                     <span>{v.duration}</span>
@@ -87,7 +127,7 @@ export default function YouTubeClassesSection() {
                 </div>
 
                 {/* Center Title overlay */}
-                <span className="absolute text-[10px] font-bold text-muted bottom-12 uppercase tracking-widest">
+                <span className="absolute text-[10px] font-bold text-muted bottom-12 uppercase tracking-widest group-hover:text-slate-100 transition-colors z-20">
                   YouTube Thumbnail Placeholder
                 </span>
               </div>
@@ -103,7 +143,7 @@ export default function YouTubeClassesSection() {
                 <div className="pt-2 flex items-center justify-between">
                   <button
                     onClick={() => setActiveVideo(v)}
-                    className="primary-btn px-4 py-2 rounded-xl text-xs font-bold"
+                    className="primary-btn px-4 py-2 rounded-xl text-xs font-bold hover:scale-[1.01] transition-transform"
                   >
                     <span>Watch Class</span>
                   </button>
@@ -111,7 +151,7 @@ export default function YouTubeClassesSection() {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* YouTube Channel CTA */}
         <div className="mt-16 text-center">
@@ -119,7 +159,7 @@ export default function YouTubeClassesSection() {
             href="https://youtube.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="secondary-btn inline-flex items-center justify-center space-x-2 w-full sm:w-auto text-center"
+            className="secondary-btn inline-flex items-center justify-center space-x-2 w-full sm:w-auto text-center hover:bg-primary hover:text-white transition-all duration-300"
           >
             <YoutubeIcon className="h-5 w-5" />
             <span>Watch More on YouTube</span>
@@ -154,7 +194,7 @@ export default function YouTubeClassesSection() {
                 </div>
                 <button
                   onClick={() => setActiveVideo(null)}
-                  className="p-1 rounded-lg text-muted hover:text-primary hover:bg-bg-soft transition-colors"
+                  className="p-1 rounded-lg text-muted hover:text-primary hover:bg-bg-soft transition-colors cursor-pointer"
                 >
                   <X className="h-6 w-6" />
                 </button>
@@ -173,13 +213,13 @@ export default function YouTubeClassesSection() {
 
               {/* Modal Footer CTA */}
               <div className="p-4 bg-bg-soft border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
-                <span className="text-text font-medium">
+                <span className="text-text font-medium text-center sm:text-left">
                   Like this class? Inquire about upcoming batches to learn directly with Sir.
                 </span>
                 <a
                   href={`https://wa.me/8801879169446?text=Hello%20Sir%2C%20I%20just%20watched%20your%20class%20on%20${encodeURIComponent(
                     activeVideo.title
-                  )}.%20Please%2520let%20me%20know%20how%20to%20register.`}
+                  )}.%20Please%20let%20me%20know%20how%20to%20register.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="primary-btn w-full sm:w-auto text-center"
