@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, animate } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import HeroSection from "@/components/home/HeroSection";
 import TrustStats from "@/components/home/TrustStats";
@@ -60,11 +60,24 @@ export default function Home() {
         endHeight
       });
 
-      // Smooth scroll to the teacher section
+      // Synchronized smooth scroll to the teacher section
       const offsetTop = teacherSection.offsetTop - 80;
-      window.scrollTo({
-        top: offsetTop,
-        behavior: "smooth"
+      const startScroll = window.scrollY;
+
+      // Temporarily disable CSS-based smooth scroll to avoid conflicts with JS animation loop
+      const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+
+      animate(startScroll, offsetTop, {
+        duration: 1.2,
+        ease: [0.25, 1, 0.5, 1], // Perfect matching custom cubic bezier curve
+        onUpdate: (latest) => {
+          window.scrollTo(0, latest);
+        },
+        onComplete: () => {
+          // Restore CSS scroll behavior once transition completes
+          document.documentElement.style.scrollBehavior = originalScrollBehavior;
+        }
       });
     }
   };
@@ -123,7 +136,7 @@ export default function Home() {
             }}
             exit={{ opacity: 0 }}
             transition={{
-              duration: 1.1, // Aligns perfectly with standard smooth scrolling speed
+              duration: 1.2, // Perfect matched duration for flight and scroll
               ease: [0.25, 1, 0.5, 1], // Smooth custom cubic bezier easing
             }}
             onAnimationComplete={() => {
@@ -138,10 +151,23 @@ export default function Home() {
             }}
           >
             <div className="w-full h-full relative" style={{ perspective: 1000 }}>
+              {/* Premium gold glow trail following the flight */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{
+                  opacity: [0, 0.6, 0.6, 0],
+                  scale: [0.5, 1.25, 1.1, 0.5],
+                }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.25, 1, 0.5, 1],
+                }}
+                className="absolute inset-0 bg-accent/20 rounded-full blur-3xl -z-10"
+              />
               <img
                 src="/images/sir_photo_clean.png"
                 alt=""
-                className="w-full h-full object-contain object-bottom filter drop-shadow-[0_15px_30px_rgba(1,14,98,0.22)]"
+                className="w-full h-full object-contain object-bottom filter drop-shadow-[0_20px_40px_rgba(1,14,98,0.25)]"
               />
             </div>
           </motion.div>
