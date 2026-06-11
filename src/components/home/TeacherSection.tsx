@@ -6,7 +6,11 @@ import { Award, GraduationCap, Users, Send } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { siteInfo, teachingMethods } from "@/data/site";
 
-export default function TeacherSection() {
+interface TeacherSectionProps {
+  isTeacherFlying?: boolean;
+}
+
+export default function TeacherSection({ isTeacherFlying = false }: TeacherSectionProps) {
   const [imgSrc, setImgSrc] = useState("/images/sir_photo_clean.png");
   const whatsappLink = `https://wa.me/${siteInfo.whatsapp}?text=Hello%20${encodeURIComponent(siteInfo.teacherName.split(" ").pop()!)}%20Sir%2C%20I%20would%20like%20to%20discuss%2520admissions%20for%20myself%20/%20my%20child.`;
   const shouldReduceMotion = useReducedMotion();
@@ -70,7 +74,10 @@ export default function TeacherSection() {
               <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:16px_16px]" />
 
               <div className="flex-grow flex flex-col items-center justify-center py-4 relative z-10">
-                <div className="relative w-48 h-48 flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
+                <div 
+                  id="teacher-section-photo" 
+                  className={`relative w-48 h-48 flex items-center justify-center group-hover:scale-105 transition-transform duration-500 transition-opacity duration-200 ${isTeacherFlying ? "opacity-0" : "opacity-100"}`}
+                >
                   <Image
                     src={imgSrc}
                     alt={siteInfo.teacherName}

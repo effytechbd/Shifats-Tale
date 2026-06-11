@@ -17,7 +17,12 @@ const HeroScene = dynamic(() => import("../three/HeroScene"), {
   ),
 });
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  isTeacherFlying?: boolean;
+  onImageClick?: (e: React.MouseEvent) => void;
+}
+
+export default function HeroSection({ isTeacherFlying = false, onImageClick }: HeroSectionProps) {
   const scrollToSection = (id: string) => {
     const el = document.querySelector(id);
     if (el) {
@@ -125,10 +130,17 @@ export default function HeroSection() {
 
             {/* Teacher transparent portrait (no box wrapper) */}
             <motion.div
+              id="hero-section-photo"
+              onClick={onImageClick}
               initial={{ opacity: 0, scale: 0.95, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
+              animate={{ 
+                opacity: isTeacherFlying ? 0 : 1, 
+                scale: 1, 
+                y: 0 
+              }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-[1/1.2] flex items-end justify-center z-10 pointer-events-none select-none"
+              className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-[1/1.2] flex items-end justify-center z-10 select-none cursor-pointer hover:scale-[1.03] active:scale-[0.98] transition-all duration-300 pointer-events-auto"
+              title="Click to meet Shifat Sir"
             >
               <Image
                 src="/images/sir_photo_clean.png"
