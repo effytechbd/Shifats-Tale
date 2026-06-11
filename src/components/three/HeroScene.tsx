@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import FloatingBook from "./FloatingBook";
-import FloatingCap from "./FloatingCap";
+import { FloatingAtom, FloatingMolecule, FloatingMath } from "./FloatingScience";
 import FloatingShapes from "./FloatingShapes";
 import * as THREE from "three";
 
@@ -109,46 +108,42 @@ export default function HeroScene() {
 
         <Suspense fallback={null}>
           <group position={[0, 0, 0]}>
-            {/* 1 Central Floating Graduation Cap */}
-            <FloatingCap 
-              position={[0, 0.5, 0]} 
-              scale={[0.7, 0.7, 0.7]} 
-              floatSpeed={0.8 * speed}
+            {/* Physics: Central Floating Atom model */}
+            <FloatingAtom 
+              position={[0, 0.5, -0.2]} 
+              scale={[0.9, 0.9, 0.9]} 
+              floatSpeed={0.75 * speed}
+              floatIntensity={0.1 * intensity}
+            />
+
+            {/* Chemistry: Molecule Model left */}
+            <FloatingMolecule 
+              position={[-1.3, 0.35, -0.3]} 
+              rotation={[0.2, 0.4, -0.2]}
+              scale={[0.85, 0.85, 0.85]}
+              floatDelay={0}
+              floatSpeed={0.85 * speed}
               floatIntensity={0.12 * intensity}
             />
 
-            {/* 3 Floating Books in different configurations */}
-            {/* Book 1: Large Navy Book left */}
-            <FloatingBook 
-              position={[-1.4, 0.3, -0.4]} 
-              rotation={[0.2, 0.4, -0.2]}
-              scale={[0.7, 0.7, 0.7]}
-              coverColor="#010E62" // Deep Navy
-              floatDelay={0}
-              floatSpeed={0.9 * speed}
-              floatIntensity={0.15 * intensity}
-            />
-
-            {/* Book 2: Medium Oxford Blue Book right */}
-            <FloatingBook 
-              position={[1.5, -0.2, 0.3]} 
+            {/* Mathematics: Dodecahedron & Axes right */}
+            <FloatingMath 
+              position={[1.4, -0.15, 0.2]} 
               rotation={[-0.3, -0.5, 0.1]}
-              scale={[0.62, 0.62, 0.62]}
-              coverColor="#0B1B4D" // Oxford Blue
+              scale={[0.85, 0.85, 0.85]}
               floatDelay={2.5}
-              floatSpeed={0.7 * speed}
-              floatIntensity={0.13 * intensity}
+              floatSpeed={0.65 * speed}
+              floatIntensity={0.1 * intensity}
             />
 
-            {/* Book 3: Small Gold Book bottom center-left */}
-            <FloatingBook 
-              position={[-0.4, -0.9, 0.6]} 
+            {/* Physics/Chemistry: Small Secondary Atom bottom center-left */}
+            <FloatingAtom 
+              position={[-0.45, -0.85, 0.5]} 
               rotation={[0.4, -0.2, 0.3]}
-              scale={[0.5, 0.5, 0.5]}
-              coverColor="#FBB503" // Gold Accent
-              floatDelay={5.0}
-              floatSpeed={0.8 * speed}
-              floatIntensity={0.1 * intensity}
+              scale={[0.65, 0.65, 0.65]}
+              floatDelay={4.8}
+              floatSpeed={0.7 * speed}
+              floatIntensity={0.08 * intensity}
             />
 
             {/* Abstract gold/navy rings and boxes floating around */}
