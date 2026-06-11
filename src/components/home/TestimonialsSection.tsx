@@ -48,23 +48,23 @@ export default function TestimonialsSection() {
 
   const slideVariants = {
     enter: (dir: number) => ({
-      x: shouldReduceMotion ? 0 : dir > 0 ? 120 : -120,
+      x: shouldReduceMotion ? 0 : dir > 0 ? 180 : -180,
       opacity: 0,
     }),
     center: {
       x: 0,
       opacity: 1,
       transition: {
-        x: { type: "spring" as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.25 },
+        x: { type: "spring" as const, stiffness: 120, damping: 20 },
+        opacity: { duration: 0.3 },
       },
     },
     exit: (dir: number) => ({
-      x: shouldReduceMotion ? 0 : dir > 0 ? -120 : 120,
+      x: shouldReduceMotion ? 0 : dir > 0 ? -180 : 180,
       opacity: 0,
       transition: {
-        x: { type: "spring" as const, stiffness: 300, damping: 30 },
-        opacity: { duration: 0.25 },
+        x: { type: "spring" as const, stiffness: 120, damping: 20 },
+        opacity: { duration: 0.3 },
       },
     }),
   };
@@ -118,13 +118,13 @@ export default function TestimonialsSection() {
 
         {/* Carousel Container */}
         <div 
-          className="relative max-w-3xl mx-auto w-full px-0 sm:px-12"
+          className="relative max-w-5xl mx-auto w-full px-4 sm:px-16"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
           {/* Carousel Track with drag gestures */}
-          <div className="overflow-hidden w-full relative min-h-[300px] sm:min-h-[250px] flex items-center justify-center">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
+          <div className="overflow-hidden w-full relative min-h-[350px] sm:min-h-[260px] flex items-center justify-center">
+            <AnimatePresence initial={false} custom={direction} mode="popLayout">
               <motion.div
                 key={currentIndex}
                 custom={direction}
@@ -136,39 +136,39 @@ export default function TestimonialsSection() {
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.6}
                 onDragEnd={handleDragEnd}
-                className="w-full absolute cursor-grab active:cursor-grabbing"
+                className="w-full absolute cursor-grab active:cursor-grabbing flex justify-center"
               >
-                <div className="brand-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative bg-white border border-border group hover:shadow-md hover:border-accent/30 transition-all duration-300 mx-auto max-w-2xl select-none">
+                <div className="brand-card rounded-3xl p-8 sm:p-10 md:p-12 flex flex-col justify-between relative bg-white border border-border group hover:shadow-md hover:border-accent/30 transition-all duration-300 w-full max-w-4xl select-none">
                   {/* Double quote background icon - scales and highlights on card hover */}
-                  <Quote className="absolute right-6 top-6 h-12 w-12 text-bg/80 group-hover:text-accent/10 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
+                  <Quote className="absolute right-8 top-8 h-16 w-16 text-bg/85 group-hover:text-accent/10 group-hover:scale-110 transition-all duration-300 pointer-events-none" />
 
-                  <div className="space-y-4 relative z-10">
+                  <div className="space-y-5 relative z-10">
                     {/* Stars */}
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-1.5">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="h-4 w-4 fill-accent text-accent" />
+                        <Star key={i} className="h-5 w-5 fill-accent text-accent" />
                       ))}
                     </div>
 
                     {/* Quote Content */}
-                    <p className="text-text text-sm sm:text-base leading-relaxed italic group-hover:text-primary-dark transition-colors">
+                    <p className="text-text text-base sm:text-lg md:text-xl font-medium leading-relaxed italic group-hover:text-primary-dark transition-colors">
                       "{activeTestimonial.quote}"
                     </p>
                   </div>
 
                   {/* User Identity Info */}
-                  <div className="pt-6 border-t border-border mt-6 flex items-center justify-between">
+                  <div className="pt-6 border-t border-border mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
-                      <h4 className="font-extrabold text-primary text-sm sm:text-base group-hover:text-primary transition-colors">
+                      <h4 className="font-extrabold text-primary text-base sm:text-lg md:text-xl group-hover:text-primary transition-colors">
                         {activeTestimonial.name}
                       </h4>
-                      <span className="text-xs text-muted block mt-0.5">
+                      <span className="text-xs sm:text-sm text-muted block mt-0.5 font-semibold">
                         {activeTestimonial.batch}
                       </span>
                     </div>
                     
                     {activeTestimonial.achievement && (
-                      <span className="text-[10px] sm:text-xs font-bold text-primary bg-bg px-2.5 py-1 rounded-lg border border-border max-w-[200px] text-right truncate group-hover:border-accent/20 transition-all">
+                      <span className="text-xs sm:text-sm font-bold text-primary bg-bg px-3.5 py-1.5 rounded-xl border border-border max-w-full sm:max-w-[280px] text-left sm:text-right truncate group-hover:border-accent/20 transition-all">
                         {activeTestimonial.achievement}
                       </span>
                     )}
@@ -181,22 +181,22 @@ export default function TestimonialsSection() {
           {/* Navigation Arrows (Desktop) */}
           <button
             onClick={handlePrev}
-            className="absolute left-[-16px] md:left-[-4px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-border bg-white flex items-center justify-center text-primary hover:text-accent hover:border-accent/40 shadow-sm hover:shadow transition-all duration-200 z-20 cursor-pointer hidden sm:flex"
+            className="absolute left-0 md:left-[-16px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center text-primary hover:text-accent hover:border-accent/40 shadow-sm hover:shadow transition-all duration-200 z-20 cursor-pointer hidden sm:flex"
             aria-label="Previous testimonial"
           >
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-6 w-6" />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-[-16px] md:right-[-4px] top-1/2 -translate-y-1/2 w-10 h-10 rounded-full border border-border bg-white flex items-center justify-center text-primary hover:text-accent hover:border-accent/40 shadow-sm hover:shadow transition-all duration-200 z-20 cursor-pointer hidden sm:flex"
+            className="absolute right-0 md:right-[-16px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-border bg-white flex items-center justify-center text-primary hover:text-accent hover:border-accent/40 shadow-sm hover:shadow transition-all duration-200 z-20 cursor-pointer hidden sm:flex"
             aria-label="Next testimonial"
           >
-            <ChevronRight className="h-5 w-5" />
+            <ChevronRight className="h-6 w-6" />
           </button>
         </div>
 
         {/* Mobile Navigation Controls & Indicator Dots */}
-        <div className="flex flex-col items-center justify-center gap-4 mt-6">
+        <div className="flex flex-col items-center justify-center gap-4 mt-8">
           {/* Arrow Buttons (Mobile only) */}
           <div className="flex items-center space-x-4 sm:hidden">
             <button
