@@ -3,10 +3,11 @@
 import React from "react";
 import { MapPin, Compass, Train } from "lucide-react";
 import { motion } from "framer-motion";
+import { siteInfo } from "@/data/site";
 
 export default function LocationSection() {
-  const mapUrl = "https://maps.google.com/maps?q=Rangunia%20Government%20College,%20Chattogram&t=&z=16&ie=UTF8&iwloc=&output=embed";
-  const directionUrl = "https://maps.google.com/?q=Rangunia+Government+College+Chattogram";
+  const mapUrl = siteInfo.googleMapEmbedUrl;
+  const directionUrl = siteInfo.googleMapDirectionUrl;
 
   return (
     <section id="location" className="brand-section-wrapper bg-bg relative">
@@ -40,7 +41,7 @@ export default function LocationSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-text text-sm sm:text-base"
           >
-            Classes are conducted in a clean, fully air-conditioned and high-tech facility near Rangunia College, Chattogram.
+            Classes are conducted in a clean, fully air-conditioned and high-tech facility near the {siteInfo.nearbyLandmark} area.
           </motion.p>
         </div>
 
@@ -57,7 +58,7 @@ export default function LocationSection() {
                 <div>
                   <h4 className="font-extrabold text-primary text-base sm:text-lg">Physical Venue</h4>
                   <p className="text-sm text-text mt-1.5 leading-relaxed font-medium">
-                    Sekandar & M.P Yusuf Building, 3rd Floor, next to Rangunia College, Rangunia, Chattogram, Bangladesh
+                    {siteInfo.address}
                   </p>
                 </div>
               </div>
@@ -70,7 +71,7 @@ export default function LocationSection() {
                 <div>
                   <h4 className="font-extrabold text-primary text-base sm:text-lg">How to reach</h4>
                   <p className="text-sm text-text mt-1.5 leading-relaxed font-medium">
-                    Conveniently located next to Rangunia College in Rangunia, Chattogram. Easily accessible from all parts of Rangunia by local transport (CNG/bus).
+                    Conveniently located {siteInfo.nearbyLandmark} in Rangunia. Easily accessible from all parts of the area by local transport (CNG/bus).
                   </p>
                 </div>
               </div>

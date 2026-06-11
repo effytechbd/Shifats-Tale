@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, MapPin, Send, Mail } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
+import { siteInfo } from "@/data/site";
 
 export default function Footer() {
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -37,11 +38,11 @@ export default function Footer() {
             </div>
           </div>
           <p className="text-sm leading-relaxed text-slate-400">
-            A premium personal coaching ecosystem specialized in Physics and Higher Mathematics. Founded and mentored by Md. Zia Uddin Azad Sifat (Shifat Sir). Empowering SSC and HSC science students to build core concepts and score top ranks in university admission tests.
+            {siteInfo.shortDescription}
           </p>
           <div className="flex items-center space-x-3 pt-2">
             <a
-              href="https://facebook.com"
+              href={siteInfo.facebookUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-primary-dark border border-primary-dark/80 text-slate-300 hover:text-accent hover:border-accent/40 transition-all duration-200"
@@ -50,7 +51,7 @@ export default function Footer() {
               <FacebookIcon className="h-4.5 w-4.5" />
             </a>
             <a
-              href="https://youtube.com"
+              href={siteInfo.youtubeUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2.5 rounded-xl bg-primary-dark border border-primary-dark/80 text-slate-300 hover:text-accent hover:border-accent/40 transition-all duration-200"
@@ -104,8 +105,8 @@ export default function Footer() {
               <Phone className="h-5 w-5 text-accent shrink-0 mt-0.5" />
               <div>
                 <span className="block text-slate-200 font-bold">Call/WhatsApp</span>
-                <a href="tel:+8801879169446" className="hover:text-accent text-slate-300 transition-colors font-semibold">
-                  +880 1879-169446
+                <a href={`tel:${siteInfo.phone.replace(/[\s-]/g, "")}`} className="hover:text-accent text-slate-300 transition-colors font-semibold">
+                  {siteInfo.phone}
                 </a>
               </div>
             </li>
@@ -113,8 +114,8 @@ export default function Footer() {
               <Mail className="h-5 w-5 text-accent shrink-0 mt-0.5" />
               <div>
                 <span className="block text-slate-200 font-bold">Email</span>
-                <a href="mailto:info@shifatstales.com" className="hover:text-accent text-slate-300 transition-colors font-mono">
-                  info@shifatstales.com
+                <a href={`mailto:${siteInfo.email}`} className="hover:text-accent text-slate-300 transition-colors font-mono">
+                  {siteInfo.email}
                 </a>
               </div>
             </li>
@@ -123,7 +124,7 @@ export default function Footer() {
               <div>
                 <span className="block text-slate-200 font-bold">Location</span>
                 <span className="text-slate-400 text-xs leading-relaxed block mt-0.5">
-                  Sekandar & M.P Yusuf Building, 3rd Floor, next to Rangunia College, Rangunia, Chattogram, Bangladesh
+                  {siteInfo.address}
                 </span>
               </div>
             </li>
@@ -134,10 +135,10 @@ export default function Footer() {
         <div className="space-y-4">
           <h3 className="text-sm font-bold text-white tracking-wider uppercase">Direct Admission Care</h3>
           <p className="text-xs text-slate-400 leading-relaxed">
-            We do not offer automatic online enrollment or payments. To join our programs, please connect directly with Shifat Sir or visit our Rangunia venue.
+            We do not offer automatic online enrollment or payments. To join our programs, please connect directly with Shifat Sir or visit our venue.
           </p>
           <a
-            href="https://wa.me/8801879169446?text=Hello%20Sir%2C%20I%20would%20like%20to%20know%20more%20about%20the%20admissions."
+            href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Sir%2C%20I%20would%20like%20to%20know%20more%20about%20the%20admissions.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center space-x-2 w-full py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-colors duration-200"

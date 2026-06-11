@@ -3,52 +3,20 @@
 import React from "react";
 import { Cpu, NotebookTabs, ClipboardList, MessageCircle, UserCheck, Users } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { benefits } from "@/data/site";
 
-interface Benefit {
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  colorClass: string;
-}
-
-const benefits: Benefit[] = [
-  {
-    title: "Personal Guidance",
-    description: "Direct mentorship from Shifat Sir, including target goal planning, parent alignment feedback, and personalized tracking.",
-    icon: <UserCheck className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
-  },
-  {
-    title: "Small Batch Environment",
-    description: "Intentionally capped intake (max 30 candidates per batch) to make sure no student sits silently with unresolved doubts.",
-    icon: <Users className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
-  },
-  {
-    title: "Weekly Exams",
-    description: "Rigorous weekly quizzes, board-standard creative questions, and mock evaluations to build test-taking confidence.",
-    icon: <ClipboardList className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
-  },
-  {
-    title: "Lecture Sheets",
-    description: "Curated worksheets, handwritten concept books, and mathematical shortcut checklists compiled directly by Shifat Sir.",
-    icon: <NotebookTabs className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
-  },
-  {
-    title: "Doubt Solving",
-    description: "Designated solving classes and active online Q&A groups to answer every individual student query step-by-step.",
-    icon: <MessageCircle className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
-  },
-  {
-    title: "Concept-Based Teaching",
-    description: "We focus on the underlying physical laws and mathematical proofs, helping students visualize concepts instead of memorizing.",
-    icon: <Cpu className="h-6 w-6" />,
-    colorClass: "text-primary bg-bg border-border",
+const getIcon = (iconName: string) => {
+  switch (iconName) {
+    case "UserCheck": return <UserCheck className="h-6 w-6" />;
+    case "Users": return <Users className="h-6 w-6" />;
+    case "ClipboardList": return <ClipboardList className="h-6 w-6" />;
+    case "NotebookTabs": return <NotebookTabs className="h-6 w-6" />;
+    case "MessageCircle": return <MessageCircle className="h-6 w-6" />;
+    case "Cpu": return <Cpu className="h-6 w-6" />;
+    default: return <UserCheck className="h-6 w-6" />;
   }
-];
+};
+
 
 export default function WhyChooseSection() {
   const shouldReduceMotion = useReducedMotion();
@@ -140,8 +108,8 @@ export default function WhyChooseSection() {
               <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               {/* Icon Container */}
-              <div className={`p-3 rounded-xl border shrink-0 w-12 h-12 flex items-center justify-center transition-transform group-hover:scale-105 duration-300 ${benefit.colorClass}`}>
-                {benefit.icon}
+              <div className="p-3 rounded-xl border shrink-0 w-12 h-12 flex items-center justify-center transition-transform group-hover:scale-105 duration-300 text-primary bg-bg border-border">
+                {getIcon(benefit.iconName)}
               </div>
 
               {/* Content */}

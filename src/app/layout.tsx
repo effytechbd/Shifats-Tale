@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
+import { siteInfo } from "@/data/site";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -13,25 +14,25 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Shifat's Tales — Academic & Admission Care",
-  description: "Premium personal coaching program specialized in Physics and Higher Mathematics. Mentored directly by Md. Zia Uddin Azad Sifat (Shifat Sir) in Rangunia, Chattogram. Focused on SSC, HSC board exams and engineering/varsity admissions.",
+  title: siteInfo.coachingCenterName,
+  description: siteInfo.shortDescription,
   keywords: [
-    "Shifat's Tales",
-    "Shifat Sir Coaching",
-    "Md. Zia Uddin Azad Sifat",
+    siteInfo.coachingCenterName.split(" — ")[0],
+    `${siteInfo.teacherName.split(" ").pop()} Sir Coaching`,
+    siteInfo.teacherName,
     "Physics Coaching Chattogram",
     "Mathematics Admission Care",
     "BUET Admission Care",
     "CUET Admission Care",
-    "Coaching center Rangunia"
+    `Coaching center ${siteInfo.address.split(",").reverse()[2]?.trim() || "Rangunia"}`
   ],
-  authors: [{ name: "Md. Zia Uddin Azad Sifat" }],
+  authors: [{ name: siteInfo.teacherName }],
   openGraph: {
-    title: "Shifat's Tales — Academic & Admission Care",
-    description: "Premium personal coaching program specialized in Physics and Higher Mathematics by Shifat Sir.",
+    title: siteInfo.coachingCenterName,
+    description: `Premium personal coaching program specialized in Physics and Higher Mathematics by ${siteInfo.teacherName.split(" ").pop()} Sir.`,
     type: "website",
     locale: "en_US",
-    siteName: "Shifat's Tales",
+    siteName: siteInfo.coachingCenterName.split(" — ")[0],
   }
 };
 

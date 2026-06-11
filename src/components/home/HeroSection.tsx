@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Play, User } from "lucide-react";
+import { siteInfo } from "@/data/site";
 
 // Dynamically import the 3D scene with SSR disabled for optimal bundle performance
 const HeroScene = dynamic(() => import("../three/HeroScene"), {
@@ -48,7 +49,7 @@ export default function HeroSection() {
               className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-border text-primary text-xs font-bold tracking-wide shadow-sm"
             >
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span>Admissions Open for SSC & HSC Batches</span>
+              <span>{siteInfo.tagline}</span>
             </motion.div>
 
             <div className="space-y-4">
@@ -58,10 +59,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-primary leading-tight"
               >
-                Personal Guidance for
-                <span className="block mt-1 text-primary-dark">
-                  Better Academic Success
-                </span>
+                {siteInfo.heroHeadline}
               </motion.h1>
 
               <motion.p
@@ -70,7 +68,7 @@ export default function HeroSection() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-lg md:text-xl text-text max-w-2xl mx-auto lg:mx-0 leading-relaxed"
               >
-                Learn directly from an experienced teacher through structured classes, regular exams, clear explanations, and individual academic support.
+                {siteInfo.heroDescription}
               </motion.p>
             </div>
 
@@ -142,7 +140,7 @@ export default function HeroSection() {
                 <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-accent/40 shadow-sm bg-bg-soft flex items-center justify-center">
                   <Image
                     src={imgSrc}
-                    alt="Md. Zia Uddin Azad Sifat"
+                    alt={siteInfo.teacherName}
                     fill
                     sizes="160px"
                     className="object-cover object-top scale-[1.15]"
@@ -151,10 +149,10 @@ export default function HeroSection() {
                 </div>
                 <div className="text-center space-y-1">
                   <span className="block font-extrabold text-primary text-base sm:text-lg leading-tight">
-                    Md. Zia Uddin Azad Sifat
+                    {siteInfo.teacherName}
                   </span>
                   <span className="block text-[11px] text-muted font-extrabold uppercase tracking-widest">
-                    Instructor & CEO
+                    {siteInfo.teacherDesignation}
                   </span>
                 </div>
               </div>
@@ -162,11 +160,11 @@ export default function HeroSection() {
               {/* Specs Badge */}
               <div className="bg-bg-soft/80 border border-border p-3 rounded-2xl flex items-center justify-between relative z-10">
                 <div>
-                  <span className="block font-bold text-xs text-primary leading-none mb-1">Shifat Sir</span>
-                  <span className="block text-[8px] text-muted font-extrabold uppercase tracking-wider">Shifat's Tales Coaching</span>
+                  <span className="block font-bold text-xs text-primary leading-none mb-1">{siteInfo.teacherName.split(" ").pop()} Sir</span>
+                  <span className="block text-[8px] text-muted font-extrabold uppercase tracking-wider">{siteInfo.coachingCenterName.split(" — ")[0]}</span>
                 </div>
                 <span className="bg-accent text-primary text-[9px] font-extrabold px-2.5 py-1 rounded">
-                  EEE, CUET
+                  {siteInfo.teacherSpecialty.split(" | ")[0]}
                 </span>
               </div>
             </motion.div>

@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Award, GraduationCap, Users, Send } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { siteInfo, teachingMethods } from "@/data/site";
 
 export default function TeacherSection() {
   const [imgSrc, setImgSrc] = useState("/images/media__1781164765908_transparent.png");
-  const whatsappLink = "https://wa.me/8801879169446?text=Hello%20Shifat%20Sir%2C%20I%20would%20like%20to%20discuss%20admissions%20for%20myself%20/%20my%20child.";
+  const whatsappLink = `https://wa.me/${siteInfo.whatsapp}?text=Hello%20${encodeURIComponent(siteInfo.teacherName.split(" ").pop()!)}%20Sir%2C%20I%20would%20like%20to%20discuss%2520admissions%20for%20myself%20/%20my%20child.`;
   const shouldReduceMotion = useReducedMotion();
 
   const floatAnimation = shouldReduceMotion ? {} : {
@@ -72,7 +73,7 @@ export default function TeacherSection() {
                 <div className="relative w-44 h-44 rounded-2xl overflow-hidden border border-border shadow-sm bg-bg-soft flex items-center justify-center group-hover:scale-105 transition-transform duration-500">
                   <Image
                     src={imgSrc}
-                    alt="Md. Zia Uddin Azad Sifat"
+                    alt={siteInfo.teacherName}
                     fill
                     sizes="176px"
                     className="object-cover object-top scale-105"
@@ -84,8 +85,8 @@ export default function TeacherSection() {
               {/* Float Tag */}
               <div className="bg-bg-soft border border-border p-3 rounded-xl flex items-center justify-between shadow-sm relative z-10 group-hover:border-accent/20 transition-all">
                 <div>
-                  <span className="block font-bold text-xs text-primary">Md. Zia Uddin Azad Sifat</span>
-                  <span className="block text-[8px] text-muted font-bold uppercase tracking-wider leading-none mt-0.5">Shifat Sir</span>
+                  <span className="block font-bold text-xs text-primary">{siteInfo.teacherName}</span>
+                  <span className="block text-[8px] text-muted font-bold uppercase tracking-wider leading-none mt-0.5">{siteInfo.teacherName.split(" ").pop()} Sir</span>
                 </div>
                 <span className="bg-accent text-primary text-[9px] font-extrabold px-2.5 py-1 rounded shadow-sm">
                   Lead Mentor
@@ -113,7 +114,7 @@ export default function TeacherSection() {
                 viewport={{ once: true }}
                 className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
               >
-                Md. Zia Uddin Azad Sifat
+                {siteInfo.teacherName}
               </motion.h3>
               <motion.p
                 variants={headerVariants}
@@ -123,7 +124,7 @@ export default function TeacherSection() {
                 className="text-primary-dark text-sm font-semibold flex items-center gap-1.5"
               >
                 <GraduationCap className="h-4.5 w-4.5 text-accent animate-bounce" style={{ animationDuration: "3s" }} />
-                <span>B.Sc. in Engineering | Physics & Mathematics Specialist</span>
+                <span>{siteInfo.teacherSpecialty}</span>
               </motion.p>
             </div>
 
@@ -135,7 +136,7 @@ export default function TeacherSection() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-text text-sm sm:text-base leading-relaxed"
             >
-              Hello, I am Md. Zia Uddin Azad Sifat (Shifat Sir). As a B.Sc. Engineer from CUET, I specialize in simplifying complex Physics and Higher Mathematics concepts. Through structured classes, weekly exams, and concept-first teaching, I guide SSC and HSC science students to excel in both board exams and engineering admission preparation.
+              {siteInfo.teacherBio}
             </motion.p>
 
             {/* Teaching Method Cards */}
@@ -150,12 +151,7 @@ export default function TeacherSection() {
                 viewport={{ once: true, margin: "-50px" }}
                 className="grid grid-cols-1 sm:grid-cols-2 gap-4"
               >
-                {[
-                  { title: "Concept-First Learning", desc: "Prioritizing complete visualization of scientific laws before solving formulas." },
-                  { title: "Chapter-Wise Problem Solving", desc: "Systematic mastery of textbook exercises and math shortcuts chapter by chapter." },
-                  { title: "Board Question Practice", desc: "Intensive drills using past test banks and creative question templates." },
-                  { title: "Weak Student Support", desc: "Tailored doubt resolution slots and parent sync reports for student accountability." }
-                ].map((method, i) => (
+                {teachingMethods.map((method, i) => (
                   <motion.div
                     key={i}
                     variants={gridItemVariants}

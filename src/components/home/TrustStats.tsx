@@ -3,40 +3,17 @@
 import React from "react";
 import { Award, Users, GraduationCap, CheckCircle } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { stats } from "@/data/site";
 
-interface StatItem {
-  number: string;
-  label: string;
-  description: string;
-  icon: React.ReactNode;
-}
-
-const stats: StatItem[] = [
-  {
-    number: "10+",
-    label: "Years Experience",
-    description: "Teaching Physics & Mathematics",
-    icon: <Award className="h-6 w-6 text-accent" />,
-  },
-  {
-    number: "1,200+",
-    label: "Students Guided",
-    description: "SSC and HSC Candidates",
-    icon: <Users className="h-6 w-6 text-primary" />,
-  },
-  {
-    number: "40+",
-    label: "Successful Batches",
-    description: "Academic & Admission Care",
-    icon: <GraduationCap className="h-6 w-6 text-primary-dark" />,
-  },
-  {
-    number: "Weekly",
-    label: "Exam System",
-    description: "Continuous progress evaluation",
-    icon: <CheckCircle className="h-6 w-6 text-emerald-600" />,
-  },
-];
+const getIcon = (iconName: string) => {
+  switch (iconName) {
+    case "Award": return <Award className="h-6 w-6 text-accent" />;
+    case "Users": return <Users className="h-6 w-6 text-primary" />;
+    case "GraduationCap": return <GraduationCap className="h-6 w-6 text-primary-dark" />;
+    case "CheckCircle": return <CheckCircle className="h-6 w-6 text-emerald-600" />;
+    default: return <Award className="h-6 w-6 text-accent" />;
+  }
+};
 
 export default function TrustStats() {
   const shouldReduceMotion = useReducedMotion();
@@ -86,7 +63,7 @@ export default function TrustStats() {
 
               {/* Icon wrapper */}
               <div className="bg-bg-soft p-3 rounded-xl border border-border group-hover:scale-105 transition-transform duration-300">
-                {stat.icon}
+                {getIcon(stat.iconName)}
               </div>
 
               {/* Number */}

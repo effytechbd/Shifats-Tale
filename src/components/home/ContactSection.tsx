@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Clock } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
 import { motion, useReducedMotion } from "framer-motion";
+import { siteInfo } from "@/data/site";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -15,7 +16,7 @@ export default function ContactSection() {
   });
 
   const [submitted, setSubmitted] = useState(false);
-  const whatsappNumber = "8801879169446";
+  const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -40,7 +41,7 @@ export default function ContactSection() {
 
     const courseName = coursesMap[formData.interestedCourse] || formData.interestedCourse;
 
-    const textMessage = `Hello Shifat Sir,\n\n*Lead Form Submission*\n\nStudent Name: *${formData.studentName}*\nClass/Batch: *${formData.studentClass}*\nInterested Batch: *${courseName}*\nPhone Number: *${formData.phone}*\n\n*Message:* ${formData.message}`;
+    const textMessage = `Hello ${siteInfo.teacherName.split(" ").pop()!} Sir,\n\n*Lead Form Submission*\n\nStudent Name: *${formData.studentName}*\nClass/Batch: *${formData.studentClass}*\nInterested Batch: *${courseName}*\nPhone Number: *${formData.phone}*\n\n*Message:* ${formData.message}`;
     
     const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(textMessage)}`;
     
@@ -109,7 +110,7 @@ export default function ContactSection() {
             viewport={{ once: true }}
             className="text-text text-sm sm:text-base"
           >
-            Fill out the short form below to compile an direct inquiry. Submitting will immediately open a chat with Shifat Sir on WhatsApp.
+            Fill out the short form below to compile an direct inquiry. Submitting will immediately open a chat with {siteInfo.teacherName.split(" ").pop()!} Sir on WhatsApp.
           </motion.p>
         </div>
 
@@ -136,7 +137,7 @@ export default function ContactSection() {
             <div className="space-y-4">
               {/* Phone */}
               <a
-                href="tel:+8801879169446"
+                href={`tel:${siteInfo.phone.replace(/[\s-]/g, "")}`}
                 className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
               >
                 <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
@@ -144,13 +145,13 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Phone Calls</span>
-                  <span className="block font-extrabold text-primary text-sm sm:text-base">+880 1879-169446</span>
+                  <span className="block font-extrabold text-primary text-sm sm:text-base">{siteInfo.phone}</span>
                 </div>
               </a>
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/8801879169446"
+                href={`https://wa.me/${siteInfo.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
@@ -167,7 +168,7 @@ export default function ContactSection() {
               {/* Social Pages */}
               <div className="grid grid-cols-2 gap-4">
                 <a
-                  href="https://facebook.com"
+                  href={siteInfo.facebookUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
@@ -176,7 +177,7 @@ export default function ContactSection() {
                   <span className="text-xs font-bold text-primary-dark">Facebook</span>
                 </a>
                 <a
-                  href="https://youtube.com"
+                  href={siteInfo.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
@@ -193,7 +194,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Office Hours</span>
-                  <span className="block font-extrabold text-primary text-sm sm:text-base">Daily 4:00 PM - 9:00 PM</span>
+                  <span className="block font-extrabold text-primary text-sm sm:text-base">{siteInfo.officeHours}</span>
                 </div>
               </div>
 
@@ -205,7 +206,7 @@ export default function ContactSection() {
                 <div>
                   <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Office Address</span>
                   <span className="block font-extrabold text-primary text-xs leading-relaxed mt-0.5">
-                    Sekandar & M.P Yusuf Building, 3rd Floor, next to Rangunia College, Rangunia, Chattogram
+                    {siteInfo.address}
                   </span>
                 </div>
               </div>

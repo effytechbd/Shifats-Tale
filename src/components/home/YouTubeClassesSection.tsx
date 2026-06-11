@@ -5,6 +5,7 @@ import { youtubeClasses, YouTubeClass } from "@/data/youtubeClasses";
 import { Play, Clock, Eye, X } from "lucide-react";
 import { YoutubeIcon } from "@/components/ui/Icons";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { siteInfo } from "@/data/site";
 
 export default function YouTubeClassesSection() {
   const [activeVideo, setActiveVideo] = useState<YouTubeClass | null>(null);
@@ -156,7 +157,7 @@ export default function YouTubeClassesSection() {
         {/* YouTube Channel CTA */}
         <div className="mt-16 text-center">
           <a
-            href="https://youtube.com"
+            href={siteInfo.youtubeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="secondary-btn inline-flex items-center justify-center space-x-2 w-full sm:w-auto text-center hover:bg-primary hover:text-white transition-all duration-300"
@@ -217,7 +218,7 @@ export default function YouTubeClassesSection() {
                   Like this class? Inquire about upcoming batches to learn directly with Sir.
                 </span>
                 <a
-                  href={`https://wa.me/8801879169446?text=Hello%20Sir%2C%20I%20just%20watched%20your%20class%20on%20${encodeURIComponent(
+                  href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Sir%2C%20I%20just%20watched%20your%20class%20on%20${encodeURIComponent(
                     activeVideo.title
                   )}.%20Please%20let%20me%20know%20how%20to%20register.`}
                   target="_blank"

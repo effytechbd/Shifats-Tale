@@ -4,9 +4,10 @@ import React from "react";
 import { courses } from "@/data/courses";
 import { BookOpen, Calendar, Clock, Send } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
+import { siteInfo } from "@/data/site";
 
 export default function CoursesSection() {
-  const whatsappNumber = "8801879169446";
+  const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
 
   const headerVariants = {
