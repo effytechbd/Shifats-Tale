@@ -50,11 +50,9 @@ function BackgroundParticles({ count = 40, speedScale = 1.0 }) {
 }
 
 export default function HeroScene() {
-  const [mounted, setMounted] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     // Check user preference for reduced motion
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     setReduceMotion(mediaQuery.matches);
@@ -69,21 +67,12 @@ export default function HeroScene() {
     };
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="w-full h-full min-h-[350px] sm:min-h-[450px] md:min-h-[550px] flex items-center justify-center bg-transparent">
-        {/* Subtle loading placeholder */}
-        <div className="w-8 h-8 border-3 border-accent/20 border-t-accent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
   // Animation intensity/speed modifiers based on system accessibility settings
   const speed = reduceMotion ? 0.05 : 1.0;
   const intensity = reduceMotion ? 0.1 : 1.0;
 
   return (
-    <div className="w-full h-[350px] sm:h-[450px] md:h-[550px] relative pointer-events-none select-none">
+    <div className="w-full h-full relative pointer-events-none select-none">
       {/* Background glow behind 3D Canvas */}
       <div className="absolute inset-0 bg-gradient-to-tr from-primary/3 to-accent/5 blur-[120px] rounded-full pointer-events-none" />
       

@@ -28,12 +28,12 @@ export default function Footer() {
         {/* About Section */}
         <div className="space-y-4 col-span-1 md:col-span-1.5">
           <div className="flex items-center space-x-2">
-            <div className="bg-white px-3 py-1.5 rounded-xl inline-block relative h-11 w-44 sm:h-12 sm:w-48">
+            <div className="inline-block relative h-11 w-44 sm:h-12 sm:w-48">
               <Image
                 src="/images/logo.png"
                 alt="Shifat's Tales Logo"
                 fill
-                className="object-contain p-0.5"
+                className="object-contain"
               />
             </div>
           </div>

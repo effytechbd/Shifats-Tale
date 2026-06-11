@@ -18,8 +18,6 @@ const HeroScene = dynamic(() => import("../three/HeroScene"), {
 });
 
 export default function HeroSection() {
-  const [imgSrc, setImgSrc] = useState("/images/media__1781164765815_transparent.png");
-
   const scrollToSection = (id: string) => {
     const el = document.querySelector(id);
     if (el) {
@@ -119,54 +117,27 @@ export default function HeroSection() {
           </div>
 
           {/* Hero 3D background & Teacher Photo Column */}
-          <div className="lg:col-span-5 w-full flex items-center justify-center relative min-h-[400px] sm:min-h-[500px]">
+          <div className="lg:col-span-5 w-full flex items-center justify-center relative min-h-[450px] sm:min-h-[550px]">
             {/* 3D Scene Layer (only on large displays for best performance) */}
             <div className="absolute inset-0 z-0 hidden md:block w-full h-full pointer-events-none">
               <HeroScene />
             </div>
 
-            {/* Teacher Card (glassmorphic border overlaying the 3D scene) */}
+            {/* Teacher transparent portrait (no box wrapper) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-full max-w-[320px] sm:max-w-[360px] aspect-[4/5] relative rounded-3xl overflow-hidden border border-border shadow-lg bg-white/90 backdrop-blur-md p-5 flex flex-col justify-between z-10"
+              className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-[1/1.2] flex items-end justify-center z-10 pointer-events-none select-none"
             >
-              {/* Grid backdrop */}
-              <div className="absolute inset-0 opacity-5 bg-[linear-gradient(to_right,#000_1px,transparent_1px),linear-gradient(to_bottom,#000_1px,transparent_1px)] bg-[size:16px_16px]" />
-
-              <div className="flex-grow flex flex-col items-center justify-center space-y-4 py-4 relative z-10">
-                {/* Framed Image Circle */}
-                <div className="relative w-40 h-40 rounded-full overflow-hidden border-2 border-accent/40 shadow-sm bg-bg-soft flex items-center justify-center">
-                  <Image
-                    src={imgSrc}
-                    alt={siteInfo.teacherName}
-                    fill
-                    sizes="160px"
-                    className="object-cover object-top scale-[1.15]"
-                    onError={() => setImgSrc("/images/shifat_sir.png")} // Fallback to raw jpeg if png isn't generated yet
-                  />
-                </div>
-                <div className="text-center space-y-1">
-                  <span className="block font-extrabold text-primary text-base sm:text-lg leading-tight">
-                    {siteInfo.teacherName}
-                  </span>
-                  <span className="block text-[11px] text-muted font-extrabold uppercase tracking-widest">
-                    {siteInfo.teacherDesignation}
-                  </span>
-                </div>
-              </div>
-
-              {/* Specs Badge */}
-              <div className="bg-bg-soft/80 border border-border p-3 rounded-2xl flex items-center justify-between relative z-10">
-                <div>
-                  <span className="block font-bold text-xs text-primary leading-none mb-1">{siteInfo.teacherName.split(" ").pop()} Sir</span>
-                  <span className="block text-[8px] text-muted font-extrabold uppercase tracking-wider">{siteInfo.coachingCenterName.split(" — ")[0]}</span>
-                </div>
-                <span className="bg-accent text-primary text-[9px] font-extrabold px-2.5 py-1 rounded">
-                  {siteInfo.teacherSpecialty.split(" | ")[0]}
-                </span>
-              </div>
+              <Image
+                src="/images/sir_photo_clean.png"
+                alt={siteInfo.teacherName}
+                fill
+                sizes="(max-width: 768px) 280px, 340px"
+                className="object-contain object-bottom filter drop-shadow-[0_12px_24px_rgba(1,14,98,0.18)]"
+                priority
+              />
             </motion.div>
           </div>
         </div>
