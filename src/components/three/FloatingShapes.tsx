@@ -13,20 +13,23 @@ export default function FloatingShapes() {
     const t = state.clock.getElapsedTime();
 
     if (shape1Ref.current) {
-      shape1Ref.current.position.y = Math.sin(t * 0.8) * 0.15 + 0.8;
+      // Float around JSX y = 0.0 (Middle Right)
+      shape1Ref.current.position.y = Math.sin(t * 0.8) * 0.15 + 0.0;
       shape1Ref.current.rotation.x = t * 0.2;
       shape1Ref.current.rotation.y = t * 0.15;
     }
 
     if (shape2Ref.current) {
-      shape2Ref.current.position.y = Math.cos(t * 0.6) * 0.15 - 0.8;
+      // Float around JSX y = 0.0 (Middle Left)
+      shape2Ref.current.position.y = Math.cos(t * 0.6) * 0.15 + 0.0;
       shape2Ref.current.rotation.z = -t * 0.25;
       shape2Ref.current.rotation.x = t * 0.1;
     }
 
     if (shape3Ref.current) {
-      shape3Ref.current.position.y = Math.sin(t * 1.0) * 0.08 - 0.1;
-      shape3Ref.current.position.x = Math.cos(t * 0.4) * 0.08 - 1.2;
+      // Float around JSX y = 0.9, x = -0.7 (Top Left-ish)
+      shape3Ref.current.position.y = Math.sin(t * 1.0) * 0.08 + 0.9;
+      shape3Ref.current.position.x = Math.cos(t * 0.4) * 0.08 - 0.7;
     }
   });
 
