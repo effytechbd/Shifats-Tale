@@ -409,7 +409,7 @@ export default function ResultsSection() {
                       rotateY: cardMotion.rotateY,
                       scale: cardMotion.scale,
                       opacity: cardMotion.opacity,
-                      filter: `blur(${cardMotion.blur}px)`,
+                      filter: cardMotion.blur > 0 ? `blur(${cardMotion.blur}px)` : "none",
                     }}
                     transition={{
                       type: "spring",
