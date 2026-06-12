@@ -3,9 +3,140 @@
 import React, { useState, useEffect } from "react";
 import { studentResults } from "@/data/results";
 import { GraduationCap, School, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 type CategoryFilter = "All" | "Engineering" | "University" | "Medical" | "Board";
+
+const getCardMotion = (offset: number, isMobile: boolean) => {
+  const abs = Math.abs(offset);
+
+  if (isMobile) {
+    if (offset === 0) {
+      return {
+        x: 0,
+        z: 80,
+        rotateY: 0,
+        scale: 0.95,
+        opacity: 1,
+        blur: 0,
+        zIndex: 50,
+        pointerEvents: "auto" as const,
+      };
+    }
+    if (offset === -1) {
+      return {
+        x: -190,
+        z: -40,
+        rotateY: 25,
+        scale: 0.82,
+        opacity: 0.55,
+        blur: 1,
+        zIndex: 30,
+        pointerEvents: "auto" as const,
+      };
+    }
+    if (offset === 1) {
+      return {
+        x: 190,
+        z: -40,
+        rotateY: -25,
+        scale: 0.82,
+        opacity: 0.55,
+        blur: 1,
+        zIndex: 30,
+        pointerEvents: "auto" as const,
+      };
+    }
+    return {
+      x: offset > 0 ? 300 : -300,
+      z: -200,
+      rotateY: offset > 0 ? -45 : 45,
+      scale: 0.6,
+      opacity: 0,
+      blur: 6,
+      zIndex: 0,
+      pointerEvents: "none" as const,
+    };
+  }
+
+  const visible = abs <= 2;
+
+  if (!visible) {
+    return {
+      x: offset > 0 ? 620 : -620,
+      z: -420,
+      rotateY: offset > 0 ? -70 : 70,
+      scale: 0.58,
+      opacity: 0,
+      blur: 8,
+      zIndex: 0,
+      pointerEvents: "none" as const,
+    };
+  }
+
+  if (offset === 0) {
+    return {
+      x: 0,
+      z: 180,
+      rotateY: 0,
+      scale: 1,
+      opacity: 1,
+      blur: 0,
+      zIndex: 50,
+      pointerEvents: "auto" as const,
+    };
+  }
+
+  if (offset === -1) {
+    return {
+      x: -300,
+      z: 20,
+      rotateY: 42,
+      scale: 0.86,
+      opacity: 0.72,
+      blur: 1.5,
+      zIndex: 30,
+      pointerEvents: "auto" as const,
+    };
+  }
+
+  if (offset === 1) {
+    return {
+      x: 300,
+      z: 20,
+      rotateY: -42,
+      scale: 0.86,
+      opacity: 0.72,
+      blur: 1.5,
+      zIndex: 30,
+      pointerEvents: "auto" as const,
+    };
+  }
+
+  if (offset === -2) {
+    return {
+      x: -500,
+      z: -180,
+      rotateY: 62,
+      scale: 0.68,
+      opacity: 0.28,
+      blur: 4,
+      zIndex: 10,
+      pointerEvents: "none" as const,
+    };
+  }
+
+  return {
+    x: 500,
+    z: -180,
+    rotateY: -62,
+    scale: 0.68,
+    opacity: 0.28,
+    blur: 4,
+    zIndex: 10,
+    pointerEvents: "none" as const,
+  };
+};
 
 const StudentSuccessCard = ({ result, isActive }: { result: any; isActive: boolean }) => {
   const initials = result.name 
@@ -101,12 +232,12 @@ export default function ResultsSection() {
     return result.examType === filter;
   });
 
-  // Autoplay functionality: shifts index every 3.5 seconds
+  // Autoplay functionality: shifts index every 4.2 seconds (slower, cinematic pace)
   useEffect(() => {
     if (isHovered || filteredResults.length <= 1) return;
     const interval = setInterval(() => {
       handleNext();
-    }, 3500);
+    }, 4200);
     return () => clearInterval(interval);
   }, [activeIndex, isHovered, filteredResults.length]);
 
@@ -123,12 +254,13 @@ export default function ResultsSection() {
     setActiveIndex((prev) => (filteredResults.length === 0 ? 0 : (prev - 1 + filteredResults.length) % filteredResults.length));
   };
 
-  const getRelativeIndex = (idx: number, active: number, length: number) => {
-    let diff = idx - active;
-    if (length <= 2) return diff;
-    while (diff < -length / 2) diff += length;
-    while (diff > length / 2) diff -= length;
-    return diff;
+  const getCircularOffset = (index: number, active: number, total: number) => {
+    if (total === 0) return 0;
+    let offset = (index - active + total) % total;
+    if (offset > total / 2) {
+      offset -= total;
+    }
+    return offset;
   };
 
   const filterTabs: { label: string; value: CategoryFilter }[] = [
@@ -219,9 +351,9 @@ export default function ResultsSection() {
             <motion.div
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.2}
+              dragElastic={0.15}
               onDragEnd={(e, info) => {
-                const threshold = 55;
+                const threshold = 80;
                 if (info.offset.x < -threshold) {
                   handleNext();
                 } else if (info.offset.x > threshold) {
@@ -230,101 +362,71 @@ export default function ResultsSection() {
               }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
-              className="relative w-full h-[430px] sm:h-[460px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
-              style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+              onFocus={() => setIsHovered(true)}
+              onBlur={() => setIsHovered(false)}
+              className="relative w-full h-[440px] sm:h-[500px] flex items-center justify-center overflow-visible cursor-grab active:cursor-grabbing"
+              style={{ perspective: "1400px", transformStyle: "preserve-3d" }}
             >
-              <AnimatePresence initial={false}>
-                {filteredResults.map((result, idx) => {
-                  const relativeIndex = getRelativeIndex(idx, activeIndex, filteredResults.length);
-                  const absOffset = Math.abs(relativeIndex);
+              {/* Soft radial glow behind the active card */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[450px] h-[300px] sm:h-[450px] bg-[#FBB503]/8 rounded-full blur-[80px] sm:blur-[110px] pointer-events-none z-0" />
 
-                  // Keep only current, side 1, and side 2 cards visible in the DOM
-                  if (absOffset > 2 && filteredResults.length > 4) return null;
+              {/* Faint curved dotted arc representing the circular track */}
+              <svg 
+                className="absolute top-1/2 left-1/2 w-full max-w-5xl h-40 -translate-x-1/2 -translate-y-1/2 text-accent/15 pointer-events-none z-0 hidden sm:block" 
+                viewBox="0 0 1000 200" 
+                fill="none"
+              >
+                <path 
+                  d="M 50,150 Q 500,40 950,150" 
+                  stroke="currentColor" 
+                  strokeWidth="2.5" 
+                  strokeDasharray="6,10" 
+                  strokeLinecap="round"
+                />
+              </svg>
 
-                  // 3D positioning parameters based on screen layout
-                  let xTranslate = 0;
-                  let scale = 1;
-                  let rotateY = 0;
-                  let zIndex = 10;
-                  let opacity = 1;
-                  let blur = "blur(0px)";
+              {filteredResults.map((result, idx) => {
+                const offset = getCircularOffset(idx, activeIndex, filteredResults.length);
+                const cardMotion = getCardMotion(offset, isMobile);
 
-                  if (relativeIndex === 0) {
-                    xTranslate = 0;
-                    scale = 1;
-                    rotateY = 0;
-                    zIndex = 50;
-                    opacity = 1;
-                    blur = "blur(0px)";
-                  } else if (relativeIndex === -1) {
-                    xTranslate = isMobile ? -145 : -260;
-                    scale = isMobile ? 0.84 : 0.86;
-                    rotateY = isMobile ? 22 : 35;
-                    zIndex = 40;
-                    opacity = 0.75;
-                    blur = isMobile ? "blur(0px)" : "blur(1px)";
-                  } else if (relativeIndex === 1) {
-                    xTranslate = isMobile ? 145 : 260;
-                    scale = isMobile ? 0.84 : 0.86;
-                    rotateY = isMobile ? -22 : -35;
-                    zIndex = 40;
-                    opacity = 0.75;
-                    blur = isMobile ? "blur(0px)" : "blur(1px)";
-                  } else if (relativeIndex === -2) {
-                    xTranslate = isMobile ? -245 : -440;
-                    scale = isMobile ? 0.7 : 0.72;
-                    rotateY = isMobile ? 32 : 45;
-                    zIndex = 30;
-                    opacity = 0.35;
-                    blur = isMobile ? "blur(1px)" : "blur(2.5px)";
-                  } else if (relativeIndex === 2) {
-                    xTranslate = isMobile ? 245 : 440;
-                    scale = isMobile ? 0.7 : 0.72;
-                    rotateY = isMobile ? -32 : -45;
-                    zIndex = 30;
-                    opacity = 0.35;
-                    blur = isMobile ? "blur(1px)" : "blur(2.5px)";
-                  } else {
-                    opacity = 0;
-                    zIndex = 0;
-                  }
-
-                  return (
-                    <motion.div
-                      key={result.id}
-                      style={{
-                        position: "absolute",
-                        transformStyle: "preserve-3d",
-                        backfaceVisibility: "hidden",
-                        transformOrigin: "center center"
-                      }}
-                      initial={{ opacity: 0, scale: 0.8, x: 0 }}
-                      animate={{ 
-                        x: xTranslate,
-                        scale: scale,
-                        rotateY: rotateY,
-                        zIndex: zIndex,
-                        opacity: opacity,
-                        filter: blur
-                      }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 280,
-                        damping: 26
-                      }}
-                      className="w-[280px] sm:w-[320px] h-[370px] sm:h-[410px] shrink-0"
-                      onClick={() => {
-                        if (relativeIndex !== 0) {
-                          setActiveIndex(idx);
-                        }
-                      }}
-                    >
-                      <StudentSuccessCard result={result} isActive={relativeIndex === 0} />
-                    </motion.div>
-                  );
-                })}
-              </AnimatePresence>
+                return (
+                  <motion.div
+                    key={result.id}
+                    className="absolute left-1/2 top-1/2 w-[280px] sm:w-[360px] h-[370px] sm:h-[430px]"
+                    style={{
+                      zIndex: cardMotion.zIndex,
+                      transformStyle: "preserve-3d",
+                      pointerEvents: cardMotion.pointerEvents,
+                      backfaceVisibility: "hidden",
+                      transformOrigin: "center center"
+                    }}
+                    transformTemplate={({ x, z, rotateY, scale }) =>
+                      `translate(-50%, -50%) translate3d(${x}, 0px, ${z}) rotateY(${rotateY}) scale(${scale})`
+                    }
+                    animate={{
+                      x: cardMotion.x,
+                      z: cardMotion.z,
+                      rotateY: cardMotion.rotateY,
+                      scale: cardMotion.scale,
+                      opacity: cardMotion.opacity,
+                      filter: `blur(${cardMotion.blur}px)`,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 90,
+                      damping: 22,
+                      mass: 0.9,
+                    }}
+                    onClick={() => {
+                      if (offset !== 0) {
+                        setActiveIndex(idx);
+                      }
+                    }}
+                  >
+                    <StudentSuccessCard result={result} isActive={offset === 0} />
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {/* Navigation Controls Center Panel */}
