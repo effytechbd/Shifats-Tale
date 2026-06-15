@@ -240,120 +240,37 @@ export default function CoursesSection() {
                     onClick={() => {
                       if (!isActive) {
                         setActiveIndex(idx);
+                      } else {
+                        setSelectedCourse(course);
                       }
                     }}
                   >
-                    {/* Full banner image (visible on side cards, hidden on active center card) */}
-                    <div 
-                      className={`absolute inset-0 transition-opacity duration-500 z-0 ${
-                        isActive ? "opacity-0 pointer-events-none" : "opacity-100"
-                      }`}
-                    >
+                    {/* Full banner image (covers the entire card, always visible) */}
+                    <div className="absolute inset-0 z-0 w-full h-full">
                       <Image 
                         src={course.bannerImage}
                         alt={course.title}
                         fill
                         sizes={`${cardWidth}px`}
-                        className="object-cover pointer-events-none"
+                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105 pointer-events-none"
                         priority={absOffset <= 1}
                       />
-                      {/* Dark overlay for side cards */}
-                      <div className="absolute inset-0 bg-primary/60 group-hover:bg-primary/50 transition-colors duration-300" />
                       
-                      {/* Course target and title overlay on side cards for identification */}
-                      <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col space-y-1.5 z-10 text-left bg-gradient-to-t from-primary/90 to-transparent">
-                        <span className="text-[8px] font-extrabold uppercase tracking-widest text-accent">
+                      {/* Dark gradient overlay for title contrast */}
+                      <div 
+                        className={`absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/20 to-transparent transition-opacity duration-500 ${
+                          isActive ? "opacity-75" : "opacity-45 group-hover:opacity-60"
+                        }`} 
+                      />
+                      
+                      {/* Course target and title overlay at bottom */}
+                      <div className="absolute inset-x-0 bottom-0 p-5 flex flex-col space-y-1.5 z-10 text-left bg-gradient-to-t from-primary/95 to-transparent">
+                        <span className="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest text-accent">
                           {course.target}
                         </span>
-                        <h4 className="font-extrabold text-white text-sm line-clamp-1">
+                        <h4 className="font-extrabold text-white text-sm sm:text-base line-clamp-1">
                           {course.title}
                         </h4>
-                      </div>
-                    </div>
-
-                    {/* Detail card content (visible on active card, hidden on side cards) */}
-                    <div 
-                      className={`absolute inset-0 transition-all duration-500 z-10 h-full w-full ${
-                        isActive 
-                          ? "opacity-100 scale-100 pointer-events-auto" 
-                          : "opacity-0 scale-95 pointer-events-none"
-                      }`}
-                    >
-                      {/* The chamfered course card content block */}
-                      <div 
-                        style={{
-                          clipPath: "polygon(0 0, calc(100% - 32px) 0, 100% 32px, 100% 100%, 0 100%)",
-                          backgroundColor: "#FBB503", // Gold border outline
-                          height: "100%",
-                        }}
-                        className="w-full p-[1.5px]"
-                      >
-                        <div 
-                          style={{
-                            clipPath: "polygon(0 0, calc(100% - 31.5px) 0, 100% 31.5px, 100% 100%, 0 100%)",
-                            backgroundColor: "#010E62", // Deep Navy background
-                            height: "100%",
-                          }}
-                          className="w-full flex flex-col justify-between p-6 sm:p-7 space-y-4 h-full"
-                        >
-                          {/* Header Row: Flyer Thumbnail & Title/Info */}
-                          <div className="flex items-start gap-4">
-                            {/* Square Flyer Thumbnail */}
-                            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-xl overflow-hidden shrink-0 border border-white/20">
-                              <Image 
-                                src={course.bannerImage}
-                                alt={course.title}
-                                fill
-                                sizes="80px"
-                                className="object-cover"
-                              />
-                            </div>
-
-                            {/* Text info and Target Badge */}
-                            <div className="flex-grow min-w-0 space-y-1 text-left">
-                              <span className="inline-block text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest px-2 py-0.5 rounded border bg-accent/15 text-accent border-accent/25">
-                                {course.target}
-                              </span>
-                              <h3 className="text-xs sm:text-sm font-extrabold tracking-tight leading-tight line-clamp-2 text-white">
-                                {course.title}
-                              </h3>
-                              <p className="text-[9px] font-bold italic mt-0.5 text-accent truncate">
-                                {course.subtitle}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Course Description */}
-                          <p className="text-xs leading-relaxed line-clamp-3 text-[#E7E0D2] flex-grow text-left">
-                            {course.description}
-                          </p>
-
-                          {/* Schedule / Time details */}
-                          <div className="grid grid-cols-2 gap-2 pt-2.5 text-[10px] font-bold border-t border-white/10 text-white/90 text-left">
-                            <div>
-                              <span className="block text-[8px] uppercase tracking-wider text-muted opacity-80 mb-0.5">Schedule</span>
-                              <span className="truncate block">{course.schedule}</span>
-                            </div>
-                            <div className="text-right">
-                              <span className="block text-[8px] uppercase tracking-wider text-muted opacity-80 mb-0.5">Duration</span>
-                              <span className="truncate block">{course.duration}</span>
-                            </div>
-                          </div>
-
-                          {/* View Details button */}
-                          <div className="pt-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedCourse(course);
-                              }}
-                              className="w-full flex items-center justify-center space-x-2 text-center py-2.5 px-4 rounded-xl text-xs font-bold transition-all duration-300 cursor-pointer bg-white text-primary hover:bg-[#FBB503] hover:text-primary-dark shadow-md focus:outline-none focus:ring-2 focus:ring-accent"
-                            >
-                              <Eye className="h-3.5 w-3.5" />
-                              <span>View Details</span>
-                            </button>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </motion.div>
@@ -421,7 +338,7 @@ export default function CoursesSection() {
                   src={selectedCourse.bannerImage}
                   alt={selectedCourse.title}
                   fill
-                  className="object-contain md:object-cover"
+                  className="object-contain"
                   priority
                 />
               </div>
