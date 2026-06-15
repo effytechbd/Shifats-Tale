@@ -12,6 +12,7 @@ export default function GallerySection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.25 });
   const [windowWidth, setWindowWidth] = useState(1200);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
   // Resize listener for responsive spacings
   useEffect(() => {
@@ -30,34 +31,34 @@ export default function GallerySection() {
   const cardWidth = isMobile ? 220 : isTablet ? 280 : 320;
   const cardHeight = isMobile ? 290 : isTablet ? 370 : 420;
 
-  // Scattered arrangements matching the mockup screenshot
+  // Scattered arrangements matching the mockup screenshot (widened to minimize overlaps)
   // zIndex logic: 
   // - Card 1 (wedding) is on top of Card 2 (lake)
   // - Card 3 (middle/guy) is on top of Card 2 and Card 4
   // - Card 4 (couple) is on top of Card 5 (peacock)
   // All cards are tilted clockwise (positive rotation)
   const desktopStyles = [
-    { x: -350, y: 30,  scale: 0.90, rotate: 6, zIndex: 30 },
-    { x: -190, y: -15, scale: 0.85, rotate: 4, zIndex: 10 },
+    { x: -480, y: 30,  scale: 0.90, rotate: 6, zIndex: 30 },
+    { x: -240, y: -15, scale: 0.85, rotate: 4, zIndex: 10 },
     { x: 0,    y: -30, scale: 1.0,  rotate: 2, zIndex: 40 },
-    { x: 180,  y: -10, scale: 0.88, rotate: 3, zIndex: 20 },
-    { x: 340,  y: 50,  scale: 0.82, rotate: 6, zIndex: 10 },
+    { x: 240,  y: -10, scale: 0.88, rotate: 3, zIndex: 20 },
+    { x: 480,  y: 50,  scale: 0.82, rotate: 6, zIndex: 10 },
   ];
 
   const tabletStyles = [
-    { x: -270, y: 20,  scale: 0.90, rotate: 5, zIndex: 30 },
-    { x: -140, y: -10, scale: 0.85, rotate: 3, zIndex: 10 },
+    { x: -380, y: 20,  scale: 0.90, rotate: 5, zIndex: 30 },
+    { x: -190, y: -10, scale: 0.85, rotate: 3, zIndex: 10 },
     { x: 0,    y: -20, scale: 1.0,  rotate: 1.5, zIndex: 40 },
-    { x: 140,  y: -8,  scale: 0.88, rotate: 2.5, zIndex: 20 },
-    { x: 270,  y: 40,  scale: 0.82, rotate: 5, zIndex: 10 },
+    { x: 190,  y: -8,  scale: 0.88, rotate: 2.5, zIndex: 20 },
+    { x: 380,  y: 40,  scale: 0.82, rotate: 5, zIndex: 10 },
   ];
 
   const mobileStyles = [
-    { x: -150, y: 15,  scale: 0.85, rotate: 4, zIndex: 30 },
-    { x: -75,  y: -5,  scale: 0.80, rotate: 2.5, zIndex: 10 },
+    { x: -180, y: 15,  scale: 0.85, rotate: 4, zIndex: 30 },
+    { x: -90,  y: -5,  scale: 0.80, rotate: 2.5, zIndex: 10 },
     { x: 0,    y: -10, scale: 1.0,  rotate: 1, zIndex: 40 },
-    { x: 75,   y: -4,  scale: 0.82, rotate: 2, zIndex: 20 },
-    { x: 150,  y: 25,  scale: 0.78, rotate: 4, zIndex: 10 },
+    { x: 90,   y: -4,  scale: 0.82, rotate: 2, zIndex: 20 },
+    { x: 180,  y: 25,  scale: 0.78, rotate: 4, zIndex: 10 },
   ];
 
   const activeStyles = isMobile ? mobileStyles : isTablet ? tabletStyles : desktopStyles;
@@ -91,14 +92,15 @@ export default function GallerySection() {
             const style = activeStyles[idx];
             const offset = idx - activeIndex; // -2, -1, 0, 1, 2
             const isActive = offset === 0;
+            const isHovered = hoveredIndex === idx;
 
             const isCollapsed = !isInView;
             
             let targetX = isCollapsed ? 0 : style.x;
             let targetY = isCollapsed ? 0 : style.y;
-            let targetScale = isCollapsed ? 0.8 : style.scale;
-            let targetRotate = isCollapsed ? 0 : style.rotate;
-            let targetZIndex = style.zIndex;
+            let targetScale = isCollapsed ? 0.8 : (isHovered ? style.scale * 1.05 : style.scale);
+            let targetRotate = isCollapsed ? 0 : (isHovered ? style.rotate * 0.5 : style.rotate);
+            let targetZIndex = isHovered ? 50 : style.zIndex;
             let targetOpacity = isCollapsed ? 0 : 1;
 
             if (shouldReduceMotion) {
@@ -119,12 +121,15 @@ export default function GallerySection() {
             return (
               <motion.div
                 key={item.id}
+                onMouseEnter={() => setHoveredIndex(idx)}
+                onMouseLeave={() => setHoveredIndex(null)}
                 style={{
                   position: "absolute",
                   width: `${cardWidth}px`,
                   height: `${cardHeight}px`,
                   zIndex: targetZIndex,
                   willChange: "transform, opacity",
+                  transition: "none", // Prevent CSS transition conflicts with Framer Motion spring physics
                 }}
                 animate={{
                   x: targetX,
