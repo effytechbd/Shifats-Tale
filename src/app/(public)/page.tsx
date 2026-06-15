@@ -3,13 +3,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 import dynamic from "next/dynamic";
-import Navbar from "@/components/layout/Navbar";
 
-// Dynamically import the 3D scene with SSR disabled for optimal bundle performance
 const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
   ssr: false,
   loading: () => <div className="absolute inset-0 bg-transparent" />,
 });
+
 import HeroSection from "@/components/home/HeroSection";
 import TrustStats from "@/components/home/TrustStats";
 import CoursesSection from "@/components/home/CoursesSection";
@@ -22,7 +21,6 @@ import GallerySection from "@/components/home/GallerySection";
 import FAQSection from "@/components/home/FAQSection";
 import LocationSection from "@/components/home/LocationSection";
 import ContactSection from "@/components/home/ContactSection";
-import Footer from "@/components/layout/Footer";
 
 export default function Home() {
   const [flyingState, setFlyingState] = useState<{
@@ -92,28 +90,19 @@ export default function Home() {
   const isFlying = flyingState !== null;
 
   return (
-    <div className="min-h-screen bg-bg-soft text-text flex flex-col selection:bg-accent selection:text-primary relative">
-      {/* Dynamic Header Navbar */}
-      <Navbar />
-
-      {/* Main Sections Body */}
-      <main className="flex-grow overflow-x-hidden">
-        <HeroSection isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
-        <TrustStats />
-        <CoursesSection />
-        <WhyChooseSection />
-        <TeacherSection isTeacherFlying={isFlying} />
-        <ResultsSection />
-        <YouTubeClassesSection />
-        <TestimonialsSection />
-        <LocationSection />
-        <GallerySection />
-        <FAQSection />
-        <ContactSection />
-      </main>
-
-      {/* Page Layout Footer */}
-      <Footer />
+    <div className="overflow-x-hidden">
+      <HeroSection isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
+      <TrustStats />
+      <CoursesSection />
+      <WhyChooseSection />
+      <TeacherSection isTeacherFlying={isFlying} />
+      <ResultsSection />
+      <YouTubeClassesSection />
+      <TestimonialsSection />
+      <LocationSection />
+      <GallerySection />
+      <FAQSection />
+      <ContactSection />
 
       {/* Flying 3D Teacher Portrait Animation Overlay */}
       <AnimatePresence>

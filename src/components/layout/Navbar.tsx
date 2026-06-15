@@ -105,6 +105,18 @@ export default function Navbar() {
               <MessageSquare className="h-4 w-4" />
               <span>Contact Sir</span>
             </a>
+            <Link
+              href="/login"
+              className="flex items-center justify-center px-4 py-2 rounded-xl border-2 border-primary/20 bg-primary/5 text-primary text-xs sm:text-sm font-bold hover:bg-primary hover:text-white transition-all duration-300 shadow-sm"
+            >
+              <span>Login</span>
+            </Link>
+            <Link
+              href="/register"
+              className="primary-btn flex items-center justify-center px-4.5 py-2 rounded-xl text-xs sm:text-sm font-bold shadow-md hover:shadow-accent/25 transition-all duration-300"
+            >
+              <span>Register</span>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -160,6 +172,20 @@ export default function Navbar() {
               <MessageSquare className="h-4 w-4" />
               <span>Contact Sir</span>
             </a>
+            <Link
+              href="/login"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-center space-x-2 py-3 rounded-xl border-2 border-primary/20 bg-primary/5 text-primary font-bold hover:bg-primary hover:text-white transition-all duration-200"
+            >
+              <span>Login</span>
+            </Link>
+            <Link
+              href="/register"
+              onClick={() => setIsOpen(false)}
+              className="primary-btn flex items-center justify-center space-x-2 py-3 rounded-xl font-bold shadow-lg shadow-accent/15"
+            >
+              <span>Register</span>
+            </Link>
           </div>
         </div>
       </div>

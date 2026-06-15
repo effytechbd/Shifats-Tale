@@ -1,0 +1,141 @@
+"use client";
+
+import React, { useState } from "react";
+import { Menu, LogOut, User, Bell, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase/client";
+
+interface DashboardHeaderProps {
+  role: "STUDENT" | "TEACHER";
+  onMenuToggle: () => void;
+  userName?: string;
+  userEmail?: string;
+}
+
+export function DashboardHeader({
+  role,
+  onMenuToggle,
+  userName = "User",
+  userEmail = "user@example.com",
+}: DashboardHeaderProps) {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const router = useRouter();
+
+  // Get User Initials
+  const getInitials = (name: string) => {
+    const parts = name.trim().split(" ");
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[1][0]).toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await supabase.auth.signOut();
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
+
+  return (
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/40 bg-white/80 px-6 backdrop-blur-md">
+      {/* Left: Mobile Nav Toggle & Brand Mobile Logo */}
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onMenuToggle}
+          type="button"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-primary border border-border/50 hover:bg-bg/50 transition-colors lg:hidden"
+          aria-label="Toggle navigation drawer"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        <div className="hidden lg:block">
+          <span className="text-xs font-bold text-muted uppercase tracking-wider">
+            Portal &bull; {role} AREA
+          </span>
+        </div>
+      </div>
+
+      {/* Right: Quick Action Controls, Notification, and User Avatar Dropdown */}
+      <div className="flex items-center gap-4">
+        {/* Notification Bell Placeholder */}
+        <button
+          type="button"
+          className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border/50 text-muted hover:text-primary hover:bg-bg/50 transition-colors"
+          aria-label="Notifications"
+        >
+          <Bell className="h-4 w-4" />
+          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent" />
+        </button>
+
+        {/* User Profile Dropdown */}
+        <div className="relative">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="flex items-center gap-2 rounded-xl border border-border/50 p-1.5 pr-3 hover:bg-bg/50 transition-all text-left"
+            type="button"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white text-xs font-bold font-display shadow-sm">
+              {getInitials(userName)}
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-xs font-extrabold text-primary font-display leading-none">
+                {userName}
+              </p>
+              <p className="text-[10px] font-semibold text-muted tracking-tight mt-0.5 leading-none">
+                {role}
+              </p>
+            </div>
+            <ChevronDown className="h-3.5 w-3.5 text-muted transition-transform duration-200" style={{ transform: dropdownOpen ? 'rotate(180deg)' : 'none' }} />
+          </button>
+
+          {/* Dropdown Menu Overlay */}
+          {dropdownOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setDropdownOpen(false)}
+              />
+              <div className="absolute right-0 mt-2.5 z-20 w-56 origin-top-right rounded-2xl border border-border/60 bg-white p-2 shadow-lg shadow-primary/5 focus:outline-none">
+                <div className="px-3 py-2 border-b border-border/30 mb-1">
+                  <p className="text-xs font-bold text-primary truncate leading-normal">
+                    {userName}
+                  </p>
+                  <p className="text-[10px] font-medium text-muted truncate mt-0.5 leading-none">
+                    {userEmail}
+                  </p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    router.push(role === "STUDENT" ? "/student/profile" : "/teacher/settings");
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-text hover:bg-bg/70 hover:text-primary transition-colors"
+                >
+                  <User className="h-4 w-4 text-muted" />
+                  <span>Account Settings</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setDropdownOpen(false);
+                    handleSignOut();
+                  }}
+                  className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-bold text-rose-600 hover:bg-rose-50 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span>Logout</span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </header>
+  );
+}
