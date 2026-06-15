@@ -28,37 +28,37 @@ export default function GallerySection() {
   const isMobile = windowWidth < 640;
   const isTablet = windowWidth >= 640 && windowWidth < 1024;
 
-  const cardWidth = isMobile ? 220 : isTablet ? 280 : 320;
-  const cardHeight = isMobile ? 290 : isTablet ? 370 : 420;
+  const cardWidth = isMobile ? 130 : isTablet ? 200 : 280;
+  const cardHeight = isMobile ? 180 : isTablet ? 270 : 370;
 
-  // Scattered arrangements matching the mockup screenshot (widened to minimize overlaps)
+  // Scattered arrangements matching the mockup screenshot (dimension-safe to prevent clipping)
   // zIndex logic: 
   // - Card 1 (wedding) is on top of Card 2 (lake)
   // - Card 3 (middle/guy) is on top of Card 2 and Card 4
   // - Card 4 (couple) is on top of Card 5 (peacock)
   // All cards are tilted clockwise (positive rotation)
   const desktopStyles = [
-    { x: -480, y: 30,  scale: 0.90, rotate: 6, zIndex: 30 },
-    { x: -240, y: -15, scale: 0.85, rotate: 4, zIndex: 10 },
-    { x: 0,    y: -30, scale: 1.0,  rotate: 2, zIndex: 40 },
-    { x: 240,  y: -10, scale: 0.88, rotate: 3, zIndex: 20 },
-    { x: 480,  y: 50,  scale: 0.82, rotate: 6, zIndex: 10 },
+    { x: -340, y: 25,  scale: 0.90, rotate: 6, zIndex: 30 },
+    { x: -170, y: -10, scale: 0.85, rotate: 4, zIndex: 10 },
+    { x: 0,    y: -20, scale: 1.0,  rotate: 2, zIndex: 40 },
+    { x: 170,  y: -8,  scale: 0.88, rotate: 3, zIndex: 20 },
+    { x: 340,  y: 35,  scale: 0.82, rotate: 6, zIndex: 10 },
   ];
 
   const tabletStyles = [
-    { x: -380, y: 20,  scale: 0.90, rotate: 5, zIndex: 30 },
-    { x: -190, y: -10, scale: 0.85, rotate: 3, zIndex: 10 },
-    { x: 0,    y: -20, scale: 1.0,  rotate: 1.5, zIndex: 40 },
-    { x: 190,  y: -8,  scale: 0.88, rotate: 2.5, zIndex: 20 },
-    { x: 380,  y: 40,  scale: 0.82, rotate: 5, zIndex: 10 },
+    { x: -200, y: 20,  scale: 0.90, rotate: 5, zIndex: 30 },
+    { x: -100, y: -10, scale: 0.85, rotate: 3, zIndex: 10 },
+    { x: 0,    y: -15, scale: 1.0,  rotate: 1.5, zIndex: 40 },
+    { x: 100,  y: -5,  scale: 0.88, rotate: 2.5, zIndex: 20 },
+    { x: 200,  y: 30,  scale: 0.82, rotate: 5, zIndex: 10 },
   ];
 
   const mobileStyles = [
-    { x: -180, y: 15,  scale: 0.85, rotate: 4, zIndex: 30 },
-    { x: -90,  y: -5,  scale: 0.80, rotate: 2.5, zIndex: 10 },
+    { x: -110, y: 15,  scale: 0.85, rotate: 4, zIndex: 30 },
+    { x: -55,  y: -5,  scale: 0.80, rotate: 2.5, zIndex: 10 },
     { x: 0,    y: -10, scale: 1.0,  rotate: 1, zIndex: 40 },
-    { x: 90,   y: -4,  scale: 0.82, rotate: 2, zIndex: 20 },
-    { x: 180,  y: 25,  scale: 0.78, rotate: 4, zIndex: 10 },
+    { x: 55,   y: -4,  scale: 0.82, rotate: 2, zIndex: 20 },
+    { x: 110,  y: 20,  scale: 0.78, rotate: 4, zIndex: 10 },
   ];
 
   const activeStyles = isMobile ? mobileStyles : isTablet ? tabletStyles : desktopStyles;
