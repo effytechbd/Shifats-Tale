@@ -16,3 +16,7 @@ export function createClient() {
 
   return createBrowserClient(supabaseUrl, supabaseAnonKey);
 }
+
+// Singleton browser client instance
+export const supabase = createClient();
+
