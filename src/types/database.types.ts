@@ -328,6 +328,20 @@ export interface Database {
           allow_download: boolean
           created_at: string
           updated_at: string
+          published_at: string | null
+          published_by: string | null
+          created_by: string | null
+          updated_by: string | null
+          cloudinary_public_id: string | null
+          cloudinary_asset_id: string | null
+          cloudinary_resource_type: string | null
+          cloudinary_delivery_type: string | null
+          cloudinary_format: string | null
+          cloudinary_version: string | null
+          original_filename: string | null
+          width: number | null
+          height: number | null
+          page_count: number | null
         }
         Insert: {
           id?: string
@@ -345,6 +359,20 @@ export interface Database {
           allow_download?: boolean
           created_at?: string
           updated_at?: string
+          published_at?: string | null
+          published_by?: string | null
+          created_by?: string | null
+          updated_by?: string | null
+          cloudinary_public_id?: string | null
+          cloudinary_asset_id?: string | null
+          cloudinary_resource_type?: string | null
+          cloudinary_delivery_type?: string | null
+          cloudinary_format?: string | null
+          cloudinary_version?: string | null
+          original_filename?: string | null
+          width?: number | null
+          height?: number | null
+          page_count?: number | null
         }
         Update: {
           id?: string
@@ -362,6 +390,20 @@ export interface Database {
           allow_download?: boolean
           created_at?: string
           updated_at?: string
+          published_at?: string | null
+          published_by?: string | null
+          created_by?: string | null
+          updated_by?: string | null
+          cloudinary_public_id?: string | null
+          cloudinary_asset_id?: string | null
+          cloudinary_resource_type?: string | null
+          cloudinary_delivery_type?: string | null
+          cloudinary_format?: string | null
+          cloudinary_version?: string | null
+          original_filename?: string | null
+          width?: number | null
+          height?: number | null
+          page_count?: number | null
         }
         Relationships: [
           {
@@ -500,6 +542,11 @@ export interface Database {
           published_at: string | null
           created_at: string
           updated_at: string
+          release_at: string | null
+          expires_at: string | null
+          published_by: string | null
+          created_by: string | null
+          updated_by: string | null
         }
         Insert: {
           id?: string
@@ -510,6 +557,11 @@ export interface Database {
           published_at?: string | null
           created_at?: string
           updated_at?: string
+          release_at?: string | null
+          expires_at?: string | null
+          published_by?: string | null
+          created_by?: string | null
+          updated_by?: string | null
         }
         Update: {
           id?: string
@@ -520,6 +572,11 @@ export interface Database {
           published_at?: string | null
           created_at?: string
           updated_at?: string
+          release_at?: string | null
+          expires_at?: string | null
+          published_by?: string | null
+          created_by?: string | null
+          updated_by?: string | null
         }
         Relationships: [
           {

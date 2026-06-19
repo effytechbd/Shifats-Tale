@@ -31,8 +31,8 @@ const teacherNavItems: NavItem[] = [
   { label: "Manage Batches", href: "/teacher/batches", icon: BookOpen },
   { label: "Attendance Control", href: "/teacher/attendance", icon: UserCheck },
   { label: "Payment Ledger", href: "/teacher/payments", icon: CreditCard },
-  { label: "Announcements", href: "/teacher/notices", icon: Bell },
-  { label: "Study Materials", href: "/teacher/resources", icon: FileText },
+  { label: "Announcements", href: "/teacher/announcements", icon: Bell },
+  { label: "Study Materials", href: "/teacher/materials", icon: FileText },
   { label: "Portal Settings", href: "/teacher/settings", icon: Settings },
 ];
 

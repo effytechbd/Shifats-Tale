@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { DashboardPageHeader } from "@/components/dashboard/dashboard-page-header";
 import { DashboardCard } from "@/components/dashboard/dashboard-card";
 import { StatusBadge } from "@/components/dashboard/status-badge";
-import { Calendar, Clock, CreditCard, FileText, Award, Layers } from "lucide-react";
+import { Calendar, Clock, CreditCard, FileText, Award, Layers, Bell } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 
 interface PageProps {
@@ -82,6 +82,37 @@ export default async function StudentBatchDetailsPage({ params }: PageProps) {
       .order("billing_month", { ascending: false });
     studentBatchPayments = pay || [];
   }
+
+  // Fetch materials for count and recent list
+  const { data: dbMaterials } = await supabase
+    .from("batch_contents")
+    .select("*")
+    .eq("batch_id", batchId)
+    .eq("status", "PUBLISHED");
+
+  const now = new Date();
+  const activeMaterials = (dbMaterials || []).filter(
+    (m) =>
+      (!m.release_at || new Date(m.release_at) <= now) &&
+      (!m.expires_at || new Date(m.expires_at) > now)
+  );
+  const recentMaterials = activeMaterials.slice(0, 3);
+  const materialsCount = activeMaterials.length;
+
+  // Fetch announcements for count and recent list
+  const { data: dbAnnouncements } = await supabase
+    .from("announcements")
+    .select("*")
+    .eq("batch_id", batchId)
+    .eq("status", "PUBLISHED");
+
+  const activeAnnouncements = (dbAnnouncements || []).filter(
+    (a) =>
+      (!a.release_at || new Date(a.release_at) <= now) &&
+      (!a.expires_at || new Date(a.expires_at) > now)
+  );
+  const recentAnnouncements = activeAnnouncements.slice(0, 3);
+  const announcementsCount = activeAnnouncements.length;
 
   const currentMonthNum = new Date().getMonth() + 1;
   const currentYearNum = new Date().getFullYear();
@@ -174,16 +205,67 @@ export default async function StudentBatchDetailsPage({ params }: PageProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Study Materials */}
         <DashboardCard
-          title="Class Materials & Resources"
+          title={`Class Materials & Resources (${materialsCount})`}
           description="Handouts, PDF files, and lectures"
           icon={<FileText className="h-5 w-5 text-accent" />}
         >
-          <div className="p-5 border border-dashed border-border/60 rounded-xl bg-slate-50/30 flex flex-col items-center justify-center text-center py-8">
-            <FileText className="h-8 w-8 text-muted/6 stroke-1 mb-2" />
-            <h4 className="text-xs font-extrabold text-primary">Materials Panel Locked</h4>
-            <p className="text-[10px] text-muted mt-1 leading-relaxed max-w-[250px]">
-              Syllabus PDF files, homework handouts, and lecture resources will be accessible once uploaded by the teacher in the next phase.
-            </p>
+          <div className="space-y-4 pt-2 text-xs font-bold text-primary">
+            {recentMaterials.length > 0 ? (
+              <div className="space-y-2">
+                {recentMaterials.map((m) => (
+                  <div key={m.id} className="flex justify-between items-center bg-slate-50 px-3 py-2 rounded-xl border border-slate-100">
+                    <span className="font-extrabold text-slate-800 line-clamp-1 flex-1 mr-2">{m.title}</span>
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[8px] font-black uppercase bg-slate-200 text-slate-700">
+                      {m.content_type}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-4 border border-dashed border-border/60 rounded-xl bg-slate-50/30 text-center py-6">
+                <p className="text-[10px] text-muted font-semibold">No materials uploaded yet.</p>
+              </div>
+            )}
+            <div className="pt-2 border-t border-border/20 text-center">
+              <Link
+                href={`/student/batches/${batchId}/materials`}
+                className="text-[10px] text-primary hover:underline"
+              >
+                View All Materials &rarr;
+              </Link>
+            </div>
+          </div>
+        </DashboardCard>
+
+        {/* Announcements */}
+        <DashboardCard
+          title={`Announcements & Notices (${announcementsCount})`}
+          description="Batch alerts and messages"
+          icon={<Bell className="h-5 w-5 text-accent" />}
+        >
+          <div className="space-y-4 pt-2 text-xs font-bold text-primary">
+            {recentAnnouncements.length > 0 ? (
+              <div className="space-y-2">
+                {recentAnnouncements.map((a) => (
+                  <div key={a.id} className="bg-slate-50 px-3 py-2 rounded-xl border border-slate-100 space-y-1">
+                    <span className="font-extrabold text-slate-800 block line-clamp-1">{a.title}</span>
+                    <span className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed font-semibold block">{a.message}</span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-4 border border-dashed border-border/60 rounded-xl bg-slate-50/30 text-center py-6">
+                <p className="text-[10px] text-muted font-semibold">No announcements posted yet.</p>
+              </div>
+            )}
+            <div className="pt-2 border-t border-border/20 text-center">
+              <Link
+                href={`/student/batches/${batchId}/announcements`}
+                className="text-[10px] text-primary hover:underline"
+              >
+                View All Announcements &rarr;
+              </Link>
+            </div>
           </div>
         </DashboardCard>
 

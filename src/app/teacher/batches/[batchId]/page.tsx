@@ -132,6 +132,35 @@ export default async function TeacherBatchDetailsPage({ params, searchParams }: 
     else if (p.status === "UNPAID") curMonthUnpaidCount++;
   });
 
+  // Fetch materials for this batch
+  const { data: batchMaterials } = await supabase
+    .from("batch_contents")
+    .select("*")
+    .eq("batch_id", batchId);
+
+  let totalMatCount = 0;
+  let pubMatCount = 0;
+  let draftMatCount = 0;
+  let archMatCount = 0;
+
+  batchMaterials?.forEach((m) => {
+    totalMatCount++;
+    if (m.status === "PUBLISHED") pubMatCount++;
+    else if (m.status === "DRAFT") draftMatCount++;
+    else if (m.status === "ARCHIVED") archMatCount++;
+  });
+
+  const recentBatchMaterials = batchMaterials?.slice(0, 5) || [];
+
+  // Fetch announcements for this batch
+  const { data: batchAnnouncements } = await supabase
+    .from("announcements")
+    .select("*")
+    .eq("batch_id", batchId)
+    .order("created_at", { ascending: false });
+
+  const recentBatchAnnouncements = batchAnnouncements?.slice(0, 5) || [];
+
   const schedule = (
     batch.schedule && typeof batch.schedule === "object"
       ? batch.schedule
@@ -187,7 +216,7 @@ export default async function TeacherBatchDetailsPage({ params, searchParams }: 
             activeTab === "materials" ? "border-primary text-primary" : "border-transparent"
           }`}
         >
-          Materials (Placeholder)
+          Materials ({totalMatCount})
         </Link>
         <Link
           href={`/teacher/batches/${batchId}?tab=exams`}
@@ -487,12 +516,104 @@ export default async function TeacherBatchDetailsPage({ params, searchParams }: 
       )}
 
       {activeTab === "materials" && (
-        <div className="p-8 bg-white border border-dashed border-border rounded-2xl flex flex-col items-center justify-center text-center">
-          <FileText className="h-10 w-10 text-muted stroke-1 mb-4" />
-          <h3 className="text-sm font-extrabold text-primary">Study Materials Placeholder</h3>
-          <p className="text-xs text-muted max-w-sm font-medium mt-1 leading-relaxed">
-            The study material distribution system, including PDF handouts uploading, lecture video embeds, link distributions, and release-time settings will be integrated in the next phase.
-          </p>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 text-xs font-bold text-primary">
+          <div className="lg:col-span-2 space-y-6">
+            {/* Stats row */}
+            <div className="grid grid-cols-4 gap-4">
+              <div className="bg-slate-50 border border-border/20 rounded-2xl p-4 text-center">
+                <span className="text-xl font-extrabold text-slate-700 font-display block leading-none">{totalMatCount}</span>
+                <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wide mt-2 block">Total Materials</span>
+              </div>
+              <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-center">
+                <span className="text-xl font-extrabold text-emerald-700 font-display block leading-none">{pubMatCount}</span>
+                <span className="text-[9px] uppercase font-bold text-emerald-600/80 tracking-wide mt-2 block">Published</span>
+              </div>
+              <div className="bg-amber-50 border border-amber-100 rounded-2xl p-4 text-center">
+                <span className="text-xl font-extrabold text-amber-700 font-display block leading-none">{draftMatCount}</span>
+                <span className="text-[9px] uppercase font-bold text-amber-600/80 tracking-wide mt-2 block">Draft</span>
+              </div>
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center">
+                <span className="text-xl font-extrabold text-slate-600 font-display block leading-none">{archMatCount}</span>
+                <span className="text-[9px] uppercase font-bold text-slate-500 tracking-wide mt-2 block">Archived</span>
+              </div>
+            </div>
+
+            {/* Materials List */}
+            <div className="bg-white p-6 rounded-2xl border border-border/40 shadow-sm space-y-4">
+              <div className="flex justify-between items-center border-b border-border/20 pb-3">
+                <h3 className="text-sm font-extrabold font-display">Recent Batch Materials</h3>
+                <Link
+                  href={`/teacher/batches/${batchId}/materials`}
+                  className="text-[10px] text-primary hover:underline"
+                >
+                  Manage All Materials &rarr;
+                </Link>
+              </div>
+
+              {recentBatchMaterials.length > 0 ? (
+                <div className="space-y-2">
+                  {recentBatchMaterials.map((m) => (
+                    <div key={m.id} className="flex justify-between items-center bg-slate-50 px-3 py-2.5 rounded-xl border border-slate-100">
+                      <div>
+                        <span className="font-extrabold text-slate-800 text-sm block">{m.title}</span>
+                        <span className="text-[9px] text-slate-400 font-semibold block mt-0.5">Type: {m.content_type}</span>
+                      </div>
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[8px] font-black uppercase border ${
+                        m.status === "PUBLISHED" ? "bg-emerald-50 text-emerald-700 border-emerald-100" : "bg-slate-100 text-slate-500 border-slate-200"
+                      }`}>
+                        {m.status}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center py-6 text-xs text-muted font-bold">No study materials uploaded for this batch yet.</p>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            {/* Quick Create Button Card */}
+            <div className="bg-white p-5 rounded-2xl border border-border/40 shadow-sm space-y-4">
+              <h3 className="text-sm font-extrabold font-display border-b border-border/20 pb-2">Add New Material</h3>
+              <p className="text-[10px] text-muted font-semibold leading-relaxed">
+                Quickly add handouts, notes, and links for this class.
+              </p>
+              <Link
+                href={`/teacher/materials/new?batchId=${batchId}`}
+                className="w-full inline-flex justify-center items-center gap-1.5 px-4 py-2.5 bg-primary text-white hover:bg-primary-dark rounded-xl transition-all shadow-sm font-bold text-xs"
+              >
+                <Plus className="h-4 w-4" />
+                Upload New Material
+              </Link>
+            </div>
+
+            {/* Recent Announcements section */}
+            <div className="bg-white p-5 rounded-2xl border border-border/40 shadow-sm space-y-4">
+              <div className="flex justify-between items-center border-b border-border/20 pb-2">
+                <h3 className="text-sm font-extrabold font-display">Batch Announcements</h3>
+                <Link
+                  href={`/teacher/batches/${batchId}/announcements`}
+                  className="text-[9px] text-primary hover:underline"
+                >
+                  Manage &rarr;
+                </Link>
+              </div>
+
+              {recentBatchAnnouncements.length > 0 ? (
+                <div className="space-y-2 max-h-[300px] overflow-y-auto pr-1">
+                  {recentBatchAnnouncements.map((a) => (
+                    <div key={a.id} className="bg-slate-50 p-2.5 rounded-xl border border-slate-100 space-y-1">
+                      <span className="font-extrabold text-slate-800 block">{a.title}</span>
+                      <p className="text-[10px] text-slate-500 line-clamp-2 leading-relaxed font-semibold">{a.message}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center py-4 text-[10px] text-muted italic">No announcements posted.</p>
+              )}
+            </div>
+          </div>
         </div>
       )}
 
