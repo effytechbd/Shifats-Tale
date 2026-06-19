@@ -127,14 +127,14 @@ class MaterialsMockService {
   }
 
   // Cloudinary Mock Operations
-  uploadToCloudinary(publicId: string, resourceType: string, buffer: Buffer) {
+  uploadToCloudinary(publicId: string, resourceType: string, buffer: Buffer, format: string) {
     this.cloudinaryStore[publicId] = { publicId, resourceType, buffer };
     return {
       public_id: publicId,
       asset_id: `asset-${crypto.randomUUID()}`,
       resource_type: resourceType,
       type: "authenticated",
-      format: publicId.split(".").pop() || "",
+      format,
       version: "123456789",
     };
   }
@@ -210,7 +210,7 @@ class MaterialsMockService {
       const publicId = `coaching-center/batches/${input.batchId}/2026/${uuid}-${sanitizedName}`;
 
       uploadedPublicId = publicId;
-      const uploadRes = this.uploadToCloudinary(publicId, resourceType, input.file.buffer);
+      const uploadRes = this.uploadToCloudinary(publicId, resourceType, input.file.buffer, ext);
 
       cloudinaryData = {
         cloudinary_public_id: uploadRes.public_id,
@@ -304,7 +304,7 @@ class MaterialsMockService {
     const publicId = `coaching-center/batches/${oldRecord.batch_id}/2026/${uuid}-${sanitizedName}`;
 
     // Upload replacement as new asset first
-    const uploadRes = this.uploadToCloudinary(publicId, resourceType, file.buffer);
+    const uploadRes = this.uploadToCloudinary(publicId, resourceType, file.buffer, ext);
 
     if (failDatabaseUpdate) {
       // Rollback newly uploaded asset
