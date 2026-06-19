@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,8 @@ import {
   User,
   GraduationCap,
   LogOut,
-  Loader2
+  Loader2,
+  Bell
 } from "lucide-react";
 
 interface SidebarProps {
@@ -31,6 +32,46 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
   const pathname = usePathname();
   const router = useRouter();
   const [loggingOut, setLoggingOut] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .is("read_at", null);
+
+        if (!error && count !== null) {
+          setUnreadCount(count);
+        }
+      } catch (err) {
+        console.error("Failed to fetch unread notification count in student sidebar:", err);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Subscribe to new/updated notifications
+    const channel = supabase
+      .channel("realtime-student-sidebar-notifications-" + Math.random().toString(36).substring(7))
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   // Dynamic Navigation Items
   const navItems: NavItem[] = [
@@ -50,6 +91,7 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
   navItems.push(
     { label: "Exams & Results", href: "/student/exams", icon: GraduationCap },
     { label: "Payments", href: "/student/payments", icon: CreditCard },
+    { label: "Notifications", href: "/student/notifications", icon: Bell },
     { label: "Profile", href: "/student/profile", icon: User }
   );
 
@@ -106,6 +148,11 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
               )}
               <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary" : "text-white/60 group-hover:text-white")} />
               <span>{item.label}</span>
+              {item.label === "Notifications" && unreadCount > 0 && (
+                <span className="ml-auto px-1.5 py-0.5 rounded-lg bg-accent text-[9px] font-extrabold text-white leading-none">
+                  {unreadCount}
+                </span>
+              )}
             </Link>
           );
         })}

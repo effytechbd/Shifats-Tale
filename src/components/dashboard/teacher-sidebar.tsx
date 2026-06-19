@@ -1,7 +1,10 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/lib/supabase/client";
 import { 
   Users, 
   BookOpen, 
@@ -12,7 +15,9 @@ import {
   UserCheck,
   Settings,
   ShieldAlert,
-  GraduationCap
+  GraduationCap,
+  Megaphone,
+  User
 } from "lucide-react";
 
 interface SidebarProps {
@@ -32,14 +37,68 @@ const teacherNavItems: NavItem[] = [
   { label: "Manage Batches", href: "/teacher/batches", icon: BookOpen },
   { label: "Attendance Control", href: "/teacher/attendance", icon: UserCheck },
   { label: "Payment Ledger", href: "/teacher/payments", icon: CreditCard },
-  { label: "Announcements", href: "/teacher/announcements", icon: Bell },
+  { label: "Announcements", href: "/teacher/announcements", icon: Megaphone },
   { label: "Study Materials", href: "/teacher/materials", icon: FileText },
   { label: "Exams & Grading", href: "/teacher/exams", icon: GraduationCap },
+  { label: "Notifications", href: "/teacher/notifications", icon: Bell },
+  { label: "My Profile", href: "/teacher/profile", icon: User },
   { label: "Portal Settings", href: "/teacher/settings", icon: Settings },
 ];
 
 export function TeacherSidebar({ className, onLinkClick }: SidebarProps) {
   const pathname = usePathname();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      try {
+        const { data: userData } = await supabase.auth.getUser();
+        if (!userData?.user) return;
+
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("auth_user_id", userData.user.id)
+          .single();
+
+        if (!profile) return;
+
+        const { count, error } = await supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", profile.id)
+          .is("read_at", null);
+
+        if (!error && count !== null) {
+          setUnreadCount(count);
+        }
+      } catch (err) {
+        console.error("Failed to fetch unread notification count in teacher sidebar:", err);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Subscribe to new/updated notifications
+    const channel = supabase
+      .channel("realtime-teacher-sidebar-notifications-" + Math.random().toString(36).substring(7))
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <div className={cn("flex flex-col h-full bg-primary-dark text-white border-r border-slate-900", className)}>
@@ -81,6 +140,11 @@ export function TeacherSidebar({ className, onLinkClick }: SidebarProps) {
               )}
               <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary-dark" : "text-white/60 group-hover:text-white")} />
               <span>{item.label}</span>
+              {item.label === "Notifications" && unreadCount > 0 && (
+                <span className="ml-auto px-1.5 py-0.5 rounded-lg bg-accent text-[9px] font-extrabold text-primary-dark leading-none">
+                  {unreadCount}
+                </span>
+              )}
             </Link>
           );
         })}

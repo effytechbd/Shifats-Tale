@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Menu, LogOut, User, Bell, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ export function DashboardHeader({
   userEmail = "user@example.com",
 }: DashboardHeaderProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const router = useRouter();
 
   // Get User Initials
@@ -40,6 +41,62 @@ export function DashboardHeader({
       console.error("Sign out error:", error);
     }
   };
+
+  useEffect(() => {
+    let activeProfileId: string | null = null;
+
+    const fetchUnreadCount = async () => {
+      try {
+        if (!activeProfileId) {
+          const { data: userData } = await supabase.auth.getUser();
+          if (!userData?.user) return;
+
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("id")
+            .eq("auth_user_id", userData.user.id)
+            .single();
+
+          if (!profile) return;
+          activeProfileId = profile.id;
+        }
+
+        const { count, error } = await supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", activeProfileId)
+          .is("read_at", null);
+
+        if (!error && count !== null) {
+          setUnreadCount(count);
+        }
+      } catch (err) {
+        console.error("Failed to fetch unread notification count:", err);
+      }
+    };
+
+    fetchUnreadCount();
+
+    // Subscribe to new/updated notifications
+    const channel = supabase
+      .channel("realtime-dashboard-header-notifications-" + Math.random().toString(36).substring(7))
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          fetchUnreadCount();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/40 bg-white/80 px-6 backdrop-blur-md">
@@ -62,14 +119,19 @@ export function DashboardHeader({
 
       {/* Right: Quick Action Controls, Notification, and User Avatar Dropdown */}
       <div className="flex items-center gap-4">
-        {/* Notification Bell Placeholder */}
+        {/* Notification Bell */}
         <button
+          onClick={() => router.push(role === "STUDENT" ? "/student/notifications" : "/teacher/notifications")}
           type="button"
           className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-border/50 text-muted hover:text-primary hover:bg-bg/50 transition-colors"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4" />
-          <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-accent" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-[9px] font-extrabold text-white animate-pulse">
+              {unreadCount}
+            </span>
+          )}
         </button>
 
         {/* User Profile Dropdown */}

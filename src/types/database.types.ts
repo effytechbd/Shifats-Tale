@@ -18,6 +18,7 @@ export interface Database {
           email: string
           phone: string | null
           avatar_url: string | null
+          avatar_cloudinary_public_id: string | null
           account_status: "ACTIVE" | "DISABLED" | "ARCHIVED"
           created_at: string
           updated_at: string
@@ -30,6 +31,7 @@ export interface Database {
           email: string
           phone?: string | null
           avatar_url?: string | null
+          avatar_cloudinary_public_id?: string | null
           account_status?: "ACTIVE" | "DISABLED" | "ARCHIVED"
           created_at?: string
           updated_at?: string
@@ -42,6 +44,7 @@ export interface Database {
           email?: string
           phone?: string | null
           avatar_url?: string | null
+          avatar_cloudinary_public_id?: string | null
           account_status?: "ACTIVE" | "DISABLED" | "ARCHIVED"
           created_at?: string
           updated_at?: string
@@ -53,6 +56,104 @@ export interface Database {
             isOneToOne: true
             referencedRelation: "users"
             referencedSchema: "auth"
+          }
+        ]
+      }
+      app_settings: {
+        Row: {
+          id: boolean
+          coaching_center_name: string
+          short_name: string
+          student_id_prefix: string
+          public_phone: string
+          public_email: string
+          address: string
+          default_currency: string
+          default_timezone: string
+          academic_session: string
+          default_grading_scale: string
+          pending_approval_contact_text: string
+          disabled_account_contact_text: string
+          student_rank_visible: boolean
+          completed_batches_visible: boolean
+          grades_displayed: boolean
+          updated_at: string
+        }
+        Insert: {
+          id?: boolean
+          coaching_center_name?: string
+          short_name?: string
+          student_id_prefix?: string
+          public_phone?: string
+          public_email?: string
+          address?: string
+          default_currency?: string
+          default_timezone?: string
+          academic_session?: string
+          default_grading_scale?: string
+          pending_approval_contact_text?: string
+          disabled_account_contact_text?: string
+          student_rank_visible?: boolean
+          completed_batches_visible?: boolean
+          grades_displayed?: boolean
+          updated_at?: string
+        }
+        Update: {
+          id?: boolean
+          coaching_center_name?: string
+          short_name?: string
+          student_id_prefix?: string
+          public_phone?: string
+          public_email?: string
+          address?: string
+          default_currency?: string
+          default_timezone?: string
+          academic_session?: string
+          default_grading_scale?: string
+          pending_approval_contact_text?: string
+          disabled_account_contact_text?: string
+          student_rank_visible?: boolean
+          completed_batches_visible?: boolean
+          grades_displayed?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      teacher_profiles: {
+        Row: {
+          id: string
+          profile_id: string
+          designation: string
+          coaching_center_name: string
+          public_contact_info: string
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          profile_id: string
+          designation?: string
+          coaching_center_name?: string
+          public_contact_info?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          profile_id?: string
+          designation?: string
+          coaching_center_name?: string
+          public_contact_info?: string
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedSchema: "public"
           }
         ]
       }

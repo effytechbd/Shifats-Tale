@@ -18,7 +18,8 @@ import {
   Shield,
   BookOpen,
   Plus,
-  CreditCard
+  CreditCard,
+  Edit2
 } from "lucide-react";
 import { formatCurrency } from "@/lib/currency";
 
@@ -174,13 +175,22 @@ export default async function TeacherStudentDetailsPage({ params }: PageProps) {
         title={`Student Profile: ${profile.full_name}`}
         description={`Manage admission verification, batch enrollments, and check audit history logs.`}
         actions={
-          <Link
-            href="/teacher/students"
-            className="px-4 py-2 border border-border/80 bg-white hover:bg-slate-50 text-xs font-bold text-muted rounded-xl transition-all flex items-center gap-1.5"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span>Back to Students</span>
-          </Link>
+          <div className="flex gap-2.5">
+            <Link
+              href="/teacher/students"
+              className="px-4 py-2 border border-border/80 bg-white hover:bg-slate-50 text-xs font-bold text-muted rounded-xl transition-all flex items-center gap-1.5"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span>Back to Students</span>
+            </Link>
+            <Link
+              href={`/teacher/students/${studentId}/edit`}
+              className="px-4 py-2 bg-primary text-white hover:bg-primary/95 text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow-md shadow-primary/10 hover:scale-[1.02]"
+            >
+              <Edit2 className="h-3.5 w-3.5" />
+              <span>Edit Profile</span>
+            </Link>
+          </div>
         }
       />
 
