@@ -284,7 +284,7 @@ test.describe.serial("Coaching Center End-to-End Workflows", () => {
     await page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 10000 });
     
     await page.goto("/student/payments");
-    await expect(page.locator("body")).toContainText("PARTIALLY_PAID");
+    await expect(page.locator("body")).toContainText("PARTIALLY PAID");
     await expect(page.locator("body")).toContainText("৳1,500"); // Outstanding due
 
     // Update payment to fully paid via database

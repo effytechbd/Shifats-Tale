@@ -122,7 +122,9 @@ export function TeacherSidebar({ className, onLinkClick }: SidebarProps) {
       <nav className="flex-grow p-4 space-y-1 overflow-y-auto">
         {teacherNavItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive = item.href === "/teacher"
+            ? pathname === "/teacher"
+            : pathname === item.href || pathname.startsWith(item.href + "/");
 
           return (
             <Link
@@ -132,14 +134,14 @@ export function TeacherSidebar({ className, onLinkClick }: SidebarProps) {
               className={cn(
                 "flex items-center gap-3.5 px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 group relative",
                 isActive
-                  ? "bg-accent text-primary-dark shadow-md shadow-accent/15"
-                  : "text-white/80 hover:text-white hover:bg-slate-800/40"
+                  ? "bg-accent text-primary-dark shadow-md"
+                  : "text-[#DCE5F5] hover:text-white hover:bg-[#102A66]"
               )}
             >
               {isActive && (
-                <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-primary-dark rounded-r-full" />
+                <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-white rounded-r-full" />
               )}
-              <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary-dark" : "text-white/60 group-hover:text-white")} />
+              <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary-dark" : "text-[#9FB0D0] group-hover:text-white")} />
               <span>{item.label}</span>
               {item.label === "Notifications" && unreadCount > 0 && (
                 <span className="ml-auto px-1.5 py-0.5 rounded-lg bg-accent text-[9px] font-extrabold text-primary-dark leading-none">

@@ -239,3 +239,160 @@ h1, h2, h3, h4, h5, h6 {
 .animate-equalizer-bar-3 {
   animation: equalizer 0.6s ease-in-out infinite alternate 0.3s;
 }
+
+/* =========================================================================
+   AUTHENTICATED AREA COLOR SYSTEM & SURFACE HIERARCHY
+   ========================================================================= */
+
+.authenticated-shell {
+  /* Color theme override */
+  --background: #F8F7F2;
+  --foreground: #101C3D;
+  
+  --color-primary: #0B1F55; /* Deep Navy */
+  --color-primary-dark: #071A45; /* Midnight Navy */
+  --color-accent: #FFB703; /* Warm Amber */
+  --color-bg: #FFFFFF; /* Card Background */
+  --color-bg-soft: #F8F7F2; /* Page Background */
+  --color-text: #101C3D; /* Ink Navy */
+  --color-muted: #64748B; /* Slate */
+  --color-border: #DDE3EC; /* Border */
+  
+  background-color: #F8F7F2 !important;
+  color: #101C3D !important;
+}
+
+/* Fonts and headers */
+.authenticated-shell h1,
+.authenticated-shell h2,
+.authenticated-shell h3,
+.authenticated-shell h4,
+.authenticated-shell h5,
+.authenticated-shell h6 {
+  color: #0B1F55 !important;
+}
+
+/* Neutral text formatting */
+.authenticated-shell .text-muted,
+.authenticated-shell .text-slate-500,
+.authenticated-shell .text-gray-500,
+.authenticated-shell .text-slate-400,
+.authenticated-shell .text-gray-400 {
+  color: #64748B !important;
+}
+
+/* Cards & Surface hierarchy */
+.authenticated-shell .brand-card,
+.authenticated-shell .bg-white {
+  background-color: #FFFFFF !important;
+  border: 1px solid #DDE3EC !important;
+  box-shadow: 0 4px 16px rgba(11, 31, 85, 0.06) !important;
+}
+
+/* Filter panel faint blue-gray interior */
+.authenticated-shell form[method="GET"],
+.authenticated-shell .filter-panel {
+  background-color: #F9FAFC !important;
+  border: 1px solid #DDE3EC !important;
+  box-shadow: none !important;
+}
+
+/* Forms controls interior */
+.authenticated-shell input,
+.authenticated-shell select,
+.authenticated-shell textarea {
+  background-color: #FFFFFF !important;
+  border: 1px solid #DDE3EC !important;
+  color: #101C3D !important;
+}
+
+.authenticated-shell input:focus,
+.authenticated-shell select:focus,
+.authenticated-shell textarea:focus {
+  border-color: #0B1F55 !important;
+  outline: none !important;
+}
+
+/* Table layout styling overrides */
+.authenticated-shell table {
+  background-color: #FFFFFF !important;
+  border-collapse: collapse !important;
+}
+
+.authenticated-shell thead tr {
+  background-color: #F4F6FA !important;
+  color: #64748B !important;
+  border-bottom: 1px solid #E5EAF1 !important;
+}
+
+.authenticated-shell thead th {
+  color: #64748B !important;
+  font-weight: 800 !important;
+}
+
+.authenticated-shell tbody tr {
+  background-color: #FFFFFF !important;
+  border-bottom: 1px solid #E5EAF1 !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.authenticated-shell tbody tr:hover {
+  background-color: #F8FAFD !important;
+  border-left: 3px solid #0B1F55 !important;
+}
+
+/* Reusable buttons styles overrides */
+.authenticated-shell .primary-btn {
+  background-color: #FFB703 !important;
+  color: #071A45 !important;
+  box-shadow: none !important;
+  border: 1px solid transparent !important;
+}
+
+.authenticated-shell .primary-btn:hover {
+  background-color: #EFA500 !important;
+}
+
+.authenticated-shell .secondary-btn {
+  background-color: #FFFFFF !important;
+  color: #0B1F55 !important;
+  border: 1px solid #CBD3E0 !important;
+  box-shadow: none !important;
+}
+
+.authenticated-shell .secondary-btn:hover {
+  background-color: #F8FAFD !important;
+  color: #0B1F55 !important;
+}
+
+/* Tertiary action or info link style */
+.authenticated-shell .tertiary-link,
+.authenticated-shell a[href*="details"],
+.authenticated-shell a[href*="edit"] {
+  color: #0F766E !important;
+  transition: color 0.15s ease;
+}
+
+.authenticated-shell .tertiary-link:hover,
+.authenticated-shell a[href*="details"]:hover,
+.authenticated-shell a[href*="edit"]:hover {
+  color: #115E59 !important;
+}
+
+/* Secondary Teal Accent conversions for status */
+.authenticated-shell .text-teal,
+.authenticated-shell .text-emerald-700,
+.authenticated-shell .text-green-700,
+.authenticated-shell .text-emerald-600 {
+  color: #0F766E !important;
+}
+
+.authenticated-shell .bg-teal-soft,
+.authenticated-shell .bg-emerald-50,
+.authenticated-shell .bg-green-50,
+.authenticated-shell .bg-emerald-50\/40 {
+  background-color: #CCFBF1 !important;
+  color: #0F766E !important;
+  border-color: #CCFBF1 !important;
+}
+

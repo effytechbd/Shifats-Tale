@@ -21,7 +21,7 @@ export function StudentShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen bg-bg-soft text-text overflow-hidden">
+    <div className="authenticated-shell flex h-screen w-screen bg-bg-soft text-text overflow-hidden">
       {/* Desktop sidebar */}
       <StudentSidebar className="hidden lg:flex lg:w-64 lg:shrink-0" activeBatches={activeBatches} />
 

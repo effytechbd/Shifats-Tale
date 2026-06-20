@@ -9,38 +9,46 @@ interface StatusBadgeProps {
 export function StatusBadge({ status, className }: StatusBadgeProps) {
   const normalized = status.toUpperCase();
 
-  let colors = "bg-gray-100 text-gray-800 border-gray-200";
+  let colors = "bg-[#E9EDF3] text-[#475569] border-[#DDE3EC]";
 
   switch (normalized) {
     case "ACTIVE":
+    case "OPEN":
+    case "PAID":
     case "APPROVED":
-      colors = "bg-emerald-50 text-emerald-700 border-emerald-200/60";
+      colors = "bg-[#DDF8EC] text-[#087A55] border-[#DDF8EC]";
       break;
     case "PENDING":
-      colors = "bg-amber-50 text-amber-700 border-amber-200/60";
+      colors = "bg-[#FFF2CC] text-[#A15C00] border-[#FFF2CC]";
+      break;
+    case "CLOSED":
+    case "INACTIVE":
+    case "REJECTED":
+    case "ARCHIVED":
+      colors = "bg-[#E9EDF3] text-[#475569] border-[#E9EDF3]";
       break;
     case "DISABLED":
-    case "REJECTED":
+    case "SUSPENDED":
+    case "FAILED":
+    case "OVERDUE":
     case "CANCELLED":
-      colors = "bg-rose-50 text-rose-700 border-rose-200/60";
+      colors = "bg-[#FEE4E2] text-[#B42318] border-[#FEE4E2]";
       break;
+    case "INFORMATION":
     case "COMPLETED":
-      colors = "bg-blue-50 text-blue-700 border-blue-200/60";
-      break;
-    case "ARCHIVED":
-      colors = "bg-slate-100 text-slate-700 border-slate-200/60";
+      colors = "bg-[#E8F1FF] text-[#175CD3] border-[#E8F1FF]";
       break;
   }
 
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold border",
+        "inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wide border",
         colors,
         className
       )}
     >
-      {status}
+      {status.replace("_", " ")}
     </span>
   );
 }

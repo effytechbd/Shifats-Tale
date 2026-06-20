@@ -19,7 +19,7 @@ export function TeacherShell({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen w-screen bg-bg-soft text-text overflow-hidden">
+    <div className="authenticated-shell flex h-screen w-screen bg-bg-soft text-text overflow-hidden">
       {/* Desktop sidebar */}
       <TeacherSidebar className="hidden lg:flex lg:w-64 lg:shrink-0" />
 

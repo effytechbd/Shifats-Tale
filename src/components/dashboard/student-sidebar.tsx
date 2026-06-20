@@ -109,10 +109,10 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
   };
 
   return (
-    <div className={cn("flex flex-col h-full bg-primary text-white border-r border-primary-dark", className)}>
+    <div className={cn("flex flex-col h-full bg-primary-dark text-white border-r border-slate-900", className)}>
       {/* Brand area */}
-      <div className="flex items-center gap-2.5 px-6 py-5 border-b border-primary-dark bg-primary-dark/40">
-        <div className="p-2 bg-accent rounded-xl text-primary">
+      <div className="flex items-center gap-2.5 px-6 py-5 border-b border-slate-900 bg-slate-950/20">
+        <div className="p-2 bg-accent rounded-xl text-primary-dark">
           <GraduationCap className="h-6 w-6 font-bold" />
         </div>
         <div>
@@ -129,7 +129,9 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
       <nav className="flex-grow p-4 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isActive = item.href === "/student"
+            ? pathname === "/student"
+            : pathname === item.href || pathname.startsWith(item.href + "/");
 
           return (
             <Link
@@ -139,17 +141,17 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
               className={cn(
                 "flex items-center gap-3.5 px-4 py-3 text-sm font-bold rounded-xl transition-all duration-200 group relative",
                 isActive
-                  ? "bg-accent text-primary shadow-md shadow-accent/15"
-                  : "text-white/80 hover:text-white hover:bg-primary-dark/30"
+                  ? "bg-accent text-primary-dark shadow-md"
+                  : "text-[#DCE5F5] hover:text-white hover:bg-[#102A66]"
               )}
             >
               {isActive && (
-                <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-primary rounded-r-full" />
+                <span className="absolute left-0 top-1/4 bottom-1/4 w-1 bg-white rounded-r-full" />
               )}
-              <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary" : "text-white/60 group-hover:text-white")} />
+              <Icon className={cn("h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-105", isActive ? "text-primary-dark" : "text-[#9FB0D0] group-hover:text-white")} />
               <span>{item.label}</span>
               {item.label === "Notifications" && unreadCount > 0 && (
-                <span className="ml-auto px-1.5 py-0.5 rounded-lg bg-accent text-[9px] font-extrabold text-white leading-none">
+                <span className="ml-auto px-1.5 py-0.5 rounded-lg bg-accent text-[9px] font-extrabold text-primary-dark leading-none">
                   {unreadCount}
                 </span>
               )}
@@ -173,7 +175,7 @@ export function StudentSidebar({ className, onLinkClick, activeBatches = [] }: S
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-primary-dark bg-primary-dark/20 text-xs font-semibold text-white/50 text-center">
+      <div className="p-4 border-t border-slate-900 bg-slate-950/10 text-xs font-semibold text-white/50 text-center">
         &copy; {new Date().getFullYear()} Shifat's Tales
       </div>
     </div>
