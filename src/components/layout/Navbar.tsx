@@ -29,7 +29,7 @@ interface NavItemConfig {
 
 const navItems: NavItemConfig[] = [
   { label: "Home", href: "/", iconName: "Home", match: "exact" },
-  { label: "About", href: "#teacher", iconName: "User" },
+  { label: "About", href: "/about", iconName: "User" },
   { label: "Courses", href: "#courses", iconName: "BookOpen" },
   { label: "Results", href: "#results", iconName: "TrendingUp" },
   { label: "Free Classes", href: "#youtube-classes", iconName: "PlayCircle" },
