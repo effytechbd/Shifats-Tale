@@ -22,7 +22,6 @@ export default function StudentCardModal({ item, onClose, onSave }: StudentCardM
   const [body, setBody] = useState(item?.body || "");
   
   const [achievement, setAchievement] = useState(meta.achievement || "");
-  const [course, setCourse] = useState(meta.course || "");
   const [examType, setExamType] = useState(meta.examType || "Engineering");
   const [year, setYear] = useState(meta.year || new Date().getFullYear().toString());
   
@@ -40,12 +39,11 @@ export default function StudentCardModal({ item, onClose, onSave }: StudentCardM
       id: item?.id,
       title,
       subtitle,
-      body,
+      body: "", // not used in UI
       media_id: mediaId,
       status: "PUBLISHED" as const,
       metadata: {
         achievement,
-        course,
         examType,
         year,
         fallbackImageUrl: meta.fallbackImageUrl // preserve if no mediaId is selected
@@ -62,7 +60,7 @@ export default function StudentCardModal({ item, onClose, onSave }: StudentCardM
         id: item?.id || Math.random().toString(36).substr(2, 9), 
         title,
         subtitle,
-        body,
+        body: "",
         media_id: mediaId,
         mediaUrl: mediaUrl || meta.fallbackImageUrl,
         metadata: payload.metadata
@@ -154,28 +152,6 @@ export default function StudentCardModal({ item, onClose, onSave }: StudentCardM
                     placeholder="e.g. 2024"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Target Batch/Course</label>
-                <input 
-                  type="text" 
-                  value={course} 
-                  onChange={(e) => setCourse(e.target.value)}
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent"
-                  placeholder="e.g. Engineering Admission Care"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold mb-1">Student's Review / Note</label>
-                <textarea 
-                  value={body} 
-                  onChange={(e) => setBody(e.target.value)}
-                  rows={4}
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent resize-none"
-                  placeholder="What did the student say about our care?"
-                />
               </div>
 
             </div>

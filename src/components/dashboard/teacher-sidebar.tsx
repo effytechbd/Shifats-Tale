@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import { 
   Users, 
+  Home,
   BookOpen, 
   LayoutDashboard, 
   CreditCard, 
@@ -81,6 +82,13 @@ export const websiteAdminNavItems: NavItem[] = [
       { label: "Projects Grid", href: "/teacher/website/about/projects" },
       { label: "Technical Skills", href: "/teacher/website/about/skills" },
       { label: "Extra Curricular Activities", href: "/teacher/website/about/eca" },
+    ]
+  },
+  { 
+    label: "Home Page", 
+    icon: Home,
+    subItems: [
+      { label: "Featured Courses", href: "/teacher/website/home/courses" },
     ]
   },
   { 

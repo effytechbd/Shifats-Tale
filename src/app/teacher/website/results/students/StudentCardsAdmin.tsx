@@ -107,17 +107,8 @@ export default function StudentCardsAdmin({ initialItems }: { initialItems: any[
                       <span>{meta.achievement || "N/A"}</span>
                     </div>
                   </div>
-                  
-                  <p className="text-sm text-gray-600 italic line-clamp-3 mb-4 flex-grow relative">
-                    <span className="text-3xl text-[#E7E0D2] absolute -top-2 -left-1 font-serif">"</span>
-                    <span className="relative z-10 ml-4 block">{item.body}</span>
-                  </p>
 
                   <div className="flex justify-between items-center text-xs text-gray-500 mt-auto pt-4 border-t border-border">
-                    <div className="flex items-center space-x-1">
-                      <BookOpen className="w-3.5 h-3.5" />
-                      <span className="truncate max-w-[120px]">{meta.course || "N/A"}</span>
-                    </div>
                     <div className="flex items-center space-x-1">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{meta.year || "N/A"}</span>
