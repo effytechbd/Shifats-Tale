@@ -1,65 +1,22 @@
-import React from "react";
-import { createClient } from "@/lib/supabase/server";
-import { requireTeacher } from "@/lib/auth-guards";
-import { CoursesHeroForm } from "./hero-form";
-
-export const metadata = {
-  title: "Courses Hero - Website Admin",
-};
+import { getPageSection } from "@/features/website-cms/actions/content-actions";
+import { SharedHeroForm } from "@/features/website-cms/components/SharedHeroForm";
 
 export default async function CoursesHeroAdminPage() {
-  await requireTeacher();
-  const supabase = await createClient();
-
-  // Fetch the raw base table section because Admin needs all fields (including DRAFT ones)
-  // vw_public_site_page_sections only shows PUBLISHED.
-  
-  // First, find the page id
-  const { data: page } = await supabase
-    .from("site_pages")
-    .select("id")
-    .eq("page_key", "COURSES")
-    .single();
-
-  let initialData = null;
-  if (page) {
-    const { data: section } = await supabase
-      .from("site_page_sections")
-      .select("*")
-      .eq("page_id", page.id)
-      .eq("section_key", "COURSES_HERO")
-      .maybeSingle();
-      
-    if (section) {
-      initialData = section;
-      
-      // If there's a mediaId, fetch the secure URL to preview it
-      if (section.content && typeof section.content === 'object' && 'mediaId' in section.content) {
-        const { data: media } = await supabase
-          .from("media_assets")
-          .select("secure_url")
-          .eq("id", section.content.mediaId as string)
-          .maybeSingle();
-          
-        if (media) {
-          initialData.mediaUrl = media.secure_url;
-        }
-      }
-    }
-  }
+  const initialData = await getPageSection("COURSES", "COURSES_HERO");
 
   return (
-    <div className="max-w-3xl space-y-6">
+    <div className="space-y-6 max-w-4xl">
       <div>
-        <h1 className="text-2xl font-extrabold text-primary font-display tracking-tight">
-          Courses Hero Section
-        </h1>
-        <p className="text-sm text-muted font-medium mt-1">
-          Update the main banner, title, and description of the Courses page.
-        </p>
+        <h1 className="text-2xl font-bold text-primary">Courses Hero Section</h1>
+        <p className="text-muted text-sm mt-1">Manage the title, subtitle, description, and background image of the Courses page hero section.</p>
       </div>
-
-      <CoursesHeroForm initialData={initialData} />
+      
+      <SharedHeroForm 
+        initialData={initialData} 
+        pageKey="COURSES" 
+        sectionKey="COURSES_HERO"
+        folderKey="COURSES"
+      />
     </div>
   );
 }

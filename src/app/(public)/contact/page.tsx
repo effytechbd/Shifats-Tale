@@ -4,13 +4,16 @@ import ContactSection from "@/components/home/ContactSection";
 import LocationSection from "@/components/home/LocationSection";
 import FAQSection from "@/components/home/FAQSection";
 import React from "react";
+import { getPageSection } from "@/features/website-cms/actions/content-actions";
 
 export const metadata: Metadata = {
   title: "Contact & FAQ | Shifat's Tales",
   description: "Get in touch with Shifat's Tales Academic & Admission Care. We are here to help with your queries.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const heroData = await getPageSection("CONTACT", "CONTACT_HERO");
+
   return (
     <div className="min-h-screen bg-[#FFF9F2] pt-24 pb-20 relative overflow-hidden">
       {/* Background Graphic */}
@@ -28,19 +31,19 @@ export default function ContactPage() {
             ========================================================================= */}
         <section className="mb-0">
           <InnerPageHero 
-            eyebrow="GET IN TOUCH"
+            eyebrow={heroData?.eyebrow || "GET IN TOUCH"}
             title={
               <>
-                <span className="block text-white">Contact &</span>
-                <span className="block text-accent mt-1">FAQ</span>
+                <span className="block text-white">{heroData?.title || "Contact &"}</span>
+                <span className="block text-accent mt-1">{heroData?.subtitle || "FAQ"}</span>
               </>
             }
-            description="Have questions? We are here to help you with anything related to our courses, batches, and admission processes."
+            description={heroData?.description || "Have questions? We are here to help you with anything related to our courses, batches, and admission processes."}
             breadcrumbs={[
               { label: "Home", href: "/" },
               { label: "Contact Me" }
             ]}
-            imageSrc="/images/gallery-classroom.png"
+            imageSrc={heroData?.mediaUrl || "/images/gallery-classroom.png"}
           />
         </section>
 

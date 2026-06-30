@@ -24,6 +24,9 @@ export default function WebsiteAdminOverview() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           { title: "Courses Hero", description: "Edit main title, subtitle, and primary call-to-actions for the Courses page.", href: "/teacher/website/courses/hero" },
+          { title: "Results Hero", description: "Edit main title, subtitle, and banner for the Results page.", href: "/teacher/website/results/hero" },
+          { title: "Gallery Hero", description: "Edit main title, subtitle, and banner for the Gallery page.", href: "/teacher/website/gallery/hero" },
+          { title: "Contact Hero", description: "Edit main title, subtitle, and banner for the Contact page.", href: "/teacher/website/contact/hero" },
           { title: "About Me", description: "Update your profile, skills, education, and experience.", href: "/teacher/website/about" },
           { title: "Gallery", description: "Manage photos and memories displayed on the website.", href: "/teacher/website/gallery" },
           { title: "Contact & Footer", description: "Update social links, contact info, and footer text.", href: "/teacher/website/contact" },

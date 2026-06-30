@@ -7,7 +7,7 @@ import { studentResults } from "@/data/results";
 import { siteInfo } from "@/data/site";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 
-export default function ResultsClient() {
+export default function ResultsClient({ heroData }: { heroData?: any }) {
   const whatsappNumber = siteInfo.whatsapp;
   const [filter, setFilter] = useState("all");
 
@@ -38,19 +38,19 @@ export default function ResultsClient() {
         
         {/* Header */}
         <InnerPageHero 
-          eyebrow="HALL OF FAME"
+          eyebrow={heroData?.eyebrow || "HALL OF FAME"}
           title={
             <>
-              <span className="block text-white">Our Success Stories</span>
-              <span className="block text-accent mt-1">& Alumni</span>
+              <span className="block text-white">{heroData?.title || "Our Success Stories"}</span>
+              <span className="block text-accent mt-1">{heroData?.subtitle || "& Alumni"}</span>
             </>
           }
-          description="Explore the brilliant minds who have achieved top ranks in board exams and university admissions."
+          description={heroData?.description || "Explore the brilliant minds who have achieved top ranks in board exams and university admissions."}
           breadcrumbs={[
             { label: "Home", href: "/" },
             { label: "Results" },
           ]}
-          imageSrc="/images/flyer_admission_science.jpg"
+          imageSrc={heroData?.mediaUrl || "/images/flyer_admission_science.jpg"}
           imageAlt="Success Stories Cover"
         />
 

@@ -3,12 +3,22 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updatePageSection } from "@/features/website-cms/actions/content-actions";
-import { MediaUploader } from "@/features/website-cms/components/MediaUploader";
+import { MediaSelector } from "@/features/website-cms/components/MediaSelector";
 import { Save, Loader2, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
-export function CoursesHeroForm({ initialData }: { initialData: any }) {
+export function SharedHeroForm({ 
+  initialData, 
+  pageKey, 
+  sectionKey, 
+  folderKey 
+}: { 
+  initialData: any;
+  pageKey: string;
+  sectionKey: string;
+  folderKey: any; // AllowedFolder
+}) {
   const router = useRouter();
   
   const [eyebrow, setEyebrow] = useState(initialData?.eyebrow || "");
@@ -40,7 +50,7 @@ export function CoursesHeroForm({ initialData }: { initialData: any }) {
     setIsSaving(true);
 
     try {
-      await updatePageSection("COURSES", "COURSES_HERO", {
+      await updatePageSection(pageKey, sectionKey, {
         eyebrow,
         title,
         subtitle,
@@ -70,19 +80,24 @@ export function CoursesHeroForm({ initialData }: { initialData: any }) {
         </h3>
         <p className="text-sm text-muted">Upload a banner or cover image for the Courses Hero section.</p>
         
-        {/* If we already have a mediaUrl from the DB, show it */}
-        {mediaUrl && mediaId === initialData?.content?.mediaId && (
+        {/* If we already have a mediaUrl from the DB or a newly selected one, show it */}
+        {mediaUrl && (
           <div className="relative w-full aspect-video max-h-64 rounded-xl overflow-hidden bg-bg border border-border/50 mb-4">
             <Image src={mediaUrl} alt="Current Background" fill className="object-contain" />
           </div>
         )}
 
-        <MediaUploader 
-          folderKey="COURSES"
-          onUploadSuccess={handleMediaSuccess}
+        <MediaSelector 
+          folderKey={folderKey}
+          onSelect={(newMediaId, newSecureUrl) => {
+            setMediaId(newMediaId);
+            if (newSecureUrl) {
+              setMediaUrl(newSecureUrl); // Instant preview update
+            }
+          }}
         />
         {mediaId && mediaId !== initialData?.content?.mediaId && (
-          <p className="text-xs text-green-600 font-medium mt-2">New image uploaded and ready to save!</p>
+          <p className="text-xs text-green-600 font-medium mt-2">New image selected and ready to save!</p>
         )}
       </div>
 
