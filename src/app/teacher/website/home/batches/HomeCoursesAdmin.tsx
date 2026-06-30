@@ -136,5 +136,6 @@ export default function HomeCoursesAdmin({
         })}
       </div>
     </div>
+    </div>
   );
 }
