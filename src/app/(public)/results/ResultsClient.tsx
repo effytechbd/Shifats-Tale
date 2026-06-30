@@ -3,11 +3,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, GraduationCap, Building2, Stethoscope, BookOpen, Shield, Trophy, CheckCircle2 } from "lucide-react";
-import { studentResults } from "@/data/results";
 import { siteInfo } from "@/data/site";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 
-export default function ResultsClient({ heroData }: { heroData?: any }) {
+export default function ResultsClient({ heroData, studentItems = [] }: { heroData?: any, studentItems?: any[] }) {
   const whatsappNumber = siteInfo.whatsapp;
   const [filter, setFilter] = useState("all");
 
@@ -19,9 +18,9 @@ export default function ResultsClient({ heroData }: { heroData?: any }) {
     { id: "Board", label: "Board Exams", icon: BookOpen }
   ];
 
-  const filteredResults = studentResults.filter(result => {
+  const filteredResults = studentItems.filter((result) => {
     if (filter === "all") return true;
-    return result.examType === filter;
+    return result.metadata?.examType === filter;
   });
 
   return (
@@ -83,7 +82,16 @@ export default function ResultsClient({ heroData }: { heroData?: any }) {
         {/* Results Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8 max-w-7xl mx-auto">
           <AnimatePresence mode="popLayout">
-            {filteredResults.map((result) => (
+            {filteredResults.map((result) => {
+              const meta = result.metadata || {};
+              const name = result.title;
+              const college = result.subtitle;
+              const achievement = meta.achievement || "N/A";
+              const examType = meta.examType || "N/A";
+              const year = meta.year || "";
+              const image = result.mediaUrl || meta.fallbackImageUrl || "/placeholder.jpg";
+              
+              return (
               <motion.div
                 layout
                 key={result.id}
@@ -95,20 +103,20 @@ export default function ResultsClient({ heroData }: { heroData?: any }) {
               >
                 {/* Top-Left Category Badge */}
                 <div className="absolute top-0 left-0 bg-[#010E62] text-white text-[9px] font-bold tracking-widest uppercase px-4 py-1.5 rounded-br-xl z-20 shadow-sm">
-                  {result.examType}
+                  {examType}
                 </div>
                 
                 {/* Top-Right Year Badge */}
                 <div className="absolute top-3 right-4 bg-[#FFFBF3] border border-[#E7E0D2] text-text text-[10px] font-bold px-3 py-1 rounded-full z-20 shadow-sm">
-                  Class of {result.year}
+                  Class of {year}
                 </div>
 
                 {/* Left: Image Container */}
                 <div className="absolute top-11 left-4 sm:left-5 z-20">
                   <div className="relative w-[110px] h-[145px] sm:w-[125px] sm:h-[155px] rounded-[18px] border-[2px] border-accent bg-white shadow-md p-1">
                     <img 
-                      src={result.image} 
-                      alt={result.name} 
+                      src={image} 
+                      alt={name} 
                       className="w-full h-full object-cover rounded-[14px]" 
                     />
                     {/* Star Badge Overlap */}
@@ -122,11 +130,11 @@ export default function ResultsClient({ heroData }: { heroData?: any }) {
                 <div className="ml-[135px] sm:ml-[155px] flex-1 flex flex-col justify-between pt-10 pb-0 pr-0 h-full relative z-10">
                   <div className="px-2 pr-4 mt-2">
                     <h4 className="font-extrabold text-[#010E62] text-xl sm:text-[22px] leading-tight truncate w-full">
-                      {result.name}
+                      {name}
                     </h4>
                     <div className="flex items-start text-[12.5px] sm:text-[13.5px] font-semibold text-text mt-2 gap-2">
                       <Building2 className="w-4 h-4 text-muted shrink-0 mt-0.5" />
-                      <span className="line-clamp-2 leading-snug">{result.college}</span>
+                      <span className="line-clamp-2 leading-snug">{college}</span>
                     </div>
                   </div>
 
@@ -144,14 +152,14 @@ export default function ResultsClient({ heroData }: { heroData?: any }) {
                           Secured Result
                         </span>
                         <p className="text-[12px] sm:text-[13px] font-bold text-white leading-snug w-full pr-1">
-                          {result.achievement}
+                          {achievement}
                         </p>
                       </div>
                     </div>
                   </div>
                 </div>
               </motion.div>
-            ))}
+            )})}
           </AnimatePresence>
         </motion.div>
 

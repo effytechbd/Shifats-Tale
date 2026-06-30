@@ -104,7 +104,7 @@ export const websiteAdminNavItems: NavItem[] = [
     icon: GraduationCap,
     subItems: [
       { label: "Hero Section", href: "/teacher/website/results/hero" },
-      // Other sections like Students List will be added here
+      { label: "Student Cards", href: "/teacher/website/results/students" },
     ]
   },
   { 
