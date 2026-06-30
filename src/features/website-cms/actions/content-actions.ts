@@ -104,6 +104,7 @@ export async function updatePageSection(
       .insert({
         page_id: page.id,
         section_key: sectionKey,
+        component_key: sectionKey, // Add component_key to satisfy NOT NULL constraint
         eyebrow: payload.eyebrow || null,
         title: payload.title || null,
         subtitle: payload.subtitle || null,
