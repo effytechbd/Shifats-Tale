@@ -28,7 +28,7 @@ export default async function HomeCoursesPage() {
 
       <HomeCoursesAdmin 
         allCourses={allCourses} 
-        initialSelectedIds={selectedCourseIds} 
+        initialSectionData={section} 
         sectionId={section?.id} 
       />
     </div>

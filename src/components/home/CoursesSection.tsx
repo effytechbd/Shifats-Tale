@@ -8,7 +8,7 @@ import { motion, useReducedMotion, AnimatePresence, useInView } from "framer-mot
 import { getCircularOffset } from "@/lib/circular";
 import { siteInfo } from "@/data/site";
 
-export default function CoursesSection({ courseItems = [] }: { courseItems?: any[] }) {
+export default function CoursesSection({ courseItems = [], headerData }: { courseItems?: any[], headerData?: any }) {
   const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
   const [windowWidth, setWindowWidth] = useState(1200);
@@ -143,7 +143,7 @@ export default function CoursesSection({ courseItems = [] }: { courseItems?: any
             viewport={{ once: true }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
-            Batches & Programs
+            {headerData?.eyebrow || "Batches & Programs"}
           </motion.h2>
           <motion.p
             variants={headerVariants}
@@ -152,7 +152,7 @@ export default function CoursesSection({ courseItems = [] }: { courseItems?: any
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
-            Offered Batches
+            {headerData?.title || "Offered Batches"}
           </motion.p>
           <motion.p
             variants={headerVariants}
@@ -161,7 +161,7 @@ export default function CoursesSection({ courseItems = [] }: { courseItems?: any
             viewport={{ once: true }}
             className="text-text text-sm sm:text-base"
           >
-            Explore our curriculum programs designed to guide students towards absolute clarity in board and admission exams.
+            {headerData?.description || "Explore our curriculum programs designed to guide students towards absolute clarity in board and admission exams."}
           </motion.p>
         </div>
 

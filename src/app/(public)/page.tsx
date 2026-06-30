@@ -21,5 +21,5 @@ export default async function HomePage() {
   // Fallback to all courses if none are selected (for initial state before admin selects any)
   const displayCourses = featuredCourses.length > 0 ? featuredCourses : allCourses.slice(0, 5);
 
-  return <HomeClient displayCourses={displayCourses} />;
+  return <HomeClient displayCourses={displayCourses} headerData={homeCoursesSection} />;
 }

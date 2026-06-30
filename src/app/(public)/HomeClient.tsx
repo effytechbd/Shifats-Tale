@@ -20,7 +20,7 @@ import YouTubeClassesSection from "@/components/home/YouTubeClassesSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import GallerySection from "@/components/home/GallerySection";
 
-export default function HomeClient({ displayCourses }: { displayCourses: any[] }) {
+export default function HomeClient({ displayCourses, headerData }: { displayCourses: any[], headerData?: any }) {
   const [flyingState, setFlyingState] = useState<{
     startX: number;
     startY: number;
@@ -91,7 +91,7 @@ export default function HomeClient({ displayCourses }: { displayCourses: any[] }
     <div className="overflow-x-hidden">
       <HeroSection isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
       <TrustStats />
-      <CoursesSection courseItems={displayCourses} />
+      <CoursesSection headerData={headerData} courseItems={displayCourses} />
       <WhyChooseSection />
       <TeacherSection isTeacherFlying={isFlying} />
       <TopOfTheMonthSection />
