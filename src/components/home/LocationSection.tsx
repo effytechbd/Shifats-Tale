@@ -3,9 +3,10 @@
 import React from "react";
 import { MapPin, Compass, Train } from "lucide-react";
 import { motion } from "framer-motion";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 export default function LocationSection({ infoData }: { infoData?: any }) {
+  const siteInfo = useSiteSettings();
   const content = infoData?.content || {};
   const mapUrl = content.mapEmbedUrl || siteInfo.googleMapEmbedUrl;
   const directionUrl = content.mapDirectionUrl || siteInfo.googleMapDirectionUrl;
@@ -96,3 +97,5 @@ export default function LocationSection({ infoData }: { infoData?: any }) {
     </div>
   );
 }
+
+

@@ -53,7 +53,7 @@ export default async function ContactPage() {
             SECTION 2: CONTACT FORM & LOCATION
             ========================================================================= */}
         <div className="space-y-16">
-          <ContactSection infoData={contactInfo} />
+          <ContactSection />
           <LocationSection infoData={contactInfo} />
         </div>
 

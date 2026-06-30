@@ -1,10 +1,11 @@
 import React from "react";
 import { redirect } from "next/navigation";
 import { resolveAuthenticatedDestination } from "@/lib/supabase/auth";
-import { siteInfo } from "@/data/site";
+import { getGlobalSettings } from "@/features/website-cms/actions/global-settings";
 import { PendingApprovalView } from "./pending-approval-view";
 
 export default async function PendingApprovalPage() {
+  const siteInfo = await getGlobalSettings();
   // Authoritative server-side verification checks
   const {
     destination,
@@ -46,3 +47,4 @@ export default async function PendingApprovalPage() {
     />
   );
 }
+

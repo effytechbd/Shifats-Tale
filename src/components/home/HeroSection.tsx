@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Play, User } from "lucide-react";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 // Dynamically import the 3D scene with SSR disabled for optimal bundle performance
 const HeroScene = dynamic(() => import("../three/HeroScene"), {
@@ -23,6 +23,7 @@ interface HeroSectionProps {
 }
 
 export default function HeroSection({ isTeacherFlying = false, onImageClick }: HeroSectionProps) {
+  const siteInfo = useSiteSettings();
   const scrollToSection = (id: string) => {
     const el = document.querySelector(id);
     if (el) {
@@ -170,4 +171,6 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
     </section>
   );
 }
+
+
 

@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Send, CheckCircle2, Calendar, Clock, Star, GraduationCap, Building2, Stethoscope, BookOpen } from "lucide-react";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 
 export default function CoursesClient({ heroData, courseItems = [] }: { heroData?: any, courseItems?: any[] }) {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const [filter, setFilter] = useState("all");
 
@@ -188,3 +189,5 @@ export default function CoursesClient({ heroData, courseItems = [] }: { heroData
     </div>
   );
 }
+
+

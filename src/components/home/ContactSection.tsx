@@ -4,17 +4,10 @@ import React, { useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Clock } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
 import { motion, useReducedMotion } from "framer-motion";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
-export default function ContactSection({ infoData }: { infoData?: any }) {
-  const content = infoData?.content || {};
-  const phone = content.phone || siteInfo.phone;
-  const whatsappNumber = content.whatsapp || siteInfo.whatsapp;
-  const officeHours = content.officeHours || siteInfo.officeHours;
-  const facebookUrl = content.facebookUrl || siteInfo.facebookUrl;
-  const youtubeUrl = content.youtubeUrl || siteInfo.youtubeUrl;
-  const address = content.address || siteInfo.address;
-
+export default function ContactSection() {
+  const siteInfo = useSiteSettings();
   const [formData, setFormData] = useState({
     studentName: "",
     studentClass: "",
@@ -24,6 +17,7 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -109,23 +103,23 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
             {/* Icons list */}
             <div className="space-y-4">
               {/* Phone */}
-                <a
-                  href={`tel:${phone.replace(/[\s-]/g, "")}`}
-                  className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
-                >
-                  <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
-                    <Phone className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Phone Calls</span>
-                    <span className="block font-extrabold text-primary text-sm sm:text-base">{phone}</span>
-                  </div>
-                </a>
+              <a
+                href={`tel:${siteInfo.phone.replace(/[\s-]/g, "")}`}
+                className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
+              >
+                <div className="bg-accent/15 p-2.5 rounded-lg text-primary shrink-0 group-hover:scale-105 transition-transform duration-200">
+                  <Phone className="h-5 w-5" />
+                </div>
+                <div>
+                  <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Phone Calls</span>
+                  <span className="block font-extrabold text-primary text-sm sm:text-base">{siteInfo.phone}</span>
+                </div>
+              </a>
 
-                {/* WhatsApp */}
-                <a
-                  href={`https://wa.me/${whatsappNumber}`}
-                  target="_blank"
+              {/* WhatsApp */}
+              <a
+                href={`https://wa.me/${siteInfo.whatsapp}`}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center space-x-4 p-4 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
               >
@@ -138,20 +132,20 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
                 </div>
               </a>
 
-                {/* Social Pages */}
-                <div className="grid grid-cols-2 gap-4">
-                  <a
-                    href={facebookUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
-                  >
-                    <FacebookIcon className="h-4.5 w-4.5 text-primary group-hover:scale-105 transition-transform" />
-                    <span className="text-xs font-bold text-primary-dark">Facebook</span>
-                  </a>
-                  <a
-                    href={youtubeUrl}
-                    target="_blank"
+              {/* Social Pages */}
+              <div className="grid grid-cols-2 gap-4">
+                <a
+                  href={siteInfo.facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
+                >
+                  <FacebookIcon className="h-4.5 w-4.5 text-primary group-hover:scale-105 transition-transform" />
+                  <span className="text-xs font-bold text-primary-dark">Facebook</span>
+                </a>
+                <a
+                  href={siteInfo.youtubeUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center space-x-3 p-3.5 rounded-xl border border-border bg-white hover:-translate-y-0.5 hover:shadow-md hover:border-accent/40 transition-all duration-200 shadow-sm group"
                 >
@@ -167,7 +161,7 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
                 </div>
                 <div>
                   <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Office Hours</span>
-                  <span className="block font-extrabold text-primary text-sm sm:text-base">{officeHours}</span>
+                  <span className="block font-extrabold text-primary text-sm sm:text-base">{siteInfo.officeHours}</span>
                 </div>
               </div>
 
@@ -179,7 +173,7 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
                 <div>
                   <span className="block text-[10px] text-muted font-bold uppercase tracking-wider">Office Address</span>
                   <span className="block font-extrabold text-primary text-xs leading-relaxed mt-0.5">
-                    {address}
+                    {siteInfo.address}
                   </span>
                 </div>
               </div>
@@ -310,3 +304,5 @@ export default function ContactSection({ infoData }: { infoData?: any }) {
     </div>
   );
 }
+
+

@@ -117,6 +117,7 @@ export const websiteAdminNavItems: NavItem[] = [
       { label: "FAQ Section", href: "/teacher/website/contact/faq" },
     ]
   },
+  { label: "Global Settings", href: "/teacher/website/settings", icon: Settings },
   { label: "Global Footer", href: "/teacher/website/footer", icon: Settings },
 ];
 
@@ -290,3 +291,4 @@ export function TeacherSidebar({ className, onLinkClick, adminMode = "coaching" 
     </div>
   );
 }
+

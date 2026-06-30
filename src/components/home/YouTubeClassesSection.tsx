@@ -5,10 +5,11 @@ import { youtubeClasses, YouTubeClass } from "@/data/youtubeClasses";
 import { Play, Clock, Eye, Send, Sparkles } from "lucide-react";
 import { YoutubeIcon } from "@/components/ui/Icons";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import Image from "next/image";
 
 export default function YouTubeClassesSection() {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
   const [currentVideo, setCurrentVideo] = useState<YouTubeClass>(youtubeClasses[0]);
@@ -261,3 +262,5 @@ export default function YouTubeClassesSection() {
     </section>
   );
 }
+
+

@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, MapPin, Mail } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import { MessageCircleHeart } from "lucide-react"; // for whatsapp chat icon
 
 export default function Footer() {
+  const siteInfo = useSiteSettings();
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
       e.preventDefault();
@@ -181,3 +182,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+

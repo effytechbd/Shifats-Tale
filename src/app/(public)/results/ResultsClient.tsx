@@ -3,10 +3,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, GraduationCap, Building2, Stethoscope, BookOpen, Shield, Trophy, CheckCircle2 } from "lucide-react";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 
 export default function ResultsClient({ heroData, studentItems = [] }: { heroData?: any, studentItems?: any[] }) {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const [filter, setFilter] = useState("all");
 
@@ -200,3 +201,5 @@ export default function ResultsClient({ heroData, studentItems = [] }: { heroDat
     </div>
   );
 }
+
+

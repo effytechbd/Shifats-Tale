@@ -6,9 +6,10 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight, Eye, X, Send } from "lucide-react";
 import { motion, useReducedMotion, AnimatePresence, useInView } from "framer-motion";
 import { getCircularOffset } from "@/lib/circular";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 export default function CoursesSection({ courseItems = [], headerData }: { courseItems?: any[], headerData?: any }) {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
   const [windowWidth, setWindowWidth] = useState(1200);
@@ -434,3 +435,5 @@ export default function CoursesSection({ courseItems = [], headerData }: { cours
     </section>
   );
 }
+
+

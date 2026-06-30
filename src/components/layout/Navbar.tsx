@@ -18,7 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 interface NavItemConfig {
   label: string;
@@ -60,6 +60,7 @@ const renderNavIcon = (iconName: string, className = "h-4 w-4") => {
 };
 
 export default function Navbar() {
+  const siteInfo = useSiteSettings();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
@@ -399,3 +400,5 @@ export default function Navbar() {
     </>
   );
 }
+
+
