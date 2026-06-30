@@ -85,13 +85,6 @@ export const websiteAdminNavItems: NavItem[] = [
     ]
   },
   { 
-    label: "Home Page", 
-    icon: Home,
-    subItems: [
-      { label: "Featured Courses", href: "/teacher/website/home/courses" },
-    ]
-  },
-  { 
     label: "Courses Page", 
     icon: BookOpen,
     subItems: [
