@@ -38,7 +38,7 @@ export interface MetricItem {
   id: string;
   label: string;
   value: string;
-  iconName: "GraduationCap" | "UserCheck" | "BookOpen" | "Award" | "Code";
+  iconName: string;
 }
 
 export interface EducationItem {

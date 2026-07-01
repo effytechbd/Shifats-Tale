@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { GraduationCap, UserCheck, BookOpen, Award, Code } from "lucide-react";
+import * as LucideIcons from "lucide-react";
 import { motion, useAnimation } from "framer-motion";
 import { MetricItem } from "@/data/about";
 
@@ -9,21 +9,10 @@ interface AboutMetricsProps {
   metrics: MetricItem[];
 }
 
-const renderMetricIcon = (iconName: string, className: string = "h-6 w-6") => {
-  switch (iconName) {
-    case "GraduationCap":
-      return <GraduationCap className={className} />;
-    case "UserCheck":
-      return <UserCheck className={className} />;
-    case "BookOpen":
-      return <BookOpen className={className} />;
-    case "Award":
-      return <Award className={className} />;
-    case "Code":
-      return <Code className={className} />;
-    default:
-      return <GraduationCap className={className} />;
-  }
+const renderDynamicIcon = (iconName: string, className: string = "h-6 w-6") => {
+  const IconComponent = (LucideIcons as any)[iconName];
+  if (!IconComponent) return <LucideIcons.HelpCircle className={className} />;
+  return <IconComponent className={className} />;
 };
 
 const AnimatedNumber = ({ value }: { value: string }) => {
@@ -84,7 +73,7 @@ export const AboutMetrics: React.FC<AboutMetricsProps> = ({ metrics }) => {
                 className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left space-y-4 sm:space-y-0 sm:space-x-5 group"
               >
                 <div className="p-4 rounded-2xl bg-accent/10 text-accent group-hover:bg-accent group-hover:text-primary transition-all duration-300 shadow-inner">
-                  {renderMetricIcon(item.iconName, "h-7 w-7 sm:h-8 sm:w-8")}
+                  {renderDynamicIcon(item.iconName, "h-7 w-7 sm:h-8 sm:w-8")}
                 </div>
                 <div className="flex flex-col justify-center">
                   <h4 className="font-extrabold text-2xl sm:text-3xl text-primary font-display mb-1 group-hover:text-accent transition-colors">

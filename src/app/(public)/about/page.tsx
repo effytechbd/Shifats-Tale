@@ -31,6 +31,7 @@ export const metadata: Metadata = {
 
 export default async function AboutPage() {
   const aboutHeroSection = await getPageSection("ABOUT", "ABOUT_HERO");
+  const aboutMetricsSection = await getPageSection("ABOUT", "ABOUT_METRICS");
 
   return (
     <div className="relative pt-20 pb-0 bg-bg-soft text-text flex flex-col min-h-screen selection:bg-accent selection:text-primary overflow-x-hidden">
@@ -41,7 +42,7 @@ export default async function AboutPage() {
       <AboutHero profileData={aboutHeroSection?.content || profileData} />
 
       {/* 2. Summary Metrics Strip */}
-      <AboutMetrics metrics={metricsData} />
+      <AboutMetrics metrics={aboutMetricsSection?.content?.metrics || metricsData} />
 
       {/* 3. Education Timeline */}
       <EducationTimeline education={educationData} />
