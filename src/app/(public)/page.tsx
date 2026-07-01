@@ -36,10 +36,10 @@ export default async function HomePage() {
   const displayStudents = featuredStudents.length > 0 ? featuredStudents : allStudents.slice(0, 5);
 
   return <HomeClient 
+    heroData={homeHeroSection}
     displayCourses={displayCourses} 
     headerData={homeCoursesSection} 
     displayStudents={displayStudents}
     successHeaderData={homeSuccessSection}
-    heroData={homeHeroSection}
   />;
 }

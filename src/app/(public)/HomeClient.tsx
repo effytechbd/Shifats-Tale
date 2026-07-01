@@ -21,17 +21,17 @@ import TestimonialsSection from "@/components/home/TestimonialsSection";
 import GallerySection from "@/components/home/GallerySection";
 
 export default function HomeClient({ 
+  heroData,
   displayCourses, 
   headerData,
   displayStudents,
-  successHeaderData,
-  heroData
+  successHeaderData 
 }: { 
+  heroData?: any,
   displayCourses: any[], 
   headerData?: any,
   displayStudents?: any[],
-  successHeaderData?: any,
-  heroData?: any
+  successHeaderData?: any
 }) {
   const [flyingState, setFlyingState] = useState<{
     startX: number;
@@ -101,8 +101,8 @@ export default function HomeClient({
 
   return (
     <div className="overflow-x-hidden">
-      <HeroSection isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} heroData={heroData} />
-      <TrustStats heroData={heroData} />
+      <HeroSection heroData={heroData} isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
+      <TrustStats />
       <CoursesSection headerData={headerData} courseItems={displayCourses} />
       <WhyChooseSection />
       <TeacherSection isTeacherFlying={isFlying} />
