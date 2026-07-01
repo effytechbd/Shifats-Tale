@@ -144,15 +144,6 @@ export default function AboutHeroAdmin({ initialSectionData }: { initialSectionD
                 rows={3}
               />
             </div>
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-semibold mb-1 text-gray-700">Quote (Optional)</label>
-              <input
-                type="text"
-                value={profile.quote || ""}
-                onChange={(e) => updateProfile('quote', e.target.value)}
-                className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent italic"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -227,41 +218,40 @@ export default function AboutHeroAdmin({ initialSectionData }: { initialSectionD
             <Plus className="w-4 h-4" /> <span>Add Link</span>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-3">
           {(profile.socialLinks || []).map((link, idx) => (
-            <div key={idx} className="border border-border p-4 rounded-xl flex items-center space-x-3">
-              <div className="flex-1 grid grid-cols-1 gap-2">
-                <input
-                  type="text"
-                  value={link.platform}
-                  onChange={(e) => updateSocialLink(idx, 'platform', e.target.value)}
-                  placeholder="Platform Name"
-                  className="w-full px-3 py-1.5 border border-border rounded-lg focus:border-accent text-sm"
-                />
-                <input
-                  type="text"
-                  value={link.url}
-                  onChange={(e) => updateSocialLink(idx, 'url', e.target.value)}
-                  placeholder="URL"
-                  className="w-full px-3 py-1.5 border border-border rounded-lg focus:border-accent text-sm text-blue-600"
-                />
+            <div key={idx} className="flex flex-col sm:flex-row items-center gap-3 bg-gray-50/50 p-3 rounded-xl border border-border">
+              <div className="w-full sm:w-48 shrink-0">
                 <select
                   value={link.iconName}
-                  onChange={(e) => updateSocialLink(idx, 'iconName', e.target.value as any)}
-                  className="w-full px-3 py-1.5 border border-border rounded-lg focus:border-accent text-sm"
+                  onChange={(e) => {
+                    updateSocialLink(idx, 'iconName', e.target.value as any);
+                    updateSocialLink(idx, 'platform', e.target.value); // Sync platform with icon
+                  }}
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:border-accent text-sm font-semibold"
                 >
                   <option value="Facebook">Facebook</option>
                   <option value="Instagram">Instagram</option>
-                  <option value="Youtube">Youtube</option>
+                  <option value="Youtube">YouTube</option>
                   <option value="Linkedin">LinkedIn</option>
                   <option value="Twitter">Twitter</option>
                 </select>
               </div>
+              <div className="w-full flex-1">
+                <input
+                  type="text"
+                  value={link.url}
+                  onChange={(e) => updateSocialLink(idx, 'url', e.target.value)}
+                  placeholder="Profile URL (e.g. https://facebook.com/...)"
+                  className="w-full px-3 py-2 border border-border rounded-lg focus:border-accent text-sm text-blue-600"
+                />
+              </div>
               <button 
                 onClick={() => removeSocialLink(idx)} 
-                className="text-red-400 hover:text-red-600 p-2"
+                className="w-full sm:w-auto p-2 bg-white border border-red-200 rounded-md text-red-500 hover:bg-red-50 transition-colors flex justify-center items-center"
+                title="Remove Link"
               >
-                <Trash2 className="w-5 h-5" />
+                <Trash2 className="w-4 h-4" />
               </button>
             </div>
           ))}
