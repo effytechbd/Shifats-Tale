@@ -7,7 +7,7 @@ import { motion, type Variants } from "framer-motion";
 import { ProfileInfo, SocialLink } from "@/data/about";
 
 interface AboutHeroProps {
-  profile: ProfileInfo;
+  profileData: ProfileInfo;
 }
 
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -64,7 +64,7 @@ const containerVariants: Variants = {
   },
 };
 
-export const AboutHero: React.FC<AboutHeroProps> = ({ profile }) => {
+export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile }) => {
   return (
     <section className="relative pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden bg-[#FFF9F2]">
       {/* Background Decor */}
