@@ -97,7 +97,7 @@ export const websiteAdminNavItems: NavItem[] = [
     icon: ImageIcon,
     subItems: [
       { label: "Hero Section", href: "/teacher/website/gallery/hero" },
-      // Other sections like Photo Albums will be added here
+      { label: "Photo Albums", href: "/teacher/website/gallery/albums" },
     ]
   },
   { 

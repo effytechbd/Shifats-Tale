@@ -8,7 +8,7 @@ import { Calendar, Image as ImageIcon, Search, Camera } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import InnerPageHero from "@/components/layout/InnerPageHero";
 
-export default function GalleryClient({ heroData }: { heroData?: any }) {
+export default function GalleryClient({ heroData, albumsData: dynamicAlbums }: { heroData?: any, albumsData?: any }) {
   const [hoveredAlbum, setHoveredAlbum] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
@@ -20,7 +20,9 @@ export default function GalleryClient({ heroData }: { heroData?: any }) {
 
   const categories = ["All", "Events", "Classroom", "Awards", "Study Material", "Farewell"];
 
-  const filteredAlbums = albumsData.filter((album) => {
+  const actualAlbumsData = dynamicAlbums?.content?.albums || albumsData;
+
+  const filteredAlbums = actualAlbumsData.filter((album: any) => {
     const matchesCategory = selectedCategory === "All" || album.category === selectedCategory;
     const searchLower = searchQuery.toLowerCase();
     const matchesSearch = 

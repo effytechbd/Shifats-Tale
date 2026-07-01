@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default async function GalleryPage() {
   const heroData = await getPageSection("GALLERY", "GALLERY_HERO");
+  const albumsData = await getPageSection("GALLERY", "GALLERY_ALBUMS");
 
-  return <GalleryClient heroData={heroData} />;
+  return <GalleryClient heroData={heroData} albumsData={albumsData} />;
 }
