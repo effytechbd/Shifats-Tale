@@ -3,13 +3,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { courses } from "@/data/courses";
 import { ChevronLeft, ChevronRight, Eye, X, Send } from "lucide-react";
 import { motion, useReducedMotion, AnimatePresence, useInView } from "framer-motion";
-import { siteInfo } from "@/data/site";
 import { getCircularOffset } from "@/lib/circular";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
-export default function CoursesSection() {
+export default function CoursesSection({ courseItems = [], headerData }: { courseItems?: any[], headerData?: any }) {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
   const [windowWidth, setWindowWidth] = useState(1200);
@@ -18,8 +18,8 @@ export default function CoursesSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, amount: 0.25 });
 
-  const [activeIndex, setActiveIndex] = useState(1); // Default to Class 11/12 (index 1)
-  const [selectedCourse, setSelectedCourse] = useState<typeof courses[0] | null>(null);
+  const [activeIndex, setActiveIndex] = useState(courseItems.length > 1 ? 1 : 0);
+  const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [hasAnimatedEntrance, setHasAnimatedEntrance] = useState(false);
@@ -44,7 +44,22 @@ export default function CoursesSection() {
   const scaleFactor = 0.08;
   const maxVisibleOffset = isMobile ? 1 : isTablet ? 2 : 3;
 
-  const N = courses.length;
+  const mappedCourses = courseItems.map(item => {
+    const meta = item.metadata || {};
+    return {
+      id: item.id,
+      title: item.title,
+      subtitle: item.subtitle || meta.subject || "",
+      target: meta.target || meta.targetClass || "All",
+      bannerImage: item.mediaUrl || meta.fallbackImageUrl || "/images/flyer_admission_science.jpg",
+      description: item.body || "",
+      features: meta.features || [],
+      schedule: meta.schedule || "N/A",
+      duration: meta.duration || "N/A",
+    };
+  });
+
+  const N = mappedCourses.length;
 
   const handleNext = () => {
     if (N <= 1) return;
@@ -129,7 +144,7 @@ export default function CoursesSection() {
             viewport={{ once: true }}
             className="text-xs font-bold text-accent tracking-widest uppercase"
           >
-            Batches & Programs
+            {headerData?.eyebrow || "Batches & Programs"}
           </motion.h2>
           <motion.p
             variants={headerVariants}
@@ -138,7 +153,7 @@ export default function CoursesSection() {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
-            Offered Batches
+            {headerData?.title || "Offered Batches"}
           </motion.p>
           <motion.p
             variants={headerVariants}
@@ -147,7 +162,7 @@ export default function CoursesSection() {
             viewport={{ once: true }}
             className="text-text text-sm sm:text-base"
           >
-            Explore our curriculum programs designed to guide students towards absolute clarity in board and admission exams.
+            {headerData?.description || "Explore our curriculum programs designed to guide students towards absolute clarity in board and admission exams."}
           </motion.p>
         </div>
 
@@ -173,7 +188,7 @@ export default function CoursesSection() {
             className="w-full h-full flex items-center justify-center relative cursor-grab active:cursor-grabbing overflow-hidden"
           >
             <AnimatePresence initial={false}>
-              {courses.map((course, idx) => {
+              {mappedCourses.map((course, idx) => {
                 const offset = getCircularOffset(idx, activeIndex, N);
                 const absOffset = Math.abs(offset);
                 const isActive = offset === 0;
@@ -420,3 +435,5 @@ export default function CoursesSection() {
     </section>
   );
 }
+
+

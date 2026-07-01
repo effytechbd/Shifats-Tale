@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { studentResults } from "@/data/results";
 import { GraduationCap, School, ChevronLeft, ChevronRight, Star, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 
@@ -179,13 +178,19 @@ const StudentSuccessCard = ({ result, isActive }: { result: any; isActive: boole
           {/* Outer Border Frame */}
           <div className="relative w-[130px] h-[180px] sm:w-[160px] sm:h-[220px] rounded-2xl p-1 bg-gradient-to-tr from-accent via-[#010E62] to-accent shadow-xl group-hover/card:scale-105 transition-transform duration-300 mx-auto">
             {/* Inner Image Container */}
-            <div className="w-full h-full rounded-[14px] overflow-hidden border-[3px] border-white bg-[#F8F7F2]">
-              <img
-                src={result.image}
-                alt={result.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
+              <div className="w-full h-full rounded-[14px] overflow-hidden border-[3px] border-white bg-[#F8F7F2] flex items-center justify-center">
+                {result.image && result.image !== "/placeholder.jpg" ? (
+                  <img
+                    src={result.image}
+                    alt={result.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="text-[#010E62] opacity-30">
+                    <GraduationCap className="w-12 h-12" />
+                  </div>
+                )}
+              </div>
             
             {/* Achievement Badge Overlay */}
             <div className="absolute -bottom-3 -right-3 bg-accent text-primary p-2.5 rounded-full border-[3px] border-white shadow-md group-hover/card:scale-110 transition-transform duration-300 z-10">
@@ -225,7 +230,25 @@ const StudentSuccessCard = ({ result, isActive }: { result: any; isActive: boole
   );
 };
 
-export default function ResultsSection() {
+export default function ResultsSection({ studentItems = [], headerData }: { studentItems?: any[], headerData?: any }) {
+  const mappedResults = studentItems.map(item => {
+    const meta = item.metadata || {};
+    return {
+      id: item.id,
+      name: item.title,
+      studentName: item.title,
+      college: item.subtitle,
+      image: item.mediaUrl || meta.fallbackImageUrl || "/placeholder.jpg",
+      achievement: meta.achievement || "N/A",
+      course: meta.course || "N/A",
+      examType: meta.examType || "N/A",
+      year: meta.year || "",
+      note: meta.note || ""
+    };
+  });
+
+  const studentResults = mappedResults;
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -294,31 +317,30 @@ export default function ResultsSection() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <motion.h2
-            variants={headerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-xs font-bold text-accent tracking-widest uppercase"
+            className="text-xs font-bold text-accent tracking-widest uppercase mb-3"
           >
-            Hall of Fame
+            {headerData?.eyebrow || "STUDENT SUCCESS STORIES"}
           </motion.h2>
           <motion.p
-            variants={headerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
+            transition={{ delay: 0.1 }}
+            className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight mb-4"
           >
-            Our Student Success Stories
+            {headerData?.title || "Celebrating Excellence"}
           </motion.p>
           <motion.p
-            variants={headerVariants}
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-text text-sm sm:text-base"
+            transition={{ delay: 0.2 }}
+            className="text-text max-w-xl mx-auto text-sm sm:text-base font-medium"
           >
-            Real results ND/Holy Cross and leading college candidates secured in BUET, medical colleges, and Dhaka University batches.
+            {headerData?.description || "Here are some of the remarkable success stories from our past batches."}
           </motion.p>
         </div>
 

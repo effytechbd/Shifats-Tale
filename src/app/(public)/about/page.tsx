@@ -12,6 +12,7 @@ import {
   trainingData,
   ecaData,
 } from "@/data/about";
+import { getPageSection } from "@/features/website-cms/actions/content-actions";
 
 import { AboutHero } from "@/components/about/AboutHero";
 import { AboutMetrics } from "@/components/about/AboutMetrics";
@@ -28,38 +29,69 @@ export const metadata: Metadata = {
   description: "Explore the academic portfolio, research publications, engineering projects, and teaching background of Md. Zia Uddin Azad Sifat (Shifat Sir), CEO at Shifat's Tales.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const aboutHeroSection = await getPageSection("ABOUT", "ABOUT_HERO");
+  const aboutMetricsSection = await getPageSection("ABOUT", "ABOUT_METRICS");
+  const aboutEducationSection = await getPageSection("ABOUT", "ABOUT_EDUCATION");
+  const aboutResearchSection = await getPageSection("ABOUT", "ABOUT_RESEARCH_EXP");
+  const aboutPublicationsSection = await getPageSection("ABOUT", "ABOUT_PUBLICATIONS");
+  const aboutTrainingSection = await getPageSection("ABOUT", "ABOUT_TRAINING");
+  const aboutProjectsSection = await getPageSection("ABOUT", "ABOUT_PROJECTS");
+  const aboutSkillsSection = await getPageSection("ABOUT", "ABOUT_SKILLS");
+  const aboutEcaSection = await getPageSection("ABOUT", "ABOUT_ECA");
+
   return (
     <div className="relative pt-20 pb-0 bg-bg-soft text-text flex flex-col min-h-screen selection:bg-accent selection:text-primary overflow-x-hidden">
       {/* Global Background Noise / Pattern */}
       <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.015] pointer-events-none mix-blend-overlay z-0" />
       
       {/* 1. About Hero Section */}
-      <AboutHero profile={profileData} />
+      <AboutHero profileData={aboutHeroSection?.content || profileData} />
 
       {/* 2. Summary Metrics Strip */}
-      <AboutMetrics metrics={metricsData} />
+      <AboutMetrics metrics={aboutMetricsSection?.content?.metrics || metricsData} />
 
       {/* 3. Education Timeline */}
-      <EducationTimeline education={educationData} />
+      <EducationTimeline 
+        education={aboutEducationSection?.content?.education || educationData} 
+        header={aboutEducationSection?.content?.header}
+      />
 
       {/* New Section: Research Experience */}
-      <ResearchExperienceSection researchData={researchExperienceData} />
+      <ResearchExperienceSection 
+        researchData={aboutResearchSection?.content?.researchData || researchExperienceData} 
+        header={aboutResearchSection?.content?.header}
+      />
 
       {/* New Section: Research Publications */}
-      <PublicationsSection publications={publicationsData} />
+      <PublicationsSection 
+        publications={aboutPublicationsSection?.content?.publications || publicationsData} 
+        header={aboutPublicationsSection?.content?.header}
+      />
 
       {/* 7. Industrial Training Banner */}
-      <IndustrialTrainingBanner training={trainingData} />
+      <IndustrialTrainingBanner 
+        training={aboutTrainingSection?.content?.training || trainingData} 
+        header={aboutTrainingSection?.content?.header}
+      />
 
       {/* 6. Projects Grid */}
-      <ProjectsGrid projects={projectsData} />
+      <ProjectsGrid 
+        projects={aboutProjectsSection?.content?.projects || projectsData} 
+        header={aboutProjectsSection?.content?.header}
+      />
 
       {/* 8. Technical Skills */}
-      <TechnicalSkillsSection skills={skillCategoriesData} />
+      <TechnicalSkillsSection 
+        skills={aboutSkillsSection?.content?.skills || skillCategoriesData} 
+        header={aboutSkillsSection?.content?.header}
+      />
 
       {/* 9. Extra Curricular Activities */}
-      <ECASection ecaItems={ecaData} />
+      <ECASection 
+        ecaItems={aboutEcaSection?.content?.ecaList || ecaData} 
+        header={aboutEcaSection?.content?.header}
+      />
 
     </div>
   );

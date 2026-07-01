@@ -5,13 +5,28 @@ import { youtubeClasses, YouTubeClass } from "@/data/youtubeClasses";
 import { Play, Clock, Eye, Send, Sparkles } from "lucide-react";
 import { YoutubeIcon } from "@/components/ui/Icons";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import Image from "next/image";
 
-export default function YouTubeClassesSection() {
+export default function YouTubeClassesSection({ youtubeData }: { youtubeData?: any }) {
+  const siteInfo = useSiteSettings();
   const whatsappNumber = siteInfo.whatsapp;
   const shouldReduceMotion = useReducedMotion();
-  const [currentVideo, setCurrentVideo] = useState<YouTubeClass>(youtubeClasses[0]);
+  
+  const displayClasses = youtubeData?.content?.classes && youtubeData.content.classes.length > 0 
+    ? youtubeData.content.classes 
+    : youtubeClasses;
+    
+  const headerData = youtubeData?.content?.header || {
+    badge: "Concept Lectures",
+    title: "Concept Breakdown Theater",
+    description: "Experience Shifat Sir's pedagogy. Select a lecture from the playlist below to load it directly into the theater screen.",
+    moreTitle: "More free lectures",
+    moreText: "Watch dozens of detailed concept breakdowns, board solutions, and shortcuts on Sir's official channel.",
+    playlistTitle: "Playlist Classes"
+  };
+
+  const [currentVideo, setCurrentVideo] = useState<YouTubeClass>(displayClasses[0] || youtubeClasses[0]);
   const [isPlaying, setIsPlaying] = useState(false);
 
   const headerVariants = {
@@ -45,7 +60,7 @@ export default function YouTubeClassesSection() {
             className="text-xs font-bold text-accent tracking-widest uppercase flex items-center justify-center gap-1.5"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            <span>Concept Lectures</span>
+            <span>{headerData.badge}</span>
           </motion.h2>
           <motion.p
             variants={headerVariants}
@@ -54,7 +69,7 @@ export default function YouTubeClassesSection() {
             viewport={{ once: true }}
             className="text-3xl sm:text-4xl font-extrabold text-primary tracking-tight"
           >
-            Concept Breakdown Theater
+            {headerData.title}
           </motion.p>
           <motion.p
             variants={headerVariants}
@@ -63,7 +78,7 @@ export default function YouTubeClassesSection() {
             viewport={{ once: true }}
             className="text-text text-sm sm:text-base"
           >
-            Experience Shifat Sir's pedagogy. Select a lecture from the playlist below to load it directly into the theater screen.
+            {headerData.description}
           </motion.p>
         </div>
 
@@ -107,6 +122,7 @@ export default function YouTubeClassesSection() {
                         src={currentVideo.thumbnailUrl}
                         alt={currentVideo.title}
                         fill
+                        sizes="(max-width: 768px) 100vw, 800px"
                         className="object-cover transition-transform duration-700 group-hover:scale-103 opacity-80"
                         priority
                       />
@@ -176,9 +192,9 @@ export default function YouTubeClassesSection() {
           <div className="lg:col-span-5 xl:col-span-4 flex flex-col justify-between space-y-6">
             <div className="flex flex-col gap-4 flex-grow max-h-[460px] lg:max-h-none overflow-y-auto pr-1">
               <h4 className="text-[10px] font-extrabold uppercase tracking-wider text-muted px-1">
-                Playlist Classes
+                {headerData.playlistTitle}
               </h4>
-              {youtubeClasses.map((item, idx) => {
+              {displayClasses.map((item: any, idx: number) => {
                 const isActive = item.id === currentVideo.id;
                 const indexNum = String(idx + 1).padStart(2, "0");
 
@@ -239,12 +255,13 @@ export default function YouTubeClassesSection() {
 
             {/* Bottom YouTube Channel Subscription banner */}
             <div className="p-5 rounded-2xl bg-bg-soft border border-border text-center space-y-4 flex flex-col justify-center shadow-sm">
-              <span className="text-[10px] font-extrabold text-muted uppercase tracking-wider block">
-                More free lectures
-              </span>
-              <p className="text-xs text-text font-semibold leading-relaxed">
-                Watch dozens of detailed concept breakdowns, board solutions, and shortcuts on Sir's official channel.
-              </p>
+                <span className="text-sm font-bold text-primary flex items-center justify-center space-x-1.5 mb-1.5">
+                  <YoutubeIcon className="h-4 w-4 text-red-600" />
+                  <span>{headerData.moreTitle}</span>
+                </span>
+                <p className="text-xs text-text font-semibold leading-relaxed">
+                  {headerData.moreText}
+                </p>
               <a
                 href={siteInfo.youtubeUrl}
                 target="_blank"
@@ -261,3 +278,5 @@ export default function YouTubeClassesSection() {
     </section>
   );
 }
+
+

@@ -2,11 +2,12 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { SkillCategory } from "@/data/about";
+import { SkillCategory, SectionHeader } from "@/data/about";
 import { Terminal, Code, Cpu, FileText, CheckCircle2 } from "lucide-react";
 
 interface TechnicalSkillsSectionProps {
   skills: SkillCategory[];
+  header?: SectionHeader;
 }
 
 const cardDetails = [
@@ -18,9 +19,6 @@ const cardDetails = [
       bg: "bg-[#8B5CF6]",
       number: "01",
     },
-    description: "Strong foundation in core programming languages and problem-solving.",
-    progress: "90%",
-    progressWidth: "w-[90%]"
   },
   {
     theme: {
@@ -30,9 +28,6 @@ const cardDetails = [
       bg: "bg-[#10B981]",
       number: "02",
     },
-    description: "Familiar with modern libraries and frameworks for efficient development.",
-    progress: "85%",
-    progressWidth: "w-[85%]"
   },
   {
     theme: {
@@ -42,9 +37,6 @@ const cardDetails = [
       bg: "bg-[#F59E0B]",
       number: "03",
     },
-    description: "Proficient in engineering tools for design, simulation, and analysis.",
-    progress: "80%",
-    progressWidth: "w-[80%]"
   },
   {
     theme: {
@@ -54,9 +46,6 @@ const cardDetails = [
       bg: "bg-[#3B82F6]",
       number: "04",
     },
-    description: "Efficient with documentation tools and productivity software.",
-    progress: "88%",
-    progressWidth: "w-[88%]"
   }
 ];
 
@@ -68,7 +57,19 @@ const getCategoryIcon = (title: string, className: string = "") => {
   return <CheckCircle2 className={className} />;
 };
 
-export default function TechnicalSkillsSection({ skills }: TechnicalSkillsSectionProps) {
+export default function TechnicalSkillsSection({ skills, header }: TechnicalSkillsSectionProps) {
+  const defaultHeader = {
+    badge: "Core Competencies",
+    title1: "Technical",
+    title2: "Expertise",
+    description: "A comprehensive overview of my proficiency in programming languages, engineering software, and data analysis tools."
+  };
+  
+  const displayBadge = header?.badge || defaultHeader.badge;
+  const displayTitle1 = header?.title1 || defaultHeader.title1;
+  const displayTitle2 = header?.title2 !== undefined ? header.title2 : defaultHeader.title2;
+  const displayDesc = header?.description || defaultHeader.description;
+
   return (
     <section className="py-24 bg-[#FFFCF6] relative overflow-hidden font-sans">
       {/* Decorative Background Elements */}
@@ -84,7 +85,7 @@ export default function TechnicalSkillsSection({ skills }: TechnicalSkillsSectio
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E8DDBF]/50 shadow-sm text-[#010E62] text-xs sm:text-sm font-bold tracking-wider uppercase mb-6"
           >
             <Cpu className="w-4 h-4 text-[#FBB503]" />
-            Core Competencies
+            {displayBadge}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -93,7 +94,7 @@ export default function TechnicalSkillsSection({ skills }: TechnicalSkillsSectio
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-5xl lg:text-[52px] font-extrabold text-[#010E62] mb-6 leading-tight tracking-tight"
           >
-            Technical <span className="text-[#FBB503]">Expertise</span>
+            {displayTitle1} {displayTitle2 && <span className="text-[#FBB503]">{displayTitle2}</span>}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -102,14 +103,18 @@ export default function TechnicalSkillsSection({ skills }: TechnicalSkillsSectio
             transition={{ delay: 0.2 }}
             className="text-[#4A5568] text-[17px] font-medium max-w-2xl mx-auto"
           >
-            A comprehensive overview of my proficiency in programming languages, engineering software, and data analysis tools.
+            {displayDesc}
           </motion.p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {skills.map((category, index) => {
-            const cardData = cardDetails[index] || cardDetails[0];
-            const { theme, description, progress, progressWidth } = cardData;
+            const cardData = cardDetails[index % cardDetails.length];
+            const { theme } = cardData;
+            
+            // Use dynamic fields from category, or fallback to sensible defaults
+            const description = category.description || "Proficient in these technologies.";
+            const progress = category.progress || "80%";
 
             return (
               <motion.div

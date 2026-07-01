@@ -2,24 +2,34 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { TrainingItem, profileData } from "@/data/about";
-import { Award, Calendar, Building, CheckCircle2, Cable, PhoneCall, Zap, Radio, FileText, ExternalLink } from "lucide-react";
+import { TrainingItem, profileData, SectionHeader } from "@/data/about";
+import * as LucideIcons from "lucide-react";
+import { Award, Calendar, Building, CheckCircle2, FileText, ExternalLink } from "lucide-react";
 
 interface IndustrialTrainingBannerProps {
   training: TrainingItem;
+  header?: SectionHeader;
 }
 
-export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> = ({ training }) => {
+export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> = ({ training, header }) => {
+  const defaultHeader = {
+    badge: "Industry Experience",
+    title1: "Industrial",
+    title2: "Training",
+    description: "My practical experience in the telecommunications and power sector."
+  };
+  
+  const displayBadge = header?.badge || defaultHeader.badge;
+  const displayTitle1 = header?.title1 || defaultHeader.title1;
+  const displayTitle2 = header?.title2 !== undefined ? header.title2 : defaultHeader.title2;
+  const displayDesc = header?.description || defaultHeader.description;
+
   if (!training) return null;
 
-  const renderIcon = (name: string) => {
-    switch (name) {
-      case "Cable": return <Cable className="w-5 h-5 text-accent" />;
-      case "PhoneCall": return <PhoneCall className="w-5 h-5 text-accent" />;
-      case "Zap": return <Zap className="w-5 h-5 text-accent" />;
-      case "Radio": return <Radio className="w-5 h-5 text-accent" />;
-      default: return <CheckCircle2 className="w-5 h-5 text-accent" />;
-    }
+  const renderDynamicIcon = (name: string) => {
+    const IconComponent = (LucideIcons as any)[name];
+    if (!IconComponent) return <CheckCircle2 className="w-5 h-5 text-accent" />;
+    return <IconComponent className="w-5 h-5 text-accent" />;
   };
 
   return (
@@ -63,14 +73,15 @@ export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> =
           className="flex flex-col items-center justify-center text-center space-y-4"
         >
           <div className="inline-flex items-center space-x-2 bg-white px-4 py-1.5 rounded-full border border-[#E7E0D2] shadow-sm">
-            <Radio className="h-4 w-4 text-accent" />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">Industrial Training</span>
+            <LucideIcons.Radio className="h-4 w-4 text-accent" />
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">{displayBadge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-display">
-            Industrial Training
+            {displayTitle1}{" "}
+            {displayTitle2 && <span className="text-accent">{displayTitle2}</span>}
           </h2>
           <p className="text-primary/70 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
-            Practical industry exposure and hands-on professional training to bridge academic knowledge with real-world applications.
+            {displayDesc}
           </p>
         </motion.div>
 
@@ -85,7 +96,7 @@ export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> =
           <div className="flex-1 space-y-8">
             <div className="flex items-start gap-4 sm:gap-6">
               <div className="w-14 h-14 rounded-full bg-[#0A1A44] flex items-center justify-center shrink-0 border border-accent/20 shadow-lg relative overflow-hidden">
-                <Radio className="w-6 h-6 text-accent relative z-10" />
+                <LucideIcons.Radio className="w-6 h-6 text-accent relative z-10" />
               </div>
               <div>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-primary font-display leading-tight mb-2">
@@ -134,7 +145,7 @@ export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> =
                 {training.features.map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-3 p-4 rounded-xl bg-[#FFF9F2] border border-[#E7E0D2]">
                     <div className="shrink-0 bg-white p-1.5 rounded-lg border border-[#E7E0D2] shadow-sm">
-                      {renderIcon(feature.iconName)}
+                      {renderDynamicIcon(feature.iconName)}
                     </div>
                     <span className="text-xs font-bold text-primary leading-tight">
                       {feature.label}

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/lib/supabase/client";
 import { 
   Users, 
+  Home,
   BookOpen, 
   LayoutDashboard, 
   CreditCard, 
@@ -92,16 +93,32 @@ export const websiteAdminNavItems: NavItem[] = [
     ]
   },
   { 
-    label: "Other Pages", 
+    label: "Gallery Page", 
     icon: ImageIcon,
     subItems: [
-      { label: "Gallery Page", href: "/teacher/website/gallery" },
-      { label: "Projects Page", href: "/teacher/website/projects" },
-      { label: "Results Page", href: "/teacher/website/results" },
-      { label: "Contact Page", href: "/teacher/website/contact" },
+      { label: "Hero Section", href: "/teacher/website/gallery/hero" },
+      { label: "Photo Albums", href: "/teacher/website/gallery/albums" },
     ]
   },
-  { label: "Global Footer", href: "/teacher/website/footer", icon: MessageSquare },
+  { 
+    label: "Results Page", 
+    icon: GraduationCap,
+    subItems: [
+      { label: "Hero Section", href: "/teacher/website/results/hero" },
+      { label: "Student Cards", href: "/teacher/website/results/students" },
+    ]
+  },
+  { 
+    label: "Contact Page", 
+    icon: MessageSquare,
+    subItems: [
+      { label: "Hero Section", href: "/teacher/website/contact/hero" },
+      { label: "Contact Info & Map", href: "/teacher/website/contact/info" },
+      { label: "FAQ Section", href: "/teacher/website/contact/faq" },
+    ]
+  },
+  { label: "Global Settings", href: "/teacher/website/settings", icon: Settings },
+  { label: "Global Footer", href: "/teacher/website/footer", icon: Settings },
 ];
 
 export function TeacherSidebar({ className, onLinkClick, adminMode = "coaching" }: SidebarProps) {
@@ -274,3 +291,4 @@ export function TeacherSidebar({ className, onLinkClick, adminMode = "coaching" 
     </div>
   );
 }
+

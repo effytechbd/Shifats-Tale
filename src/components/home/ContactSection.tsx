@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { Phone, Mail, MapPin, Send, MessageCircle, Clock } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
 import { motion, useReducedMotion } from "framer-motion";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 export default function ContactSection() {
+  const siteInfo = useSiteSettings();
   const [formData, setFormData] = useState({
     studentName: "",
     studentClass: "",
@@ -303,3 +304,5 @@ export default function ContactSection() {
     </div>
   );
 }
+
+

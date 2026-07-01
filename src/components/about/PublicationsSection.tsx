@@ -2,14 +2,27 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PublicationItem } from "@/data/about";
+import { PublicationItem, SectionHeader } from "@/data/about";
 import { BookOpen, Users, MapPin, Eye, Link as LinkIcon, Award, ChevronDown, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PublicationsSectionProps {
   publications: PublicationItem[];
+  header?: SectionHeader;
 }
 
-export const PublicationsSection: React.FC<PublicationsSectionProps> = ({ publications }) => {
+export const PublicationsSection: React.FC<PublicationsSectionProps> = ({ publications, header }) => {
+  const defaultHeader = {
+    badge: "Publications",
+    title1: "Research",
+    title2: "Publications",
+    description: "My published research work, conference papers, and journal articles."
+  };
+  
+  const displayBadge = header?.badge || defaultHeader.badge;
+  const displayTitle1 = header?.title1 || defaultHeader.title1;
+  const displayTitle2 = header?.title2 !== undefined ? header.title2 : defaultHeader.title2;
+  const displayDesc = header?.description || defaultHeader.description;
+
   const [filter, setFilter] = useState<"All" | "Journal Article" | "Conference Paper">("All");
   const [sortBy, setSortBy] = useState<"newest" | "oldest">("newest");
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,13 +68,14 @@ export const PublicationsSection: React.FC<PublicationsSectionProps> = ({ public
         >
           <div className="inline-flex items-center space-x-2 bg-white px-4 py-1.5 rounded-full border border-[#E7E0D2] shadow-sm">
             <BookOpen className="h-4 w-4 text-accent" />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">Research & Impact</span>
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">{displayBadge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-display">
-            Research Publications
+            {displayTitle1}{" "}
+            {displayTitle2 && <span className="text-accent">{displayTitle2}</span>}
           </h2>
           <p className="text-primary/70 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
-            A curated list of my peer-reviewed journal articles and conference papers in the field of photonics and optical communication.
+            {displayDesc}
           </p>
         </motion.div>
 

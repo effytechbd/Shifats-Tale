@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Outfit, Inter } from "next/font/google";
 import "./globals.css";
-import { siteInfo } from "@/data/site";
+import { getGlobalSettings } from "@/features/website-cms/actions/global-settings";
+import { SiteSettingsProvider } from "@/lib/providers/SiteSettingsProvider";
+import { Toaster } from "react-hot-toast";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -13,37 +15,40 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: siteInfo.coachingCenterName,
-  description: siteInfo.shortDescription,
-  keywords: [
-    siteInfo.coachingCenterName.split(" — ")[0],
-    `${siteInfo.teacherName.split(" ").pop()} Sir Coaching`,
-    siteInfo.teacherName,
-    "Physics Coaching Chattogram",
-    "Mathematics Admission Care",
-    "BUET Admission Care",
-    "CUET Admission Care",
-    `Coaching center ${siteInfo.address.split(",").reverse()[2]?.trim() || "Rangunia"}`
-  ],
-  authors: [{ name: siteInfo.teacherName }],
-  openGraph: {
+export async function generateMetadata(): Promise<Metadata> {
+  const siteInfo = await getGlobalSettings();
+
+  return {
     title: siteInfo.coachingCenterName,
-    description: `Premium personal coaching program specialized in Physics and Higher Mathematics by ${siteInfo.teacherName.split(" ").pop()} Sir.`,
-    type: "website",
-    locale: "en_US",
-    siteName: siteInfo.coachingCenterName.split(" — ")[0],
-  }
-};
+    description: siteInfo.shortDescription,
+    keywords: [
+      siteInfo.coachingCenterName.split(" - ")[0],
+      `${siteInfo.teacherName.split(" ").pop()} Sir Coaching`,
+      siteInfo.teacherName,
+      "Physics Coaching Chattogram",
+      "Mathematics Admission Care",
+      "BUET Admission Care",
+      "CUET Admission Care",
+      `Coaching center ${siteInfo.address.split(",").reverse()[2]?.trim() || "Rangunia"}`
+    ],
+    authors: [{ name: siteInfo.teacherName }],
+    openGraph: {
+      title: siteInfo.coachingCenterName,
+      description: `Premium personal coaching program specialized in Physics and Higher Mathematics by ${siteInfo.teacherName.split(" ").pop()} Sir.`,
+      type: "website",
+      locale: "en_US",
+      siteName: siteInfo.coachingCenterName.split(" - ")[0],
+    }
+  };
+}
 
-import { Toaster } from 'react-hot-toast';
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
-  // Let's keep the parameter standard
 }: {
   children: React.ReactNode;
 }) {
+  const settings = await getGlobalSettings();
+
   return (
     <html
       lang="en"
@@ -52,8 +57,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-bg-soft font-sans" suppressHydrationWarning>
-        {children}
-        <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+        <SiteSettingsProvider settings={settings}>
+          {children}
+          <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
+        </SiteSettingsProvider>
       </body>
     </html>
   );

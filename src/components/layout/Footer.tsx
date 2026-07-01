@@ -4,10 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Phone, MapPin, Mail } from "lucide-react";
 import { FacebookIcon, YoutubeIcon } from "@/components/ui/Icons";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 import { MessageCircleHeart } from "lucide-react"; // for whatsapp chat icon
 
 export default function Footer() {
+  const siteInfo = useSiteSettings();
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith("#")) {
       e.preventDefault();
@@ -41,12 +42,13 @@ export default function Footer() {
                 src="/images/logo_transparent.png"
                 alt="Shifat's Tales Logo"
                 fill
+                sizes="(max-width: 768px) 192px, 224px"
                 className="object-contain object-left"
               />
             </div>
           </div>
           <p className="text-[15px] leading-relaxed text-[#475569] font-medium">
-            A premium personal coaching ecosystem for Physics and Higher Mathematics. Empowering SSC, HSC & Admission aspirants to achieve top ranks.
+            {siteInfo.footerDescription}
           </p>
           <div className="flex items-center space-x-3 pt-2">
             <a
@@ -75,16 +77,7 @@ export default function Footer() {
           <h3 className="text-lg font-bold text-[#071A68] mb-1">Quick Links</h3>
           <div className="w-8 h-[3px] bg-[#F4B400] rounded-full mb-6"></div>
           <ul className="space-y-3.5">
-            {[
-              { label: "Home", href: "#home" },
-              { label: "Programs", href: "#courses" },
-              { label: "Courses", href: "#courses" },
-              { label: "Success Results", href: "#results" },
-              { label: "Free Video Lectures", href: "#youtube-classes" },
-              { label: "Meet Shifat Sir", href: "#teacher" },
-              { label: "Student Login", href: "/login", isPortal: true },
-              { label: "Admin Login", href: "/login", isPortal: true },
-            ].map((link) => (
+            {siteInfo.quickLinks?.map((link) => (
               <li key={link.label}>
                 {link.isPortal ? (
                   <Link
@@ -152,7 +145,7 @@ export default function Footer() {
         <div className="md:col-span-12 lg:col-span-3 lg:pl-6 flex flex-col justify-center">
           <div className="space-y-6">
             <p className="text-[15px] text-[#475569] leading-relaxed font-medium">
-              We do not offer automatic online enrollment or payments. To join our programs, please connect directly with Shifat Sir or visit our venue.
+              {siteInfo.footerNotice}
             </p>
             <a
               href={`https://wa.me/${siteInfo.whatsapp}?text=Hello%20Sir%2C%20I%20would%20like%20to%20know%20more%20about%20the%20admissions.`}
@@ -171,9 +164,9 @@ export default function Footer() {
       <div className="w-full bg-[#F8F0DE] border-t border-[#E8DDBF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[14px] text-[#718096] font-medium">
-            <p>© {new Date().getFullYear()} Shifat's Tales. All rights reserved.</p>
+            <p>{siteInfo.footerCopyright}</p>
             <p className="flex items-center gap-1">
-              Designed with <span className="text-[#F4B400] text-lg">💛</span> for students in Bangladesh
+              Designed by <a href="https://effytechbd.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F4B400] transition-colors font-semibold">Effy Tech</a>
             </p>
           </div>
         </div>
@@ -181,3 +174,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+

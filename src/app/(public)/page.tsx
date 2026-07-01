@@ -1,199 +1,71 @@
-"use client";
+import { Metadata } from "next";
+import HomeClient from "./HomeClient";
+import { getPageSection, getSectionItems } from "@/features/website-cms/actions/content-actions";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence, animate } from "framer-motion";
-import dynamic from "next/dynamic";
+export const metadata: Metadata = {
+  title: "Shifat's Tales | Admission & Academic Care",
+  description: "Providing quality education to build the future of our students.",
+};
 
-const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
-  ssr: false,
-  loading: () => <div className="absolute inset-0 bg-transparent" />,
-});
+export default async function HomePage() {
+  const homeHeroSection = await getPageSection("HOME", "HOME_HERO");
+  const homeStatsSection = await getPageSection("HOME", "HOME_STATS");
+  const homeWhyChooseSection = await getPageSection("HOME", "HOME_WHY_CHOOSE");
+  const homeTeacherSection = await getPageSection("HOME", "HOME_TEACHER");
+  const homeTopStudentsSection = await getPageSection("HOME", "HOME_TOP_STUDENTS");
+  const homeYoutubeSection = await getPageSection("HOME", "HOME_YOUTUBE_CLASSES");
+  const homeGallerySection = await getPageSection("HOME", "HOME_GALLERY");
+  
+  const allCourses = await getSectionItems("COURSES_CARDS");
+  const homeCoursesSection = await getPageSection("HOME", "HOME_FEATURED_COURSES");
+  
+  const selectedCourseIds: string[] = homeCoursesSection?.content?.selectedCourseIds || [];
+  
+  // Filter courses based on selected IDs and preserve the selection order
+  const featuredCourses = selectedCourseIds
+    .map(id => allCourses.find(c => c.id === id))
+    .filter(Boolean);
 
-import HeroSection from "@/components/home/HeroSection";
-import TrustStats from "@/components/home/TrustStats";
-import CoursesSection from "@/components/home/CoursesSection";
-import WhyChooseSection from "@/components/home/WhyChooseSection";
-import TeacherSection from "@/components/home/TeacherSection";
-import TopOfTheMonthSection from "@/components/home/TopOfTheMonthSection";
-import ResultsSection from "@/components/home/ResultsSection";
-import YouTubeClassesSection from "@/components/home/YouTubeClassesSection";
-import TestimonialsSection from "@/components/home/TestimonialsSection";
-import GallerySection from "@/components/home/GallerySection";
+  // Fallback to all courses if none are selected (for initial state before admin selects any)
+  const displayCourses = featuredCourses.length > 0 ? featuredCourses : allCourses.slice(0, 5);
 
-export default function Home() {
-  const [flyingState, setFlyingState] = useState<{
-    startX: number;
-    startY: number;
-    startWidth: number;
-    startHeight: number;
-    endX: number;
-    endY: number;
-    endWidth: number;
-    endHeight: number;
-  } | null>(null);
+  const allStudents = await getSectionItems("RESULTS_STUDENTS");
+  const homeSuccessSection = await getPageSection("HOME", "HOME_STUDENT_SUCCESS");
+  
+  const selectedStudentIds: string[] = homeSuccessSection?.content?.selectedStudentIds || [];
+  
+  // Filter students based on selected IDs and preserve the selection order
+  const featuredStudents = selectedStudentIds
+    .map(id => allStudents.find(s => s.id === id))
+    .filter(Boolean);
 
-  const handleTeacherPhotoClick = () => {
-    const heroEl = document.getElementById("hero-teacher-block");
-    const teacherEl = document.getElementById("teacher-instructor-block");
-    const teacherSection = document.getElementById("teacher");
+  // Fallback to all students if none are selected
+  const displayStudents = featuredStudents.length > 0 ? featuredStudents : allStudents.slice(0, 5);
 
-    if (heroEl && teacherEl && teacherSection) {
-      const heroRect = heroEl.getBoundingClientRect();
-      const teacherRect = teacherEl.getBoundingClientRect();
+  const albumsSection = await getPageSection("GALLERY", "GALLERY_ALBUMS");
+  // @ts-ignore
+  const { albumsData } = await import("@/data/albums");
+  const allAlbums = albumsSection?.content?.albums || albumsData;
+  const selectedAlbumIds: string[] = homeGallerySection?.content?.selectedAlbumIds || [];
+  
+  const featuredAlbums = selectedAlbumIds
+    .map(id => allAlbums.find((a: any) => a.id === id))
+    .filter(Boolean);
+    
+  const displayAlbums = featuredAlbums.length > 0 ? featuredAlbums : allAlbums.slice(0, 4);
 
-      // Get absolute coordinates relative to the document
-      const startX = heroRect.left + window.scrollX;
-      const startY = heroRect.top + window.scrollY;
-      const startWidth = heroRect.width;
-      const startHeight = heroRect.height;
-
-      const endX = teacherRect.left + window.scrollX;
-      const endY = teacherRect.top + window.scrollY;
-      const endWidth = teacherRect.width;
-      const endHeight = teacherRect.height;
-
-      setFlyingState({
-        startX,
-        startY,
-        startWidth,
-        startHeight,
-        endX,
-        endY,
-        endWidth,
-        endHeight
-      });
-
-      // Synchronized smooth scroll to the teacher section
-      const offsetTop = teacherSection.offsetTop - 80;
-      const startScroll = window.scrollY;
-
-      // Temporarily disable CSS-based smooth scroll to avoid conflicts with JS animation loop
-      const originalScrollBehavior = document.documentElement.style.scrollBehavior;
-      document.documentElement.style.scrollBehavior = "auto";
-
-      animate(startScroll, offsetTop, {
-        duration: 1.2,
-        ease: [0.25, 1, 0.5, 1], // Perfect matching custom cubic bezier curve
-        onUpdate: (latest) => {
-          window.scrollTo(0, latest);
-        },
-        onComplete: () => {
-          // Restore CSS scroll behavior once transition completes
-          document.documentElement.style.scrollBehavior = originalScrollBehavior;
-        }
-      });
-    }
-  };
-
-  const isFlying = flyingState !== null;
-
-  return (
-    <div className="overflow-x-hidden">
-      <HeroSection isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
-      <TrustStats />
-      <CoursesSection />
-      <WhyChooseSection />
-      <TeacherSection isTeacherFlying={isFlying} />
-      <TopOfTheMonthSection />
-      <ResultsSection />
-      <YouTubeClassesSection />
-      <TestimonialsSection />
-      <GallerySection />
-
-      {/* Flying 3D Teacher Portrait Animation Overlay */}
-      <AnimatePresence>
-        {flyingState && (
-          <motion.div
-            initial={{
-              left: flyingState.startX,
-              top: flyingState.startY,
-              width: flyingState.startWidth,
-              height: flyingState.startHeight,
-              opacity: 1,
-              rotateY: 0,
-              rotateX: 0,
-              rotateZ: 0,
-              scale: 1,
-            }}
-            animate={{
-              left: flyingState.endX,
-              top: flyingState.endY,
-              width: flyingState.endWidth,
-              height: flyingState.endHeight,
-              opacity: [1, 1, 1, 0.9, 1], // Subtle flash of light
-              rotateY: [0, 45, -25, 0], // Gorgeous 3D rotations during flight
-              rotateX: [0, 15, -10, 0],
-              rotateZ: [0, -12, 6, 0],
-              scale: [1, 1.03, 0.99, 1], // Subtle scaling for the entire block
-            }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 1.2, // Perfect matched duration for flight and scroll
-              ease: [0.25, 1, 0.5, 1], // Smooth custom cubic bezier easing
-            }}
-            onAnimationComplete={() => {
-              setFlyingState(null);
-            }}
-            style={{
-              position: "absolute",
-              pointerEvents: "none",
-              zIndex: 9999,
-              transformStyle: "preserve-3d",
-              backfaceVisibility: "hidden",
-            }}
-          >
-            <div className="w-full h-full flex flex-col items-center justify-center relative bg-transparent" style={{ perspective: 1000 }}>
-              {/* 3D Scene Layer rendering during flight */}
-              <div className="absolute inset-0 z-0 w-full h-full pointer-events-none">
-                <HeroScene />
-              </div>
-
-              {/* Centered Teacher Portrait container */}
-              <div className="relative w-full max-w-[280px] sm:max-w-[340px] aspect-[1/1.2] flex items-end justify-center z-10 select-none">
-                {/* Radial shadows & glows */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 w-[85%] h-[20%] bg-primary-dark/25 rounded-full blur-xl z-0 pointer-events-none" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-accent/6 rounded-full blur-[80px] z-0 pointer-events-none" />
-
-                {/* Premium gold glow trail following the flight */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{
-                    opacity: [0, 0.6, 0.6, 0],
-                    scale: [0.5, 1.25, 1.1, 0.5],
-                  }}
-                  transition={{
-                    duration: 1.2,
-                    ease: [0.25, 1, 0.5, 1],
-                  }}
-                  className="absolute inset-0 bg-accent/20 rounded-full blur-3xl -z-10"
-                />
-
-                {/* Gradient fade overlay (uses landing bg to dissolve cropped bottom edge) */}
-                <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#FFF8E6] via-[#FFF8E6]/85 to-transparent z-10 pointer-events-none" />
-
-                <img
-                  src="/images/sir_photo_clean.png"
-                  alt=""
-                  className="w-full h-full object-contain object-bottom filter drop-shadow-[0_16px_32px_rgba(1,14,98,0.22)] z-10"
-                />
-              </div>
-
-              {/* Compact Designation Tag */}
-              <div className="mt-6 z-20 text-center w-full max-w-[280px] sm:max-w-[340px] bg-white border border-border p-3.5 rounded-xl shadow-sm">
-                <span className="block text-accent font-extrabold text-[10px] sm:text-xs uppercase tracking-widest">
-                  Instructor & CEO
-                </span>
-                <h4 className="font-extrabold text-base sm:text-lg text-primary mt-1">
-                  Md. Zia Uddin Azad Sifat
-                </h4>
-                <span className="block text-xs text-muted font-bold mt-0.5">
-                  EEE, CUET
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+  return <HomeClient 
+    heroData={homeHeroSection}
+    statsData={homeStatsSection}
+    whyChooseData={homeWhyChooseSection}
+    teacherData={homeTeacherSection}
+    topStudentsData={homeTopStudentsSection}
+    youtubeData={homeYoutubeSection}
+    galleryData={homeGallerySection}
+    displayAlbums={displayAlbums}
+    displayCourses={displayCourses} 
+    headerData={homeCoursesSection} 
+    displayStudents={displayStudents}
+    successHeaderData={homeSuccessSection}
+  />;
 }

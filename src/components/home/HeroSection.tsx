@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Phone, Play, User } from "lucide-react";
-import { siteInfo } from "@/data/site";
+import { useSiteSettings } from "@/lib/providers/SiteSettingsProvider";
 
 // Dynamically import the 3D scene with SSR disabled for optimal bundle performance
 const HeroScene = dynamic(() => import("../three/HeroScene"), {
@@ -18,11 +18,24 @@ const HeroScene = dynamic(() => import("../three/HeroScene"), {
 });
 
 interface HeroSectionProps {
+  heroData?: any;
   isTeacherFlying?: boolean;
   onImageClick?: (e: React.MouseEvent) => void;
 }
 
-export default function HeroSection({ isTeacherFlying = false, onImageClick }: HeroSectionProps) {
+export default function HeroSection({ heroData, isTeacherFlying = false, onImageClick }: HeroSectionProps) {
+  const siteInfo = useSiteSettings();
+  const content = heroData?.content || {};
+
+  const tagline = content.tagline || siteInfo.tagline;
+  const headline = content.headline || siteInfo.heroHeadline;
+  const description = content.description || siteInfo.heroDescription;
+  
+  const features = content.features || ["Offline classes", "Weekly exams", "Personal guidance", "Lecture sheets"];
+  const teacherName = content.teacherName || siteInfo.teacherName;
+  const teacherTitle = content.teacherTitle || "Instructor & CEO";
+  const teacherSubtitle = content.teacherSubtitle || "EEE, CUET";
+
   const scrollToSection = (id: string) => {
     const el = document.querySelector(id);
     if (el) {
@@ -52,7 +65,7 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
               className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white border border-border text-primary text-xs font-bold tracking-wide shadow-sm"
             >
               <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-              <span>{siteInfo.tagline}</span>
+              <span>{tagline}</span>
             </motion.div>
 
             <div className="space-y-4">
@@ -62,7 +75,7 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-primary leading-tight"
               >
-                {siteInfo.heroHeadline}
+                {headline}
               </motion.h1>
 
               <motion.p
@@ -71,7 +84,7 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-base sm:text-lg md:text-xl text-text max-w-2xl mx-auto lg:mx-0 leading-relaxed"
               >
-                {siteInfo.heroDescription}
+                {description}
               </motion.p>
             </div>
 
@@ -83,11 +96,7 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
               className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
             >
               <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("#contact");
-                }}
+                href="/contact"
                 className="primary-btn flex items-center justify-center space-x-2 w-full sm:w-auto text-center cursor-pointer"
               >
                 <Phone className="h-4.5 w-4.5" />
@@ -110,13 +119,12 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
               className="pt-2 border-t border-border/80 max-w-xl mx-auto lg:mx-0"
             >
               <p className="text-xs sm:text-sm text-muted font-bold tracking-wide flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
-                <span>Offline classes</span>
-                <span className="text-border">•</span>
-                <span>Weekly exams</span>
-                <span className="text-border">•</span>
-                <span>Personal guidance</span>
-                <span className="text-border">•</span>
-                <span>Lecture sheets</span>
+                {features.map((feature: string, idx: number) => (
+                  <React.Fragment key={idx}>
+                    <span>{feature}</span>
+                    {idx < features.length - 1 && <span className="text-border">•</span>}
+                  </React.Fragment>
+                ))}
               </p>
             </motion.div>
           </div>
@@ -143,8 +151,8 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
               <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-[#FFFCF2] via-[#FFFCF2]/85 to-transparent z-10 pointer-events-none" />
 
               <Image
-                src="/images/sir_photo_clean.png"
-                alt={siteInfo.teacherName}
+                src={content.teacherImage || "/images/sir_photo_clean.png"}
+                alt={teacherName}
                 fill
                 sizes="(max-width: 768px) 280px, 340px"
                 className="object-contain object-bottom filter drop-shadow-[0_16px_32px_rgba(1,14,98,0.22)] z-10"
@@ -155,13 +163,13 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
             {/* Compact Designation Tag under portrait */}
             <div className="mt-6 z-20 text-center w-full max-w-[280px] sm:max-w-[340px] bg-white border border-border p-3.5 rounded-xl shadow-sm hover:border-accent/30 hover:shadow-md transition-all duration-300">
               <span className="block text-accent font-extrabold text-[10px] sm:text-xs uppercase tracking-widest">
-                Instructor & CEO
+                {teacherTitle}
               </span>
               <h4 className="font-extrabold text-base sm:text-lg text-primary mt-1">
-                {siteInfo.teacherName}
+                {teacherName}
               </h4>
               <span className="block text-xs text-muted font-bold mt-0.5">
-                EEE, CUET
+                {teacherSubtitle}
               </span>
             </div>
           </div>
@@ -170,4 +178,6 @@ export default function HeroSection({ isTeacherFlying = false, onImageClick }: H
     </section>
   );
 }
+
+
 

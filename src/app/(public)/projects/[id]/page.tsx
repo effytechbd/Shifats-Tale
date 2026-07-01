@@ -1,6 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { projectsData } from "@/data/about";
+import { projectsData, ProjectItem } from "@/data/about";
+import { getPageSection } from "@/features/website-cms/actions/content-actions";
 import { 
   ArrowLeft, Calendar, User, Tag, 
   Sun, Zap, Cpu, Settings, Bot, Layout, Droplet, Percent, Leaf, BatteryCharging, 
@@ -37,7 +38,12 @@ const getIcon = (name: string, className: string = "w-5 h-5") => {
 
 export default async function ProjectDetailsPage({ params }: ProjectDetailsProps) {
   const { id } = await params;
-  const project = projectsData.find((p) => p.id === id);
+  
+  // Fetch dynamic projects data from CMS
+  const aboutProjectsSection = await getPageSection("ABOUT", "ABOUT_PROJECTS");
+  const projectsList: ProjectItem[] = aboutProjectsSection?.content?.projects || projectsData;
+  
+  const project = projectsList.find((p: ProjectItem) => p.id === id);
 
   if (!project) {
     notFound();
@@ -61,7 +67,9 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsProps
             Back to Portfolio
           </Link>
           <span className="text-primary/30">/</span>
-          <span className="text-primary/60">Projects</span>
+          <Link href="/about" className="text-primary/60 hover:text-primary transition-colors">
+            Projects
+          </Link>
           <span className="text-primary/30">/</span>
           <span className="text-primary truncate max-w-[200px] sm:max-w-xs">{project.title}</span>
         </nav>
@@ -75,14 +83,14 @@ export default async function ProjectDetailsPage({ params }: ProjectDetailsProps
               alt={project.title} 
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
             
             <div className="absolute bottom-0 left-0 w-full p-6 sm:p-10 flex flex-col justify-end">
               <div className="flex items-center space-x-2 bg-accent/90 text-primary font-black text-xs uppercase tracking-widest px-3 py-1.5 rounded w-fit mb-4">
                 {getIcon(project.iconName, "w-4 h-4")}
                 <span>{project.category}</span>
               </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white font-display leading-tight max-w-4xl">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white !text-white font-display leading-tight max-w-4xl drop-shadow-md">
                 {project.title}
               </h1>
             </div>

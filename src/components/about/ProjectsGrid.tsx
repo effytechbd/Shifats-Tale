@@ -2,20 +2,32 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ProjectItem } from "@/data/about";
+import { ProjectItem, SectionHeader } from "@/data/about";
+import * as LucideIcons from "lucide-react";
 import { 
-  Play, Sun, Leaf, Percent, Zap, BatteryCharging, ArrowRight, FileText, BarChart, 
-  Cpu, Lock, Code, Fan, Settings, FileSymlink, Bot, Layout, Droplet,
-  ChevronLeft, ChevronRight, ChevronDown
+  Play, ArrowRight, ChevronLeft, ChevronRight, ChevronDown
 } from "lucide-react";
 
 interface ProjectsGridProps {
   projects: ProjectItem[];
+  header?: SectionHeader;
 }
 
 const ITEMS_PER_PAGE = 6;
 
-export const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
+export const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects, header }) => {
+  const defaultHeader = {
+    badge: "Real-world Applications",
+    title1: "Featured",
+    title2: "Projects",
+    description: "A showcase of my academic and personal projects demonstrating theoretical knowledge applied to real-world challenges."
+  };
+  
+  const displayBadge = header?.badge || defaultHeader.badge;
+  const displayTitle1 = header?.title1 || defaultHeader.title1;
+  const displayTitle2 = header?.title2 !== undefined ? header.title2 : defaultHeader.title2;
+  const displayDesc = header?.description || defaultHeader.description;
+
   const [filter, setFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState<"newest" | "oldest">("newest");
@@ -55,35 +67,20 @@ export const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  const getIcon = (name: string) => {
-    switch (name) {
-      case "Sun": return <Sun className="w-4 h-4" />;
-      case "Zap": return <Zap className="w-4 h-4" />;
-      case "Cpu": return <Cpu className="w-4 h-4" />;
-      case "Settings": return <Settings className="w-4 h-4" />;
-      case "Bot": return <Bot className="w-4 h-4" />;
-      case "Droplet": return <Droplet className="w-4 h-4" />;
-      case "Percent": return <Percent className="w-4 h-4" />;
-      case "Leaf": return <Leaf className="w-4 h-4" />;
-      case "BatteryCharging": return <BatteryCharging className="w-4 h-4" />;
-      case "ArrowRight": return <ArrowRight className="w-4 h-4" />;
-      case "FileText": return <FileText className="w-4 h-4" />;
-      case "BarChart": return <BarChart className="w-4 h-4" />;
-      case "Code": return <Code className="w-4 h-4" />;
-      case "FileSymlink": return <FileSymlink className="w-4 h-4" />;
-      case "Layout": return <Layout className="w-4 h-4" />;
-      default: return <div className="w-1.5 h-1.5 rounded-full bg-accent" />;
-    }
+  const getIcon = (name: string, className = "w-4 h-4") => {
+    const IconComponent = (LucideIcons as any)[name];
+    if (!IconComponent) return <div className={`rounded-full bg-accent ${className}`} />;
+    return <IconComponent className={className} />;
   };
 
   const getCategoryIcon = (name: string) => {
     switch (name) {
-      case "Energy": return <Sun className="w-4 h-4 opacity-50" />;
-      case "Power": return <Zap className="w-4 h-4 opacity-50" />;
-      case "Electronics": return <Settings className="w-4 h-4 opacity-50" />;
-      case "Embedded": return <Cpu className="w-4 h-4 opacity-50" />;
-      case "CAD": return <Layout className="w-4 h-4 opacity-50" />;
-      case "Automation": return <Bot className="w-4 h-4 opacity-50" />;
+      case "Energy": return getIcon("Sun", "w-4 h-4 opacity-50");
+      case "Power": return getIcon("Zap", "w-4 h-4 opacity-50");
+      case "Electronics": return getIcon("Settings", "w-4 h-4 opacity-50");
+      case "Embedded": return getIcon("Cpu", "w-4 h-4 opacity-50");
+      case "CAD": return getIcon("Layout", "w-4 h-4 opacity-50");
+      case "Automation": return getIcon("Bot", "w-4 h-4 opacity-50");
       default: return <div className="w-2 h-2 rounded-full bg-accent" />;
     }
   };
@@ -120,14 +117,15 @@ export const ProjectsGrid: React.FC<ProjectsGridProps> = ({ projects }) => {
           className="flex flex-col items-center justify-center text-center space-y-4"
         >
           <div className="inline-flex items-center space-x-2 bg-white px-4 py-1.5 rounded-full border border-[#E7E0D2] shadow-sm">
-            <Layout className="h-4 w-4 text-accent" />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">Project Portfolio</span>
+            <LucideIcons.Layout className="h-4 w-4 text-accent" />
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">{displayBadge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-display">
-            Projects
+            {displayTitle1}{" "}
+            {displayTitle2 && <span className="text-accent">{displayTitle2}</span>}
           </h2>
           <p className="text-primary/70 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
-            A showcase of my engineering projects spanning sustainable energy, power systems, electronics, embedded systems, and design automation.
+            {displayDesc}
           </p>
         </motion.div>
 

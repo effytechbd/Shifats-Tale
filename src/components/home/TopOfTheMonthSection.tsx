@@ -5,21 +5,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Trophy, ChevronLeft, ChevronRight, Award, Star } from "lucide-react";
 import { topStudentsData } from "@/data/top-students";
 
-export default function TopOfTheMonthSection() {
+export default function TopOfTheMonthSection({ topStudentsData: dynamicData }: { topStudentsData?: any }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
-  const currentMonth = topStudentsData[currentIndex];
+  const displayData = dynamicData?.content?.months && dynamicData.content.months.length > 0
+    ? dynamicData.content.months
+    : topStudentsData;
 
-  const handlePrevious = () => {
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? topStudentsData.length - 1 : prev - 1));
+  const headerData = dynamicData?.content?.header || {
+    badge: "Top of the Month",
+    titleNormal: "Celebrating",
+    titleHighlighted: "Excellence",
+    description: "Recognizing the outstanding achievements and hard work of our top-performing students every month."
   };
 
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev === topStudentsData.length - 1 ? 0 : prev + 1));
-  };
+  const currentMonth = displayData[currentIndex] || displayData[0];
 
   const variants = {
     enter: (direction: number) => {
@@ -64,7 +65,7 @@ export default function TopOfTheMonthSection() {
             className="inline-flex items-center justify-center space-x-2 bg-white border border-[#FBB503]/30 rounded-full px-5 py-2 shadow-sm mb-6"
           >
             <Crown className="w-5 h-5 text-[#FBB503]" />
-            <span className="text-sm font-extrabold text-[#010E62] uppercase tracking-wider">Top of the Month</span>
+            <span className="text-sm font-extrabold text-[#010E62] uppercase tracking-wider">{headerData.badge}</span>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
@@ -73,7 +74,7 @@ export default function TopOfTheMonthSection() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-[#010E62] tracking-tight mb-6"
           >
-            Celebrating <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#010E62] to-[#FBB503]">Excellence</span>
+            {headerData.titleNormal} <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#010E62] to-[#FBB503]">{headerData.titleHighlighted}</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -82,8 +83,37 @@ export default function TopOfTheMonthSection() {
             transition={{ delay: 0.2 }}
             className="text-lg text-[#4A5568] font-medium"
           >
-            Recognizing the outstanding achievements and hard work of our top-performing students every month.
+            {headerData.description}
           </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-10 flex justify-center"
+          >
+            <div className="relative inline-block">
+              <select
+                value={currentIndex}
+                onChange={(e) => {
+                  const idx = Number(e.target.value);
+                  setDirection(idx > currentIndex ? 1 : -1);
+                  setCurrentIndex(idx);
+                }}
+                className="appearance-none bg-white border-2 border-[#E8DDBF] text-[#010E62] text-lg font-bold py-3 pl-8 pr-14 rounded-full shadow-sm hover:border-[#FBB503] focus:outline-none focus:border-[#FBB503] focus:ring-4 focus:ring-[#FBB503]/20 transition-all cursor-pointer"
+              >
+                {displayData.map((month: any, idx: number) => (
+                  <option key={month.id || idx} value={idx}>
+                    {month.monthName}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5 text-[#010E62]">
+                <ChevronRight className="w-6 h-6 rotate-90" strokeWidth={3} />
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Carousel Container */}
@@ -116,9 +146,9 @@ export default function TopOfTheMonthSection() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-16 px-4 md:px-8">
-                  {currentMonth.students.map((student, idx) => (
+                  {currentMonth?.students?.map((student: any, idx: number) => (
                     <div
-                      key={student.id}
+                      key={student.id || idx}
                       className="group relative bg-white rounded-[2rem] p-8 md:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_rgba(251,181,3,0.15)] border border-[#E8DDBF]/50 transition-all duration-500 flex flex-col items-center text-center overflow-hidden"
                     >
                       {/* Premium Card Glow */}
@@ -132,12 +162,18 @@ export default function TopOfTheMonthSection() {
                         {/* Glow ring behind */}
                         <div className="absolute inset-0 bg-[#FBB503] rounded-full blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                         
-                        <div className="relative w-full h-full rounded-full overflow-hidden border-[6px] border-white shadow-[0_0_0_2px_rgba(251,181,3,0.3)] bg-[#FFFCF2]">
-                          <img
-                            src={student.image}
-                            alt={student.name}
-                            className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
-                          />
+                        <div className="relative w-full h-full rounded-full overflow-hidden border-[6px] border-white shadow-[0_0_0_2px_rgba(251,181,3,0.3)] bg-[#FFFCF2] flex items-center justify-center">
+                            {student.image ? (
+                              <img
+                                src={student.image}
+                                alt={student.name}
+                                className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
+                              />
+                            ) : (
+                              <div className="text-4xl text-[#FBB503] opacity-30">
+                                <Trophy className="w-16 h-16" />
+                              </div>
+                            )}
                         </div>
                         
                         {/* Floating Badge */}
@@ -178,43 +214,6 @@ export default function TopOfTheMonthSection() {
                 </div>
               </motion.div>
             </AnimatePresence>
-          </div>
-
-          {/* Pagination Controls */}
-          <div className="flex items-center justify-center gap-6 mt-4 sm:mt-8 relative z-20">
-            <button
-              onClick={handlePrevious}
-              className="w-14 h-14 rounded-full bg-white border border-[#E8DDBF] shadow-sm flex items-center justify-center text-[#010E62] hover:text-[#FBB503] hover:border-[#FBB503] hover:bg-[#FFF8E6] transition-all hover:scale-110 active:scale-95"
-              aria-label="Previous Month"
-            >
-              <ChevronLeft className="w-7 h-7" strokeWidth={2.5} />
-            </button>
-            
-            <div className="flex gap-2.5 items-center">
-              {topStudentsData.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setDirection(idx > currentIndex ? 1 : -1);
-                    setCurrentIndex(idx);
-                  }}
-                  className={`transition-all duration-300 rounded-full ${
-                    idx === currentIndex
-                      ? "w-10 h-3 bg-[#FBB503]"
-                      : "w-3 h-3 bg-[#E8DDBF] hover:bg-[#010E62]/40"
-                  }`}
-                  aria-label={`Go to month ${idx + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNext}
-              className="w-14 h-14 rounded-full bg-white border border-[#E8DDBF] shadow-sm flex items-center justify-center text-[#010E62] hover:text-[#FBB503] hover:border-[#FBB503] hover:bg-[#FFF8E6] transition-all hover:scale-110 active:scale-95"
-              aria-label="Next Month"
-            >
-              <ChevronRight className="w-7 h-7" strokeWidth={2.5} />
-            </button>
           </div>
         </div>
       </div>
