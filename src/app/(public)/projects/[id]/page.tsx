@@ -1,6 +1,7 @@
 import React from "react";
 import { notFound } from "next/navigation";
-import { projectsData } from "@/data/about";
+import { projectsData, ProjectItem } from "@/data/about";
+import { getPageSection } from "@/features/website-cms/actions/content-actions";
 import { 
   ArrowLeft, Calendar, User, Tag, 
   Sun, Zap, Cpu, Settings, Bot, Layout, Droplet, Percent, Leaf, BatteryCharging, 
@@ -37,7 +38,12 @@ const getIcon = (name: string, className: string = "w-5 h-5") => {
 
 export default async function ProjectDetailsPage({ params }: ProjectDetailsProps) {
   const { id } = await params;
-  const project = projectsData.find((p) => p.id === id);
+  
+  // Fetch dynamic projects data from CMS
+  const aboutProjectsSection = await getPageSection("ABOUT", "ABOUT_PROJECTS");
+  const projectsList: ProjectItem[] = aboutProjectsSection?.content?.projects || projectsData;
+  
+  const project = projectsList.find((p: ProjectItem) => p.id === id);
 
   if (!project) {
     notFound();
