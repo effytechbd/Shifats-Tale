@@ -22,6 +22,7 @@ import GallerySection from "@/components/home/GallerySection";
 
 export default function HomeClient({ 
   heroData,
+  statsData,
   displayCourses, 
   headerData,
   displayStudents,
@@ -31,7 +32,8 @@ export default function HomeClient({
   displayCourses: any[], 
   headerData?: any,
   displayStudents?: any[],
-  successHeaderData?: any
+  successHeaderData?: any,
+  statsData?: any
 }) {
   const [flyingState, setFlyingState] = useState<{
     startX: number;
@@ -102,7 +104,7 @@ export default function HomeClient({
   return (
     <div className="overflow-x-hidden">
       <HeroSection heroData={heroData} isTeacherFlying={isFlying} onImageClick={handleTeacherPhotoClick} />
-      <TrustStats />
+      <TrustStats statsData={statsData} />
       <CoursesSection headerData={headerData} courseItems={displayCourses} />
       <WhyChooseSection />
       <TeacherSection isTeacherFlying={isFlying} />

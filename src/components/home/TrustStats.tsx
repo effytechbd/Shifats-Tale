@@ -15,8 +15,10 @@ const getIcon = (iconName: string) => {
   }
 };
 
-export default function TrustStats() {
+export default function TrustStats({ statsData }: { statsData?: any }) {
   const shouldReduceMotion = useReducedMotion();
+  
+  const displayStats = statsData?.content?.stats || stats;
 
   const containerVariants = {
     hidden: {},
@@ -52,7 +54,7 @@ export default function TrustStats() {
           viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
-          {stats.map((stat, i) => (
+          {displayStats.map((stat: any, i: number) => (
             <motion.div
               key={i}
               variants={cardVariants}

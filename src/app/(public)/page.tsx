@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const homeHeroSection = await getPageSection("HOME", "HOME_HERO");
+  const homeStatsSection = await getPageSection("HOME", "HOME_STATS");
   const allCourses = await getSectionItems("COURSES_CARDS");
   const homeCoursesSection = await getPageSection("HOME", "HOME_FEATURED_COURSES");
   
@@ -37,6 +38,7 @@ export default async function HomePage() {
 
   return <HomeClient 
     heroData={homeHeroSection}
+    statsData={homeStatsSection}
     displayCourses={displayCourses} 
     headerData={homeCoursesSection} 
     displayStudents={displayStudents}
