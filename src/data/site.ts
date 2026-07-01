@@ -27,6 +27,10 @@ export interface SiteInfo {
   teacherBio: string;
   heroHeadline: string;
   heroDescription: string;
+  footerDescription: string;
+  footerNotice: string;
+  footerCopyright: string;
+  quickLinks: { label: string; href: string; isPortal?: boolean }[];
 }
 
 export const siteInfo: SiteInfo = {
@@ -48,8 +52,21 @@ export const siteInfo: SiteInfo = {
   teacherExperience: "10+ Years",
   teacherSpecialty: "EEE, CUET | Physics & Mathematics Specialist",
   teacherBio: "Hello, I am Md. Zia Uddin Azad Sifat (Shifat Sir). As a B.Sc. Engineer from CUET, I specialize in simplifying complex Physics and Higher Mathematics concepts. Through structured classes, weekly exams, and concept-first teaching, I guide SSC and HSC science students to excel in both board exams and engineering admission preparation.",
-  heroHeadline: "Personal Guidance for Better Academic Success",
-  heroDescription: "Learn directly from an experienced teacher through structured classes, regular exams, clear explanations, and individual academic support."
+  heroHeadline: "Shifat's Tales",
+  heroDescription: "Physics & Higher Mathematics Coaching",
+  footerDescription: "A premium personal coaching ecosystem for Physics and Higher Mathematics. Empowering SSC, HSC & Admission aspirants to achieve top ranks.",
+  footerNotice: "We do not offer automatic online enrollment or payments. To join our programs, please connect directly with Shifat Sir or visit our venue.",
+  footerCopyright: `© ${new Date().getFullYear()} Shifat's Tales. All rights reserved.`,
+  quickLinks: [
+    { label: "Home", href: "#home" },
+    { label: "Programs", href: "#courses" },
+    { label: "Courses", href: "#courses" },
+    { label: "Success Results", href: "#results" },
+    { label: "Free Video Lectures", href: "#youtube-classes" },
+    { label: "Meet Shifat Sir", href: "#teacher" },
+    { label: "Student Login", href: "/login", isPortal: true },
+    { label: "Admin Login", href: "/login", isPortal: true },
+  ]
 };
 
 export interface StatItem {
