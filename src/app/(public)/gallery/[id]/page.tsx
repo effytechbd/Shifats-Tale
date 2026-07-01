@@ -4,10 +4,11 @@ import { albumsData } from "@/data/albums";
 import { getPageSection } from "@/features/website-cms/actions/content-actions";
 import AlbumDetailsClient from "./AlbumDetailsClient";
 
-export default async function AlbumDetailsPage({ params }: { params: { id: string } }) {
+export default async function AlbumDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const albumsSection = await getPageSection("GALLERY", "GALLERY_ALBUMS");
   const albums = albumsSection?.content?.albums || albumsData;
-  const album = albums.find((a: any) => a.id === params.id);
+  const album = albums.find((a: any) => a.id === id);
 
   if (!album) {
     return (

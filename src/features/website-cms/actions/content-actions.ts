@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { requireTeacher } from "@/lib/auth-guards";
+import { revalidatePath } from "next/cache";
 import { SitePageSection } from "../types/cms-types";
 
 /**
