@@ -15,16 +15,6 @@ export default function TopOfTheMonthSection({ topStudentsData: dynamicData }: {
 
   const currentMonth = displayData[currentIndex] || displayData[0];
 
-  const handlePrevious = () => {
-    setDirection(-1);
-    setCurrentIndex((prev) => (prev === 0 ? displayData.length - 1 : prev - 1));
-  };
-
-  const handleNext = () => {
-    setDirection(1);
-    setCurrentIndex((prev) => (prev === displayData.length - 1 ? 0 : prev + 1));
-  };
-
   const variants = {
     enter: (direction: number) => {
       return {
@@ -88,6 +78,35 @@ export default function TopOfTheMonthSection({ topStudentsData: dynamicData }: {
           >
             Recognizing the outstanding achievements and hard work of our top-performing students every month.
           </motion.p>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-10 flex justify-center"
+          >
+            <div className="relative inline-block">
+              <select
+                value={currentIndex}
+                onChange={(e) => {
+                  const idx = Number(e.target.value);
+                  setDirection(idx > currentIndex ? 1 : -1);
+                  setCurrentIndex(idx);
+                }}
+                className="appearance-none bg-white border-2 border-[#E8DDBF] text-[#010E62] text-lg font-bold py-3 pl-8 pr-14 rounded-full shadow-sm hover:border-[#FBB503] focus:outline-none focus:border-[#FBB503] focus:ring-4 focus:ring-[#FBB503]/20 transition-all cursor-pointer"
+              >
+                {displayData.map((month: any, idx: number) => (
+                  <option key={month.id || idx} value={idx}>
+                    {month.monthName}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-5 text-[#010E62]">
+                <ChevronRight className="w-6 h-6 rotate-90" strokeWidth={3} />
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* Carousel Container */}
@@ -188,43 +207,6 @@ export default function TopOfTheMonthSection({ topStudentsData: dynamicData }: {
                 </div>
               </motion.div>
             </AnimatePresence>
-          </div>
-
-          {/* Pagination Controls */}
-          <div className="flex items-center justify-center gap-6 mt-4 sm:mt-8 relative z-20">
-            <button
-              onClick={handlePrevious}
-              className="w-14 h-14 rounded-full bg-white border border-[#E8DDBF] shadow-sm flex items-center justify-center text-[#010E62] hover:text-[#FBB503] hover:border-[#FBB503] hover:bg-[#FFF8E6] transition-all hover:scale-110 active:scale-95"
-              aria-label="Previous Month"
-            >
-              <ChevronLeft className="w-7 h-7" strokeWidth={2.5} />
-            </button>
-            
-            <div className="flex gap-2.5 items-center">
-              {topStudentsData.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setDirection(idx > currentIndex ? 1 : -1);
-                    setCurrentIndex(idx);
-                  }}
-                  className={`transition-all duration-300 rounded-full ${
-                    idx === currentIndex
-                      ? "w-10 h-3 bg-[#FBB503]"
-                      : "w-3 h-3 bg-[#E8DDBF] hover:bg-[#010E62]/40"
-                  }`}
-                  aria-label={`Go to month ${idx + 1}`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={handleNext}
-              className="w-14 h-14 rounded-full bg-white border border-[#E8DDBF] shadow-sm flex items-center justify-center text-[#010E62] hover:text-[#FBB503] hover:border-[#FBB503] hover:bg-[#FFF8E6] transition-all hover:scale-110 active:scale-95"
-              aria-label="Next Month"
-            >
-              <ChevronRight className="w-7 h-7" strokeWidth={2.5} />
-            </button>
           </div>
         </div>
       </div>
