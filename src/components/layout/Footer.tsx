@@ -166,7 +166,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-[14px] text-[#718096] font-medium">
             <p>{siteInfo.footerCopyright}</p>
             <p className="flex items-center gap-1">
-              Designed with <span className="text-[#F4B400] text-lg">💛</span> for students in Bangladesh
+              Designed by <a href="https://effytechbd.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F4B400] transition-colors font-semibold">Effy Tech</a>
             </p>
           </div>
         </div>
