@@ -35,6 +35,7 @@ export default async function AboutPage() {
   const aboutEducationSection = await getPageSection("ABOUT", "ABOUT_EDUCATION");
   const aboutResearchSection = await getPageSection("ABOUT", "ABOUT_RESEARCH_EXP");
   const aboutPublicationsSection = await getPageSection("ABOUT", "ABOUT_PUBLICATIONS");
+  const aboutTrainingSection = await getPageSection("ABOUT", "ABOUT_TRAINING");
 
   return (
     <div className="relative pt-20 pb-0 bg-bg-soft text-text flex flex-col min-h-screen selection:bg-accent selection:text-primary overflow-x-hidden">
@@ -57,7 +58,7 @@ export default async function AboutPage() {
       <PublicationsSection publications={aboutPublicationsSection?.content?.publications || publicationsData} />
 
       {/* 7. Industrial Training Banner */}
-      <IndustrialTrainingBanner training={trainingData} />
+      <IndustrialTrainingBanner training={aboutTrainingSection?.content?.training || trainingData} />
 
       {/* 6. Projects Grid */}
       <ProjectsGrid projects={projectsData} />
