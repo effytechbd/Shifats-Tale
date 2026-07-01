@@ -26,6 +26,7 @@ export default function HomeClient({
   whyChooseData,
   teacherData,
   topStudentsData,
+  youtubeData,
   displayCourses, 
   headerData,
   displayStudents,
@@ -39,7 +40,8 @@ export default function HomeClient({
   statsData?: any,
   whyChooseData?: any,
   teacherData?: any,
-  topStudentsData?: any
+  topStudentsData?: any,
+  youtubeData?: any
 }) {
   const [flyingState, setFlyingState] = useState<{
     startX: number;
@@ -116,7 +118,7 @@ export default function HomeClient({
       <TeacherSection isTeacherFlying={isFlying} teacherData={teacherData} />
       <TopOfTheMonthSection topStudentsData={topStudentsData} />
       <ResultsSection studentItems={displayStudents} headerData={successHeaderData} />
-      <YouTubeClassesSection />
+      <YouTubeClassesSection youtubeData={youtubeData} />
       <TestimonialsSection />
       <GallerySection />
 

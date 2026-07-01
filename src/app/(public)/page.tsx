@@ -13,6 +13,7 @@ export default async function HomePage() {
   const homeWhyChooseSection = await getPageSection("HOME", "HOME_WHY_CHOOSE");
   const homeTeacherSection = await getPageSection("HOME", "HOME_TEACHER");
   const homeTopStudentsSection = await getPageSection("HOME", "HOME_TOP_STUDENTS");
+  const homeYoutubeSection = await getPageSection("HOME", "HOME_YOUTUBE_CLASSES");
   const allCourses = await getSectionItems("COURSES_CARDS");
   const homeCoursesSection = await getPageSection("HOME", "HOME_FEATURED_COURSES");
   
@@ -45,6 +46,7 @@ export default async function HomePage() {
     whyChooseData={homeWhyChooseSection}
     teacherData={homeTeacherSection}
     topStudentsData={homeTopStudentsSection}
+    youtubeData={homeYoutubeSection}
     displayCourses={displayCourses} 
     headerData={homeCoursesSection} 
     displayStudents={displayStudents}
