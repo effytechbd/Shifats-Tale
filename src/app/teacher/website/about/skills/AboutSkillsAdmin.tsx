@@ -16,6 +16,8 @@ export default function AboutSkillsAdmin({ initialSectionData }: { initialSectio
     const newCategory: SkillCategory = {
       title: "New Category",
       skills: ["Skill 1", "Skill 2"],
+      description: "Brief description of this skill category.",
+      progress: "80%"
     };
     setCategories([...categories, newCategory]);
   };
@@ -92,14 +94,37 @@ export default function AboutSkillsAdmin({ initialSectionData }: { initialSectio
             </div>
             
             <div className="p-6 space-y-4 flex-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-primary mb-1">Category Title</label>
+                  <input
+                    type="text"
+                    value={category.title}
+                    onChange={(e) => updateCategory(index, 'title', e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/50 text-sm"
+                    placeholder="e.g. Programming Languages"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-primary mb-1">Progress (%)</label>
+                  <input
+                    type="text"
+                    value={category.progress || ""}
+                    onChange={(e) => updateCategory(index, 'progress', e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/50 text-sm"
+                    placeholder="e.g. 90%"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label className="block text-sm font-bold text-primary mb-1">Category Title</label>
+                <label className="block text-sm font-bold text-primary mb-1">Description</label>
                 <input
                   type="text"
-                  value={category.title}
-                  onChange={(e) => updateCategory(index, 'title', e.target.value)}
+                  value={category.description || ""}
+                  onChange={(e) => updateCategory(index, 'description', e.target.value)}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-accent/50 text-sm"
-                  placeholder="e.g. Programming Languages"
+                  placeholder="e.g. Strong foundation in core programming..."
                 />
               </div>
 

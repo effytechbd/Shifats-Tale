@@ -97,6 +97,8 @@ export interface ProjectItem {
 export interface SkillCategory {
   title: string;
   skills: string[];
+  description?: string;
+  progress?: string;
 }
 
 export interface TrainingItem {
@@ -420,18 +422,26 @@ export const skillCategoriesData: SkillCategory[] = [
   {
     title: "Programming Languages",
     skills: ["C", "Python"],
+    description: "Strong foundation in core programming languages and problem-solving.",
+    progress: "90%"
   },
   {
     title: "Libraries & Frameworks",
     skills: ["NumPy", "Pandas", "Matplotlib"],
+    description: "Familiar with modern libraries and frameworks for efficient development.",
+    progress: "85%"
   },
   {
     title: "Engineering Software",
     skills: ["COMSOL", "MATLAB", "Cadence", "ADS", "PVsyst", "MikroC Pro", "Proteus"],
+    description: "Proficient in engineering tools for design, simulation, and analysis.",
+    progress: "80%"
   },
   {
     title: "Documentation & Productivity",
     skills: ["LaTeX", "MS Word", "MS PowerPoint"],
+    description: "Efficient with documentation tools and productivity software.",
+    progress: "88%"
   },
 ];
 

@@ -18,9 +18,6 @@ const cardDetails = [
       bg: "bg-[#8B5CF6]",
       number: "01",
     },
-    description: "Strong foundation in core programming languages and problem-solving.",
-    progress: "90%",
-    progressWidth: "w-[90%]"
   },
   {
     theme: {
@@ -30,9 +27,6 @@ const cardDetails = [
       bg: "bg-[#10B981]",
       number: "02",
     },
-    description: "Familiar with modern libraries and frameworks for efficient development.",
-    progress: "85%",
-    progressWidth: "w-[85%]"
   },
   {
     theme: {
@@ -42,9 +36,6 @@ const cardDetails = [
       bg: "bg-[#F59E0B]",
       number: "03",
     },
-    description: "Proficient in engineering tools for design, simulation, and analysis.",
-    progress: "80%",
-    progressWidth: "w-[80%]"
   },
   {
     theme: {
@@ -54,9 +45,6 @@ const cardDetails = [
       bg: "bg-[#3B82F6]",
       number: "04",
     },
-    description: "Efficient with documentation tools and productivity software.",
-    progress: "88%",
-    progressWidth: "w-[88%]"
   }
 ];
 
@@ -108,8 +96,12 @@ export default function TechnicalSkillsSection({ skills }: TechnicalSkillsSectio
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {skills.map((category, index) => {
-            const cardData = cardDetails[index] || cardDetails[0];
-            const { theme, description, progress, progressWidth } = cardData;
+            const cardData = cardDetails[index % cardDetails.length];
+            const { theme } = cardData;
+            
+            // Use dynamic fields from category, or fallback to sensible defaults
+            const description = category.description || "Proficient in these technologies.";
+            const progress = category.progress || "80%";
 
             return (
               <motion.div
