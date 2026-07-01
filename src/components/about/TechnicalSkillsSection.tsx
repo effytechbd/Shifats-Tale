@@ -58,6 +58,13 @@ const getCategoryIcon = (title: string, className: string = "") => {
 };
 
 export default function TechnicalSkillsSection({ skills, header }: TechnicalSkillsSectionProps) {
+  const displayHeader = header || {
+    badge: "Core Competencies",
+    title1: "Technical",
+    title2: "Expertise",
+    description: "A comprehensive overview of my proficiency in programming languages, engineering software, and data analysis tools."
+  };
+
   return (
     <section className="py-24 bg-[#FFFCF6] relative overflow-hidden font-sans">
       {/* Decorative Background Elements */}
@@ -73,7 +80,7 @@ export default function TechnicalSkillsSection({ skills, header }: TechnicalSkil
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#E8DDBF]/50 shadow-sm text-[#010E62] text-xs sm:text-sm font-bold tracking-wider uppercase mb-6"
           >
             <Cpu className="w-4 h-4 text-[#FBB503]" />
-            {header?.badge || "Core Competencies"}
+            {displayHeader.badge}
           </motion.div>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -82,7 +89,7 @@ export default function TechnicalSkillsSection({ skills, header }: TechnicalSkil
             transition={{ delay: 0.1 }}
             className="text-3xl md:text-5xl lg:text-[52px] font-extrabold text-[#010E62] mb-6 leading-tight tracking-tight"
           >
-            {header?.title1 || "Technical"} {header?.title2 ? <span className="text-[#FBB503]">{header.title2}</span> : ""}
+            {displayHeader.title1} {displayHeader.title2 && <span className="text-[#FBB503]">{displayHeader.title2}</span>}
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
@@ -91,7 +98,7 @@ export default function TechnicalSkillsSection({ skills, header }: TechnicalSkil
             transition={{ delay: 0.2 }}
             className="text-[#4A5568] text-[17px] font-medium max-w-2xl mx-auto"
           >
-            {header?.description || "A comprehensive overview of my proficiency in programming languages, engineering software, and data analysis tools."}
+            {displayHeader.description}
           </motion.p>
         </div>
 

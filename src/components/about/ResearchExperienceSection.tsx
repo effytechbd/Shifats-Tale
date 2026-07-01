@@ -18,6 +18,13 @@ const renderDynamicIcon = (iconName: string, className: string = "w-5 h-5") => {
 };
 
 export const ResearchExperienceSection: React.FC<ResearchExperienceSectionProps> = ({ researchData, header }) => {
+  const displayHeader = header || {
+    badge: "Research & Innovation",
+    title1: "Research",
+    title2: "Experience",
+    description: "My contributions to academic research, focusing on power electronics and renewable energy."
+  };
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   if (!researchData || researchData.length === 0) return null;
@@ -37,14 +44,14 @@ export const ResearchExperienceSection: React.FC<ResearchExperienceSectionProps>
         >
           <div className="inline-flex items-center space-x-2 bg-white px-4 py-1.5 rounded-full border border-[#E7E0D2] shadow-sm">
             <LucideIcons.FlaskConical className="h-4 w-4 text-accent" />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">{header?.badge || "Research Experience"}</span>
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">{displayHeader.badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-display">
-            {header?.title1 || "Research That Drives"}{" "}
-            {header?.title2 ? <span className="text-accent">{header.title2}</span> : "Impact"}
+            {displayHeader.title1}{" "}
+            {displayHeader.title2 && <span className="text-accent">{displayHeader.title2}</span>}
           </h2>
           <p className="text-primary/70 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
-            {header?.description || "Exploring advanced topics in engineering to solve real-world problems through research and innovation."}
+            {displayHeader.description}
           </p>
         </motion.div>
 

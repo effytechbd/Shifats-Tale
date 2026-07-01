@@ -12,6 +12,13 @@ interface IndustrialTrainingBannerProps {
 }
 
 export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> = ({ training, header }) => {
+  const displayHeader = header || {
+    badge: "Industry Experience",
+    title1: "Industrial",
+    title2: "Training",
+    description: "My practical experience in the telecommunications and power sector."
+  };
+
   if (!training) return null;
 
   const renderDynamicIcon = (name: string) => {
@@ -62,14 +69,14 @@ export const IndustrialTrainingBanner: React.FC<IndustrialTrainingBannerProps> =
         >
           <div className="inline-flex items-center space-x-2 bg-white px-4 py-1.5 rounded-full border border-[#E7E0D2] shadow-sm">
             <LucideIcons.Radio className="h-4 w-4 text-accent" />
-            <span className="text-xs font-bold text-primary uppercase tracking-widest">{header?.badge || "Industry Experience"}</span>
+            <span className="text-xs font-bold text-primary uppercase tracking-widest">{displayHeader.badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-primary tracking-tight font-display">
-            {header?.title1 || "Industrial"}{" "}
-            {header?.title2 ? <span className="text-accent">{header.title2}</span> : "Training"}
+            {displayHeader.title1}{" "}
+            {displayHeader.title2 && <span className="text-accent">{displayHeader.title2}</span>}
           </h2>
           <p className="text-primary/70 font-medium text-lg leading-relaxed max-w-2xl mx-auto">
-            {header?.description || "Practical industry exposure and hands-on professional training to bridge academic knowledge with real-world applications."}
+            {displayHeader.description}
           </p>
         </motion.div>
 
