@@ -4,10 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { User, Play, GraduationCap, Users, MapPin, Feather } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
-import { ProfileInfo, SocialLink } from "@/data/about";
+import { profileData as defaultProfileData, ProfileInfo, SocialLink } from "@/data/about";
 
 interface AboutHeroProps {
-  profileData: ProfileInfo;
+  profileData?: ProfileInfo;
 }
 
 const FacebookIcon = ({ className }: { className?: string }) => (
@@ -64,7 +64,7 @@ const containerVariants: Variants = {
   },
 };
 
-export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile }) => {
+export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile = defaultProfileData }) => {
   return (
     <section className="relative pt-12 pb-20 lg:pt-24 lg:pb-32 overflow-hidden bg-[#FFF9F2]">
       {/* Background Decor */}
@@ -116,9 +116,9 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile }) =>
                 {profile.greeting}
               </p>
               <h1 className="text-5xl sm:text-6xl lg:text-[72px] font-extrabold text-primary leading-[1.05] font-display tracking-tight">
-                Md. Zia Uddin<br />Azad Sifat
+                {profile.name}
               </h1>
-              <p className="text-xl font-bold text-accent pt-3">
+              <p className="text-xl sm:text-2xl font-bold text-text mt-4">
                 {profile.subtitle}
               </p>
             </motion.div>
@@ -131,7 +131,7 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile }) =>
             {/* 4 Stat Cards */}
             {profile.heroStats && (
               <motion.div variants={fadeUpVariants} className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-2">
-                {profile.heroStats.map((stat, idx) => (
+                {(profile.heroStats || []).map((stat, idx) => (
                   <div key={idx} className="bg-white rounded-2xl p-4 shadow-sm border border-[#E7E0D2]/60 flex flex-col justify-between hover:-translate-y-1 transition-transform duration-300 min-h-[120px]">
                     <div className="text-primary/60 mb-2">
                       {renderStatIcon(stat.iconName, "w-5 h-5")}
@@ -151,15 +151,15 @@ export const AboutHero: React.FC<AboutHeroProps> = ({ profileData: profile }) =>
               <motion.div variants={fadeUpVariants} className="flex items-center space-x-5 pt-6">
                 <span className="text-base font-extrabold text-primary">Follow Me</span>
                 <div className="flex items-center space-x-3">
-                  {profile.socialLinks.map((link) => (
+                  {(profile.socialLinks || []).map((social) => (
                     <a
-                      key={link.platform}
-                      href={link.url}
+                      key={social.platform}
+                      href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border border-[#E7E0D2] flex items-center justify-center text-primary/70 hover:bg-accent hover:text-primary hover:border-accent transition-all shadow-sm hover:-translate-y-1"
                     >
-                      {renderSocialIcon(link.iconName, "w-4 h-4 sm:w-5 sm:h-5")}
+                      {renderSocialIcon(social.iconName, "w-4 h-4 sm:w-5 sm:h-5")}
                     </a>
                   ))}
                 </div>
