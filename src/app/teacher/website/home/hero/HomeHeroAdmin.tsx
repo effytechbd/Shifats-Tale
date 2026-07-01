@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Check, Loader2, Image as ImageIcon, X } from "lucide-react";
+import { Check, Loader2, Image as ImageIcon, X, Trash2, Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { updatePageSection } from "@/features/website-cms/actions/content-actions";
@@ -21,8 +21,27 @@ export default function HomeHeroAdmin({ initialSectionData }: { initialSectionDa
   const [teacherSubtitle, setTeacherSubtitle] = useState(content.teacherSubtitle || "");
   const [teacherImage, setTeacherImage] = useState(content.teacherImage || "");
 
+  const [features, setFeatures] = useState<string[]>(
+    content.features || ["Offline classes", "Weekly exams", "Personal guidance", "Lecture sheets"]
+  );
+
   const [isSaving, setIsSaving] = useState(false);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState(false);
+
+  const handleFeatureChange = (index: number, value: string) => {
+    const updatedFeatures = [...features];
+    updatedFeatures[index] = value;
+    setFeatures(updatedFeatures);
+  };
+
+  const addFeature = () => {
+    setFeatures([...features, ""]);
+  };
+
+  const removeFeature = (index: number) => {
+    const updatedFeatures = features.filter((_, i) => i !== index);
+    setFeatures(updatedFeatures);
+  };
 
   const handleSave = async () => {
     try {
@@ -36,7 +55,8 @@ export default function HomeHeroAdmin({ initialSectionData }: { initialSectionDa
           teacherName,
           teacherTitle,
           teacherSubtitle,
-          teacherImage
+          teacherImage,
+          features: features.filter(f => f.trim() !== "")
         }
       });
       toast.success("Home hero section saved successfully");
@@ -103,6 +123,37 @@ export default function HomeHeroAdmin({ initialSectionData }: { initialSectionDa
                 className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent min-h-[120px]"
               />
               <p className="text-xs text-gray-500 mt-1">Leave blank to use Global Setting</p>
+            </div>
+
+            <div className="pt-4 border-t border-border mt-6">
+              <h3 className="font-bold text-gray-700 mb-4">Features List (Bullet Points)</h3>
+              <div className="space-y-3">
+                {features.map((feature, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={feature}
+                      onChange={(e) => handleFeatureChange(idx, e.target.value)}
+                      placeholder="e.g. Offline classes"
+                      className="flex-1 px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent"
+                    />
+                    <button
+                      onClick={() => removeFeature(idx)}
+                      className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-100"
+                      title="Remove Feature"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <button
+                onClick={addFeature}
+                className="flex items-center space-x-2 text-sm text-primary font-medium hover:text-accent transition-colors mt-3"
+              >
+                <Plus className="w-4 h-4" />
+                <span>Add Feature</span>
+              </button>
             </div>
           </div>
 
