@@ -5,13 +5,12 @@ import { Check, Loader2, Plus, Trash2, MoveUp, MoveDown } from "lucide-react";
 import toast from "react-hot-toast";
 import { updatePageSection } from "@/features/website-cms/actions/content-actions";
 import { stats as defaultStats } from "@/data/site";
+import { availableStatsIcons, getIconComponent } from "@/components/home/stats-icons";
 
 export default function HomeStatsAdmin({ initialSectionData }: { initialSectionData: any }) {
   const content = initialSectionData?.content || {};
   const [stats, setStats] = useState<any[]>(content.stats || defaultStats);
   const [isSaving, setIsSaving] = useState(false);
-
-  const availableIcons = ["Award", "Users", "GraduationCap", "CheckCircle"];
 
   const handleStatChange = (index: number, field: string, value: string) => {
     const updatedStats = [...stats];
@@ -137,15 +136,20 @@ export default function HomeStatsAdmin({ initialSectionData }: { initialSectionD
               </div>
               <div>
                 <label className="block text-sm font-semibold mb-1">Icon</label>
-                <select
-                  value={stat.iconName}
-                  onChange={(e) => handleStatChange(idx, "iconName", e.target.value)}
-                  className="w-full px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent"
-                >
-                  {availableIcons.map((icon) => (
-                    <option key={icon} value={icon}>{icon}</option>
-                  ))}
-                </select>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 rounded-lg bg-gray-100 border border-border flex items-center justify-center text-primary flex-shrink-0">
+                    {getIconComponent(stat.iconName, "w-5 h-5")}
+                  </div>
+                  <select
+                    value={stat.iconName}
+                    onChange={(e) => handleStatChange(idx, "iconName", e.target.value)}
+                    className="flex-1 px-4 py-2 border border-border rounded-lg focus:outline-none focus:border-accent"
+                  >
+                    {availableStatsIcons.map((icon) => (
+                      <option key={icon} value={icon}>{icon}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
           </div>

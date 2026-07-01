@@ -4,15 +4,15 @@ import React from "react";
 import { Award, Users, GraduationCap, CheckCircle } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { stats } from "@/data/site";
+import { getIconComponent } from "./stats-icons";
 
 const getIcon = (iconName: string) => {
-  switch (iconName) {
-    case "Award": return <Award className="h-6 w-6 text-accent" />;
-    case "Users": return <Users className="h-6 w-6 text-primary" />;
-    case "GraduationCap": return <GraduationCap className="h-6 w-6 text-primary-dark" />;
-    case "CheckCircle": return <CheckCircle className="h-6 w-6 text-emerald-600" />;
-    default: return <Award className="h-6 w-6 text-accent" />;
-  }
+  let colorClass = "text-accent";
+  if (iconName === "Users" || iconName === "BookOpen") colorClass = "text-primary";
+  else if (iconName === "GraduationCap" || iconName === "Globe") colorClass = "text-primary-dark";
+  else if (iconName === "CheckCircle" || iconName === "CheckSquare") colorClass = "text-emerald-600";
+  
+  return getIconComponent(iconName, `h-6 w-6 ${colorClass}`);
 };
 
 export default function TrustStats({ statsData }: { statsData?: any }) {
