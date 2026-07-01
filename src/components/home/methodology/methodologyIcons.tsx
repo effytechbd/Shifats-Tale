@@ -1,19 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  UserCheck,
-  Users,
-  ClipboardList,
-  BookOpen,
-  MessageCircle,
-  Lightbulb,
-  Award,
-  GraduationCap,
-  Target,
-  ShieldCheck,
-  Star,
-} from "lucide-react";
+import { getIconComponent } from "./../stats-icons";
 
 export interface BenefitItem {
   id?: string;
@@ -23,24 +11,7 @@ export interface BenefitItem {
 }
 
 export const getMethodologyIcon = (iconName: string, className: string = "h-6 w-6") => {
-  switch (iconName) {
-    case "UserCheck":
-      return <UserCheck className={className} />;
-    case "Users":
-      return <Users className={className} />;
-    case "ClipboardList":
-      return <ClipboardList className={className} />;
-    case "NotebookTabs":
-    case "BookOpen":
-      return <BookOpen className={className} />;
-    case "MessageCircle":
-      return <MessageCircle className={className} />;
-    case "Cpu":
-    case "Lightbulb":
-      return <Lightbulb className={className} />;
-    default:
-      return <UserCheck className={className} />;
-  }
+  return getIconComponent(iconName, className);
 };
 
 /**

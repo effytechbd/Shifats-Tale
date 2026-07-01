@@ -7,18 +7,20 @@ import { GraduationCap, Target, Users, ShieldCheck } from "lucide-react";
 import { MethodologyIntro } from "./methodology/MethodologyIntro";
 import { MethodologyCard } from "./methodology/MethodologyCard";
 
-export default function WhyChooseSection() {
+export default function WhyChooseSection({ whyChooseData }: { whyChooseData?: any }) {
   const shouldReduceMotion = useReducedMotion();
+  
+  const displayBenefits: BenefitItem[] = whyChooseData?.content?.benefits || benefits;
 
   // Sort / Map items to match exact Target Reference composition
   // Top row large items: Small Batch Environment, Weekly Exams
   // Bottom row standard items: Personal Guidance, Lecture Sheets, Doubt Solving, Concept-Based Teaching
-  const smallBatchItem = benefits.find((b) => b.title.includes("Small Batch")) || benefits[1] || benefits[0];
-  const weeklyExamsItem = benefits.find((b) => b.title.includes("Weekly Exams")) || benefits[2] || benefits[1];
+  const smallBatchItem = displayBenefits.find((b) => b.title.includes("Small Batch")) || displayBenefits[1] || displayBenefits[0];
+  const weeklyExamsItem = displayBenefits.find((b) => b.title.includes("Weekly Exams")) || displayBenefits[2] || displayBenefits[1];
 
   const topRowItems: BenefitItem[] = [smallBatchItem, weeklyExamsItem];
 
-  const bottomRowItems: BenefitItem[] = benefits.filter(
+  const bottomRowItems: BenefitItem[] = displayBenefits.filter(
     (b) => b !== smallBatchItem && b !== weeklyExamsItem
   );
 
